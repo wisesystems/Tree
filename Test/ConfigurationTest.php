@@ -120,5 +120,17 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals(ConfigurationException::FILE_NOT_PARSEABLE, $code);
 	}
 
+	/**
+	 * Verifies that Configuration's ArrayAccess implementation returns the
+	 * expected results
+	 */
+	public function testArrayAccess()
+	{
+		$config = new Configuration($this->relativePath);
+
+		$this->assertTrue(isset($config['test']));
+		$this->assertEquals(1, $config['test']);
+	}
+
 }
 

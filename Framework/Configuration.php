@@ -17,7 +17,7 @@ use \Tree\Exception\ConfigurationException;
  * @subpackage Framework
  * @version    0.00
  */
-class Configuration {
+class Configuration implements ArrayAccess {
 
 	/**
 	 * The full path of the ini file 
@@ -84,6 +84,57 @@ class Configuration {
 		}
 
 		return $this->iniValues;
+	}
+
+	/**
+	 * ArrayAccess: Indicates whether the given configuration value exists 
+	 * 
+	 * @access public
+	 * @param  string $offset 
+	 * @return boolean
+	 */
+	public function offsetExists($offset)
+	{
+		$iniValues = $this->getIniValues();
+		return isset($iniValues[$offset]);
+	}
+
+	/**
+	 * ArrayAccess: Returns the given configuration value 
+	 * 
+	 * @access public
+	 * @param  string $offset 
+	 * @return mixed
+	 */
+	public function offsetGet($offset)
+	{
+		$iniValues = $this->getIniValues();
+		return $iniValues[$offset];
+	}
+
+	/**
+	 * ArrayAccess: Does nothing because configuration values must be set in the
+	 * ini file, not at runtime
+	 * 
+	 * @access public
+	 * @param  string $offset 
+	 * @param  mixed  $value 
+	 */
+	public function offsetSet($offset, $value)
+	{
+		// do nothing
+	}
+
+	/**
+	 * ArrayAccess: Does nothing because configuration values should be removed
+	 * from the ini file, not at runtime
+	 * 
+	 * @access public
+	 * @param  string $offset 
+	 */
+	public function offsetUnset($offset)
+	{
+		// do nothing
 	}
 
 	/**
