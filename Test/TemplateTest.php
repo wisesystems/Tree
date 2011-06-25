@@ -19,9 +19,11 @@ namespace Tree\Test;
 
 require 'PHPUnit/Autoload.php';
 require '../Component/Template.php';
+require '../Exception/TemplateException.php';
 
-use \Tree\Component\Template;
 use \PHPUnit_Framework_TestCase;
+use \Tree\Component\Template;
+use \Tree\Exception\TemplateException;
 
 class TemplateTest extends PHPUnit_Framework_TestCase {
 
@@ -54,17 +56,6 @@ class TemplateTest extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * Tests that getOutput() throws an Exception if it is called before
-	 * the Template object has been provided with all the input values that
-	 * it needs to execute
-	 */
-	public function testGetOutputThrowsExceptionIfValuesMissing()
-	{
-		$this->setExpectedException('\Exception');
-		$this->template->getOutput();
-	}
-
-	/**
 	 * Tests that setInputValue() runs successfully if given a permissible
 	 * input value
 	 */
@@ -74,13 +65,39 @@ class TemplateTest extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * Tests that setInputValue() throws an Exception if it is given an
-	 * input value that is not in the list of specifically permitted values
+	 * Verifies that Template throws the right kind of TemplateException if an
+	 * attempt is made to generate output when all required inputs are not yet
+	 * available
 	 */
-	public function testSetInputValueRejectsInvalidValues()
+	public function testThrowsExceptionIfValuesMissing()
 	{
-		$this->setExpectedException('\Exception');
-		$this->template->setInputValue('foo', 'bar');
+		$code = null;
+
+		try {
+			$this->template->getOutput();
+		} catch (TemplateException $e) {
+			$code = $e->getCode();
+		}
+
+		$this->assertEquals(TemplateException::MISSING_REQUIRED_VARIABLE, $code);
+	}
+
+	/**
+	 * Verifies that Template throws the right kind of TemplateException if an
+	 * attempt is made to set an input value that is not in the list of acceptable
+	 * input values
+	 */
+	public function testThrowsExceptionIfGivenInvalidValue()
+	{
+		$code = null;
+
+		try {
+			$this->template->setInputValue('asdfgh', '12345');
+		} catch (TemplateException $e) {
+			$code = $e->getCode();
+		}
+
+		$this->assertEquals(TemplateException::INVALID_VALUE_NAME, $code);
 	}
 
 }

@@ -21,7 +21,7 @@
 
 namespace Tree\Component;
 
-use \Exception;
+use \Tree\Exception\TemplateException;
 
 abstract class Template {
 
@@ -104,7 +104,9 @@ abstract class Template {
 	public function setInputValue($name, $value)
 	{
 		if (!$this->isPermissibleValue($name)) {
-			throw new Exception("Invalid value: {$name}");
+			$message = "Invalid template value: {$name}";
+			$code    = TemplateException::INVALID_VALUE_NAME;
+			throw new TemplateException($message, $code);
 		}
 
 		$this->inputValues[$name] = $value;
@@ -137,14 +139,17 @@ abstract class Template {
 	private function generateOutput()
 	{
 		if ($this->templateFilename === null) {
-			throw new Exception('No template file specified');
+			$message = 'No template file specified';
+			$code    = TemplateException::MISSING_TEMPLATE_FILENAME;
+			throw new TemplateException($message, $code);
 		}
 
 		$missingValues = $this->getMissingValues();
 
 		if (!empty($missingValues)) {
-			$missingList = implode(', ', $missingValues);
-			throw new Exception("Missing values: {$missingList}");
+			$message = "Missing template values: {$missingValues}";
+			$code    = TemplateException::MISSING_REQUIRED_VARIABLE;
+			throw new TemplateException($message, $code);
 		}
 
 		extract($this->inputValues);
