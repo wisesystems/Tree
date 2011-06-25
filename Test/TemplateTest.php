@@ -100,6 +100,25 @@ class TemplateTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals(TemplateException::INVALID_VALUE_NAME, $code);
 	}
 
+	/**
+	 * Verifies that Template throws the right kind of TemplateException if an
+	 * attempt is made to generate output when no template filename has yet been
+	 * set
+	 */
+	public function testThrowsExceptionIfFilenameMissing()
+	{
+		$code = null;
+
+		try {
+			$this->template->setTemplateFilename(null);
+			$this->template->getOutput();
+		} catch (TemplateException $e) {
+			$code = $e->getCode();
+		}
+
+		$this->assertEquals(TemplateException::MISSING_TEMPLATE_FILENAME, $code);
+	}
+
 }
 
 class TemplateMock extends Template {
