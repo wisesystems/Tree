@@ -2,9 +2,6 @@
 
 namespace Tree\Framework;
 
-use \Tree\Framework\Autoloader;
-use \Tree\Framework\Configuration;
-
 /**
  * Tree 
  *
@@ -34,20 +31,25 @@ class Tree {
 		$tree->runFramework();
 	}
 
+	private $autoloader;
+
+	private $configuration;
+
+	private $requestHandler;
+
+	private $router;
+
 	public function runFramework()
 	{
 		if (!$this->includePathContainsTree()) {
 			return false;
 		}
 
-		require_once 'Tree/Framework/Autoloader.php';
+		$this->loadDependencies();
+		$this->configureDependencies();
 
-		$autoloader = new Autoloader;
-		$autoloader->registerAutoloader();
-
-		$configuration = new Configuration('Tree.ini');
-
-		print_r($configuration);
+		echo '<pre>';
+		print_r($this);
 
 	}
 
@@ -68,6 +70,61 @@ class Tree {
 		$treeDirectory = dirname($treeDirectory);
 
 		return in_array($treeDirectory, $includePath);
+	}
+
+	private function loadDependencies()
+	{
+		require_once 'Tree/Framework/Autoloader.php';
+		$this->autoloader = new Autoloader;
+		$this->autoloader->registerAutoloader();
+
+		$this->configuration  = new Configuration('Tree.ini');
+		$this->requestHandler = new RequestHandler;
+		$this->router         = new Router;
+
+	}
+
+	private function configureDependencies()
+	{
+		if (isset($this->configuration['router'])) {
+			$this->configureRouter($this->configuration['router']);
+		}
+
+		if (isset($this->configuration['routes'])) {
+			$this->configureRoutes($this->configuration['routes']);
+		}
+
+		$this->configureRequestHandler();
+	}
+
+	private function configureRouter(array $config)
+	{
+		if (isset($config['urlprefix'])) {
+			$this->router->setUrlPrefix($config['urlprefix']);
+		}
+	}
+
+	private function configureRoutes(array $routes)
+	{
+		foreach ($routes as $name => $route) {
+
+			$action  = $route['action'];
+			$pattern = $route['pattern'];
+			
+			if (isset($route['parameters'])) {
+				$parameters = $route['parameters'];
+			} else {
+				$parameters = array();
+			}
+
+			$this->router->addRoute($pattern, $action, $parameters);
+		}
+	}
+
+	private function configureRequestHandler()
+	{
+		$this->requestHandler->setConfiguration($this->configuration);
+		$this->requestHandler->setRouter($this->router);
 	}
 
 }
