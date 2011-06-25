@@ -39,8 +39,6 @@ class RequestRouterTest extends PHPUnit_Framework_TestCase {
 	 * Tests that RequestRouter::generateRegEx creates well-formed regular
 	 * expressions to perform named-capture of the parameters in the
 	 * request path
-	 * 
-	 * @access public
 	 */
 	public function testGenerateRegEx()
 	{
@@ -74,8 +72,6 @@ class RequestRouterTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Tests that RequestRouter::parsePattern correctly extracts lists of
 	 * parameter names from request patterns
-	 * 
-	 * @access public
 	 */
 	public function testParsePattern()
 	{
@@ -112,8 +108,6 @@ class RequestRouterTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Tests that RequestRouter::injectParameters correctly injects
 	 * parameters into request patterns to generate request paths
-	 * 
-	 * @access public
 	 */
 	public function testInjectParameters()
 	{
@@ -137,8 +131,6 @@ class RequestRouterTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Tests that RequestRouter applies the right rules to requests and
 	 * extracts the parameters from those requests correctly
-	 * 
-	 * @access public
 	 */
 	public function testRoutesValidRequestsCorrectly()
 	{
@@ -164,8 +156,6 @@ class RequestRouterTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Tests that RequestRouter doesn't inadvertantly route requests that
 	 * don't actually match any of the rules it has been given
-	 * 
-	 * @access public
 	 */
 	public function testRejectsInvalidRequests()
 	{
@@ -180,8 +170,6 @@ class RequestRouterTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Tests that RequestRouter::getPath returns paths that are correctly-
 	 * formed according to the specified request routes
-	 * 
-	 * @access public
 	 */
 	public function testGetPath()
 	{
@@ -196,8 +184,6 @@ class RequestRouterTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Tests that RequestRouter::getPath and RequestRouter::getAction fit
 	 * together to create a two-way mapping between actions and patterns
-	 * 
-	 * @access public
 	 */
 	public function testTwoWayMapping()
 	{
@@ -233,8 +219,6 @@ class RequestRouterTest extends PHPUnit_Framework_TestCase {
 	 * Tests that setting a URL prefix allows us to give RequestRouter a
 	 * full request URL and expect it to parse out the part that actually
 	 * matters
-	 * 
-	 * @access public
 	 */
 	public function testUrlPrefix()
 	{
