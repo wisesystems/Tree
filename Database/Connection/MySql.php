@@ -90,6 +90,11 @@ class Connection_MySql extends Connection {
 		return true;
 	}
 
+	protected function vendorEscape($string)
+	{
+		return $this->mysqli->real_escape_string($string);
+	}
+
 	/**
 	 * Sends a query to the database and returns a result
 	 * 

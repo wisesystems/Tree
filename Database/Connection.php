@@ -49,6 +49,8 @@ abstract class Connection {
 	 */
 	abstract protected function vendorConnect();
 
+	abstract protected function vendorEscape($string);
+
 	/**
 	 * Subclasses must implement this with a method that accepts SQL and returns a
 	 * subclass of Result
@@ -59,6 +61,12 @@ abstract class Connection {
 	 * @return \Tree\Database\Result
 	 */
 	abstract protected function vendorQuery($sql);
+
+	public function escapeString($string)
+	{
+		$this->requireConnection();
+		return $this->vendorEscape($string);
+	}
 
 	/**
 	 * Opens the database connection
