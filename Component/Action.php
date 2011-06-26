@@ -20,7 +20,7 @@ use \Tree\Interfaces\TextResponseGenerator;
  * 
  * @abstract
  * @author     Henry Smith <henry@henrysmith.org> 
- * @copyright  2010 - 2011 Henry Smith
+ * @copyright  2011 Henry Smith
  * @license    GPLv2.0
  * @package    Tree
  * @subpackage Component
@@ -28,8 +28,21 @@ use \Tree\Interfaces\TextResponseGenerator;
  */
 abstract class Action {
 
-	protected $configValues = array();
+	/**
+	 * The Configuration instance containing the config values from the ini file
+	 * 
+	 * @access protected
+	 * @var    \Tree\Framework\Configuration
+	 */
+	protected $configuration;
 
+	/**
+	 * An associative array mapping database connection IDs to their corresponding
+	 * connections
+	 * 
+	 * @access protected
+	 * @var    array
+	 */
 	protected $databases = array();
 
 	/**
@@ -89,11 +102,11 @@ abstract class Action {
 	 * Stores the configuration values from the .ini file for later use
 	 * 
 	 * @access public
-	 * @param  array $configValues 
+	 * @param  array \Tree\Framework\Configuration
 	 */
-	public function setConfigValues(array $configValues)
+	public function setConfigValues($configuration)
 	{
-		$this->configValues = $configValues;
+		$this->configuration = $configuration;
 	}
 
 	/**
