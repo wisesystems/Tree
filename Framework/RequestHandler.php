@@ -183,6 +183,8 @@ class RequestHandler {
 			$action->setInputValue($name, $value);
 		}
 
+		$action->setConfiguration($this->configuration);
+
 		return $action;
 	}
 

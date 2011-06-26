@@ -5,6 +5,7 @@ namespace Tree\Component;
 use \Exception;
 use \PDO;
 
+use \Tree\Database\Connection_MySql;
 use \Tree\Interfaces\HtmlResponseGenerator;
 use \Tree\Interfaces\JsonResponseGenerator;
 use \Tree\Interfaces\TextResponseGenerator;
@@ -104,7 +105,7 @@ abstract class Action {
 	 * @access public
 	 * @param  array \Tree\Framework\Configuration
 	 */
-	public function setConfigValues($configuration)
+	public function setConfiguration($configuration)
 	{
 		$this->configuration = $configuration;
 	}
@@ -178,30 +179,36 @@ abstract class Action {
 	 */
 	protected function getDatabase($database)
 	{
-		if (!isset($this->configValues['database'])) {
+		if (isset($this->databases[$database])) {
+			return $this->databases[$database];
+		}
+
+		if (!isset($this->configuration['database'])) {
 			return null;
 		}
 
-		if (!isset($this->configValues['database'][$database])) {
+		if (!isset($this->configuration['database'][$database])) {
 			return null;
 		}
 
-		$dsn  = $this->configValues['database'][$database]['dsn'];
-		$user = $this->configValues['database'][$database]['username'];
+		$vendor = $this->configuration['database'][$database]['vendor'];
 
-		if (isset($this->configValues['database'][$database]['password'])) {
-			$pass = $this->configValues['database'][$database]['password'];
-		} else {
-			$pass = null;
+		switch ($vendor) {
+
+			case 'MySQL':
+				$connection = new Connection_MySql;
+				break;
+
+			default:
+				return null;
+
 		}
 
-		try {
-			$pdo = new PDO($dsn, $user, $pass);
-		} catch (Exception $e) {
-			return null;
-		}
+		$connection->setIniValues($this->configuration['database'][$database]);
 
-		return $pdo;
+		$this->databases[$database] = $connection;
+
+		return $connection;
 	}
 
 	/**
