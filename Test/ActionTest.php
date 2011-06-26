@@ -4,6 +4,7 @@ namespace Tree\Test;
 
 require 'PHPUnit/Autoload.php';
 require '../Component/Action.php';
+require 'Mock/Action.php';
 
 use \Tree\Component\Action;
 use \PHPUnit_Framework_TestCase;
@@ -27,7 +28,7 @@ class ActionTest extends PHPUnit_Framework_TestCase {
 
 	public function setUp()
 	{
-		$this->action = new ActionMock;
+		$this->action = new Mock_Action;
 	}
 
 	/**
@@ -57,15 +58,6 @@ class ActionTest extends PHPUnit_Framework_TestCase {
 		$response = $this->action->performAction();
 
 		$this->assertEquals('Article: 12345', $response);
-	}
-
-}
-
-class ActionMock extends Action {
-
-	public function main(array $input)
-	{
-		return "Article: {$input['id']}";
 	}
 
 }

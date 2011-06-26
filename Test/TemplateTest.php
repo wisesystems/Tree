@@ -11,7 +11,7 @@
  * @license    GPLv2.0
  * @package    Tree
  * @subpackage Test
- * @uses       PHPUnit_Framework_TestCase
+ * @uses       \PHPUnit_Framework_TestCase
  * @version    0.00
  */
 
@@ -20,6 +20,7 @@ namespace Tree\Test;
 require 'PHPUnit/Autoload.php';
 require '../Component/Template.php';
 require '../Exception/TemplateException.php';
+require 'Mock/Template.php';
 
 use \PHPUnit_Framework_TestCase;
 use \Tree\Component\Template;
@@ -31,7 +32,7 @@ class TemplateTest extends PHPUnit_Framework_TestCase {
 
 	public function setUp()
 	{
-		$this->template = new TemplateMock;
+		$this->template = new Mock_Template;
 		$this->template->setTemplateFilename('/tmp/template.php');
 		file_put_contents('/tmp/template.php', 'Content: <?php echo $content; ?>');
 	}
@@ -120,17 +121,4 @@ class TemplateTest extends PHPUnit_Framework_TestCase {
 	}
 
 }
-
-class TemplateMock extends Template {
-
-	protected $optionalInputValues = array(
-		'footnote' => 'example footnote',
-	);
-
-	protected $requiredInputValues = array(
-		'content',
-	);
-
-}
-
 
