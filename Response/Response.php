@@ -62,9 +62,13 @@ abstract class Response {
 	 * @param  string $name 
 	 * @param  string $value 
 	 */
-	public function setHeader($name, $value)
+	public function setHeader($name, $value = null)
 	{
-		$this->responseHeaders[$name] = $value;
+		if (is_null($value)) {
+			$this->responseHeaders[] = $name;
+		} else {
+			$this->responseHeaders[$name] = $value;
+		}
 	}
 
 	/**
@@ -75,7 +79,11 @@ abstract class Response {
 	private function sendResponseHeaders()
 	{
 		foreach ($this->responseHeaders as $name => $value) {
-			header("{$name}: $value");
+			if (is_int($name)) {
+				header($value);
+			} else {
+				header("{$name}: $value");
+			}
 		}
 	}
 
