@@ -41,7 +41,6 @@ class Result_MySql extends Result {
 	 */
 	protected function vendorCurrent()
 	{
-		$this->requireResultSet();
 		$current = $this->result->fetch_assoc();
 
 		$this->seek($this->key());
@@ -57,7 +56,6 @@ class Result_MySql extends Result {
 	 */
 	protected function vendorCount()
 	{
-		$this->requireResultSet();
 		return $this->result->num_rows;
 	}
 
@@ -69,7 +67,6 @@ class Result_MySql extends Result {
 	 */
 	protected function vendorKey()
 	{
-		$this->requireResultSet();
 		return $this->iteratorIndex;
 	}
 
@@ -80,7 +77,6 @@ class Result_MySql extends Result {
 	 */
 	protected function vendorNext()
 	{
-		$this->requireResultSet();
 		$this->iteratorIndex++;
 		$this->seek($this->iteratorIndex);
 	}
@@ -92,7 +88,6 @@ class Result_MySql extends Result {
 	 */
 	protected function vendorRewind()
 	{
-		$this->requireResultSet();
 		$this->iteratorIndex = 0;
 		$this->seek($this->iteratorIndex);
 	}
@@ -105,7 +100,6 @@ class Result_MySql extends Result {
 	 */
 	protected function vendorSeek($offset)
 	{
-		$this->requireResultSet();
 		$this->result->data_seek($offset);
 	}
 
@@ -127,11 +121,18 @@ class Result_MySql extends Result {
 		}
 	}
 
-	private function requireResultSet()
+	/**
+	 * Indicates whether the result can be treated as a set of rows
+	 * 
+	 * @access protected
+	 * @return boolean
+	 */
+	protected function vendorHasResultSet()
 	{
-		if (!($this->result instanceof mysqli_result)) {
-			$message = "Result is not a result set";
-			throw new DatabaseException($message);
+		if ($this->result instanceof mysqli_result) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 

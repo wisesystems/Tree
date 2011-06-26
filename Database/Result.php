@@ -4,6 +4,7 @@ namespace Tree\Database;
 
 use \Countable;
 use \SeekableIterator;
+use \Tree\Exception\DatabaseException;
 
 /**
  * Result 
@@ -40,6 +41,7 @@ abstract class Result implements Countable, SeekableIterator {
 	 */
 	public function count()
 	{
+		$this->requireResultSet();
 		return $this->vendorCount();
 	}
 
@@ -52,6 +54,7 @@ abstract class Result implements Countable, SeekableIterator {
 	 */
 	public function current()
 	{
+		$this->requireResultSet();
 		return $this->vendorCurrent();
 	}
 
@@ -63,6 +66,7 @@ abstract class Result implements Countable, SeekableIterator {
 	 */
 	public function key()
 	{
+		$this->requireResultSet();
 		return $this->vendorKey();
 	}
 
@@ -74,6 +78,7 @@ abstract class Result implements Countable, SeekableIterator {
 	 */
 	public function next()
 	{
+		$this->requireResultSet();
 		$this->vendorNext();
 	}
 
@@ -85,6 +90,7 @@ abstract class Result implements Countable, SeekableIterator {
 	 */
 	public function rewind()
 	{
+		$this->requireResultSet();
 		$this->vendorRewind();
 	}
 
@@ -97,6 +103,7 @@ abstract class Result implements Countable, SeekableIterator {
 	 */
 	public function seek($offset)
 	{
+		$this->requireResultSet();
 		$this->vendorSeek($offset);
 	}
 
@@ -109,6 +116,7 @@ abstract class Result implements Countable, SeekableIterator {
 	 */
 	public function valid()
 	{
+		$this->requireResultSet();
 		if ($this->key() >= 0 && $this->key() < $this->count()) {
 			return true;
 		} else {
@@ -122,6 +130,8 @@ abstract class Result implements Countable, SeekableIterator {
 
 	abstract protected function vendorKey();
 
+	abstract protected function vendorHasResultSet();
+
 	abstract protected function vendorNext();
 
 	abstract protected function vendorRewind();
@@ -129,6 +139,14 @@ abstract class Result implements Countable, SeekableIterator {
 	abstract protected function vendorSeek($offset);
 
 	abstract protected function vendorStatus();
+
+	private function requireResultSet()
+	{
+		if (!$this->vendorHasResultSet()) {
+			$message = "Result is not a result set";
+			throw new DatabaseException($message);
+		}
+	}
 
 }
 
