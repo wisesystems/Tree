@@ -2,12 +2,12 @@
 
 namespace Tree\Test;
 
-require 'PHPUnit/Autoload.php';
-require '../Database/Connection.php';
-require '../Database/Query.php';
-require '../Database/Query/Where.php';
-require '../Database/Query/Select.php';
-require 'Fake/Connection.php';
+require_once 'PHPUnit/Autoload.php';
+require_once '../Database/Connection.php';
+require_once '../Database/Query.php';
+require_once '../Database/Query/Where.php';
+require_once '../Database/Query/Select.php';
+require_once 'Fake/Connection.php';
 
 use \Tree\Database\Query;
 use \Tree\Database\Query_Select;
