@@ -53,8 +53,6 @@ class QuerySelectTest extends PHPUnit_Framework_TestCase {
 
 		$sql = $query->getSql();
 
-		echo $sql;
-
 		$this->assertEquals("SELECT\n\t*\nFROM\n\t`sometable`\nORDER BY\n\t`test` ASC\n", $sql);
 	}
 
