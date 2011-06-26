@@ -18,6 +18,24 @@ namespace Tree\Request;
 class Request_Http extends Request {
 
 	/**
+	 * Returns the given HTTP request header
+	 * 
+	 * @access public
+	 * @param  string $name 
+	 * @return string
+	 */
+	public function getHeader($name)
+	{
+		$headers = getallheaders();
+
+		if (isset($headers[$name])) {
+			return $headers[$name];
+		}
+
+		return null;
+	}
+
+	/**
 	 * Returns the URL of the request 
 	 * 
 	 * @access public

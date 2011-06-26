@@ -18,6 +18,16 @@ namespace Tree\Request;
 abstract class Request {
 
 	/**
+	 * Returns the value of the given request header
+	 * 
+	 * @abstract
+	 * @access public
+	 * @param  string $name 
+	 * @return string
+	 */
+	abstract public function getHeader($name);
+
+	/**
 	 * Returns the URL that initiated the request
 	 *
 	 * @abstract
