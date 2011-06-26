@@ -2,6 +2,10 @@
 
 namespace Tree\Framework;
 
+use \Tree\Request\Request;
+use \Tree\Request\Request_Http;
+use \Tree\Response\Response;
+
 /**
  * Tree 
  *
@@ -48,8 +52,12 @@ class Tree {
 		$this->loadDependencies();
 		$this->configureDependencies();
 
-		echo '<pre>';
-		print_r($this);
+		$request  = $this->detectRequest();
+		$response = $this->requestHandler->handleRequest($request);
+
+		if ($response instanceof Response) {
+			$response->sendResponse();
+		}
 
 	}
 
@@ -81,7 +89,6 @@ class Tree {
 		$this->configuration  = new Configuration('Tree.ini');
 		$this->requestHandler = new RequestHandler;
 		$this->router         = new Router;
-
 	}
 
 	private function configureDependencies()
@@ -108,8 +115,9 @@ class Tree {
 	{
 		foreach ($routes as $name => $route) {
 
-			$action  = $route['action'];
-			$pattern = $route['pattern'];
+			$action   = $route['action'];
+			$pattern  = $route['pattern'];
+			$response = $route['response'];
 			
 			if (isset($route['parameters'])) {
 				$parameters = $route['parameters'];
@@ -117,7 +125,7 @@ class Tree {
 				$parameters = array();
 			}
 
-			$this->router->addRoute($pattern, $action, $parameters);
+			$this->router->addRoute($pattern, $action, $response, $parameters);
 		}
 	}
 
@@ -125,6 +133,11 @@ class Tree {
 	{
 		$this->requestHandler->setConfiguration($this->configuration);
 		$this->requestHandler->setRouter($this->router);
+	}
+
+	private function detectRequest()
+	{
+		return new Request_Http;
 	}
 
 }

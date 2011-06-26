@@ -45,9 +45,10 @@ class Router {
 	 * @access public
 	 * @param  string $requestPattern 
 	 * @param  string $actionId 
+	 * @param  string $response         The MIME type of the response
 	 * @param  array  $actionParameters [optional]
 	 */
-	public function addRoute($requestPattern, $actionId, array $actionParameters = array())
+	public function addRoute($requestPattern, $actionId, $response, array $actionParameters = array())
 	{
 		$regularExpression = $this->generateRegEx($requestPattern);
 		$patternParameters = $this->parsePattern($requestPattern);
@@ -59,6 +60,7 @@ class Router {
 			'regular-expression' => $regularExpression,
 			'action-id'          => $actionId,
 			'action-parameters'  => $actionParameters,
+			'response-mimetype'  => $response,
 		);
 
 	}
@@ -81,6 +83,7 @@ class Router {
 			$regularExpression = $route['regular-expression'];
 			$actionId          = $route['action-id'];
 			$actionParameters  = $route['action-parameters'];
+			$responseMimeType  = $route['response-mimetype'];
 
 			if (preg_match($regularExpression, $requestPath, $matches)) {
 
@@ -90,7 +93,7 @@ class Router {
 					}
 				}
 
-				return array($actionId, $actionParameters);
+				return array($actionId, $actionParameters, $responseMimeType);
 
 			}
 
