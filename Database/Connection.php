@@ -49,6 +49,15 @@ abstract class Connection {
 	 */
 	abstract protected function vendorConnect();
 
+	/**
+	 * Subclasses must implement this with a method that returns strings escaped
+	 * so as to be safe for inclusion in SQL queries
+	 * 
+	 * @abstract
+	 * @access protected
+	 * @param  string $string 
+	 * @return string
+	 */
 	abstract protected function vendorEscape($string);
 
 	/**
@@ -62,6 +71,13 @@ abstract class Connection {
 	 */
 	abstract protected function vendorQuery($sql);
 
+	/**
+	 * Escapes and returns the given string
+	 * 
+	 * @access public
+	 * @param  string $string 
+	 * @return string
+	 */
 	public function escapeString($string)
 	{
 		$this->requireConnection();
