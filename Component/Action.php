@@ -5,6 +5,8 @@ namespace Tree\Component;
 use \Exception;
 use \PDO;
 
+use \Tree\Interfaces\HtmlResponseGenerator;
+
 /**
  * Action 
  *
@@ -124,6 +126,14 @@ abstract class Action {
 		$value = $this->filterInputValue($name, $value);
 
 		$this->inputValues[$name] = $value;
+	}
+
+	public function supportsResponseType($responseType)
+	{
+		if ($responseType == 'text/html' && $this instanceof HtmlResponseGenerator) {
+			return true;
+		}
+		return false;
 	}
 
 	/**
