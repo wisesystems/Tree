@@ -8,7 +8,7 @@ namespace Tree\Response;
  * Handles sending JSON-encoded responses
  * 
  * @author     Henry Smith <henry@henrysmith.org> 
- * @copyright  2010 Henry Smith
+ * @copyright  2011 Henry Smith
  * @license    GPLv2.0
  * @package    Tree
  * @subpackage Response

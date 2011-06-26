@@ -14,7 +14,7 @@ use \PHPUnit_Framework_TestCase;
  * Tests for correct filtering of input values by Action
  * 
  * @author     Henry Smith <henry@henrysmith.org> 
- * @copyright  2010 - 2011 Henry Smith
+ * @copyright  2011 Henry Smith
  * @license    GPLv2.0
  * @package    Tree
  * @subpackage Test
