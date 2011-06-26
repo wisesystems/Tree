@@ -6,6 +6,8 @@ use \Exception;
 use \PDO;
 
 use \Tree\Interfaces\HtmlResponseGenerator;
+use \Tree\Interfaces\JsonResponseGenerator;
+use \Tree\Interfaces\TextResponseGenerator;
 
 /**
  * Action 
@@ -128,11 +130,28 @@ abstract class Action {
 		$this->inputValues[$name] = $value;
 	}
 
+	/**
+	 * Indicates whether the Action is capable of returning a response of the
+	 * given mimetype
+	 * 
+	 * @access public
+	 * @param  string $responseType 
+	 * @return boolean
+	 */
 	public function supportsResponseType($responseType)
 	{
 		if ($responseType == 'text/html' && $this instanceof HtmlResponseGenerator) {
 			return true;
 		}
+
+		if ($responseType == 'text/plain' && $this instanceof TextResponseGenerator) {
+			return true;
+		}
+
+		if ($responseType == 'application/json' && $this instanceof JsonResponseGenerator) {
+			return true;
+		}
+
 		return false;
 	}
 
