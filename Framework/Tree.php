@@ -35,10 +35,28 @@ class Tree {
 		$tree->runFramework();
 	}
 
+	/**
+	 * The class autoloader
+	 * 
+	 * @access private
+	 * @var    \Tree\Framework\Autoloader
+	 */
 	private $autoloader;
 
+	/**
+	 * The Configuration class containing the config values from the ini file
+	 * 
+	 * @access private
+	 * @var    \Tree\Configuration\Configuration
+	 */
 	private $configuration;
 
+	/**
+	 * The request handler for generating responses to requests
+	 * 
+	 * @access private
+	 * @var    \Tree\Framework\RequestHandler
+	 */
 	private $requestHandler;
 
 	private $router;
