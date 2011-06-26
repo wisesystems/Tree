@@ -5,6 +5,7 @@ namespace Tree\Framework;
 use \Tree\Interfaces\HtmlResponseGenerator;
 
 use \Tree\Response\Response;
+use \Tree\Response\Response_Html;
 use \Tree\Response\Response_Text;
 
 /**
@@ -21,19 +22,40 @@ use \Tree\Response\Response_Text;
  * @package    Tree
  * @subpackage Framework
  * @license    GPLv2.0
- * @uses       \Tree\Request\Request;
- * @uses       \Tree\Response\Response;
- * @uses       \Tree\Interfaces\HtmlResponseGenerator;
- * @uses       \Tree\Interfaces\JsonResponseGenerator;
- * @uses       \Tree\Interfaces\TextResponseGenerator;
+ * @uses       \Tree\Framework\Configuration
+ * @uses       \Tree\Framework\Router
+ * @uses       \Tree\Request\Request
+ * @uses       \Tree\Response\Response
+ * @uses       \Tree\Interfaces\HtmlResponseGenerator
+ * @uses       \Tree\Interfaces\JsonResponseGenerator
+ * @uses       \Tree\Interfaces\TextResponseGenerator
  * @version    0.00
  */
 class RequestHandler {
 
+	/**
+	 * The Configuration instance for configuring Actions
+	 * 
+	 * @access private
+	 * @var    \Tree\Framework\Configuration
+	 */
 	private $configuration;
 
+	/**
+	 * The Router instance for mapping URLs to Actions
+	 * 
+	 * @access private
+	 * @var    \Tree\Framework\Router
+	 */
 	private $router;
 
+	/**
+	 * Returns a Response corresponding to the given Request
+	 * 
+	 * @access public
+	 * @param  \Tree\Request\Request $request 
+	 * @return \Tree\Response\Response
+	 */
 	public function handleRequest($request)
 	{
 		$requestUrl = $request->getUrl();
@@ -85,24 +107,70 @@ class RequestHandler {
 		return $this->handle500($request);
 	}
 
+	/**
+	 * Sets the Configuration instance to be used to configure Actions
+	 * 
+	 * @access public
+	 * @param  \Tree\Framework\Configuration $configuration 
+	 */
 	public function setConfiguration($configuration)
 	{
 		$this->configuration = $configuration;
 	}
 
+	/**
+	 * Sets the Router instance to be used to map URLs to Actions
+	 * 
+	 * @access public
+	 * @param  \Tree\Framework\Router $router 
+	 */
 	public function setRouter($router)
 	{
 		$this->router = $router;
 	}
 
+	/**
+	 * Returns a response suitable for sending when the request resource cannot
+	 * be found
+	 * 
+	 * @access private
+	 * @param  \Tree\Request\Request $request 
+	 * @return \Tree\Response\Response
+	 */
 	private function handle404($request)
 	{
+		$response = new Response_Html;
+		$response->setHeader('HTTP/1.0 404 Not Found');
+		$response->setBody('<h1>404 File Not Found</h1>');
+
+		return $response;
 	}
 
+	/**
+	 * Returns a response suitable for sending when there has been an internal
+	 * server error
+	 * 
+	 * @access private
+	 * @param  \Tree\Request\Request $request 
+	 * @return \Tree\Response\Response
+	 */
 	private function handle500($request)
 	{
+		$response = new Response_Html;
+		$response->setHeader('HTTP/1.0 500 Internal Server Error');
+		$response->setBody('<h1>500 Internal Server Error</h1>');
+
+		return $response;
 	}
 
+	/**
+	 * Loads and returns the Action subclass defined by the given route
+	 * specification
+	 * 
+	 * @access private
+	 * @param  array $spec 
+	 * @return Action
+	 */
 	private function loadAction(array $spec)
 	{
 		$actionClass  = $spec[0];
@@ -118,6 +186,15 @@ class RequestHandler {
 		return $action;
 	}
 
+	/**
+	 * Returns a response obtained from the given action according to the response
+	 * type defined in the given route specification
+	 * 
+	 * @access private
+	 * @param  Action $action 
+	 * @param  array $spec 
+	 * @return Response
+	 */
 	private function getResponseFromAction($action, array $spec)
 	{
 		if ($spec[2] === 'text/html') {

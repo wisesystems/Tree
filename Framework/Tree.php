@@ -43,6 +43,11 @@ class Tree {
 
 	private $router;
 
+	/**
+	 * The overall flow of control of the framework
+	 * 
+	 * @access public
+	 */
 	public function runFramework()
 	{
 		if (!$this->includePathContainsTree()) {
@@ -80,6 +85,11 @@ class Tree {
 		return in_array($treeDirectory, $includePath);
 	}
 
+	/**
+	 * Instantiates all framework classes needed to bootstrap the framework
+	 * 
+	 * @access private
+	 */
 	private function loadDependencies()
 	{
 		require_once 'Tree/Framework/Autoloader.php';
@@ -91,6 +101,12 @@ class Tree {
 		$this->router         = new Router;
 	}
 
+	/**
+	 * Applies configuration values from the ini file to the components of the
+	 * framework
+	 * 
+	 * @access private
+	 */
 	private function configureDependencies()
 	{
 		if (isset($this->configuration['router'])) {
@@ -104,6 +120,12 @@ class Tree {
 		$this->configureRequestHandler();
 	}
 
+	/**
+	 * Applies the ini config values to the request router
+	 * 
+	 * @access private
+	 * @param  array $config 
+	 */
 	private function configureRouter(array $config)
 	{
 		if (isset($config['urlprefix'])) {
@@ -111,6 +133,12 @@ class Tree {
 		}
 	}
 
+	/**
+	 * Sets up the request routes from the config file
+	 * 
+	 * @access private
+	 * @param  array $routes 
+	 */
 	private function configureRoutes(array $routes)
 	{
 		foreach ($routes as $name => $route) {
@@ -129,12 +157,25 @@ class Tree {
 		}
 	}
 
+	/**
+	 * Applies the ini config values to the request router and injects
+	 * dependencies
+	 * 
+	 * @access private
+	 */
 	private function configureRequestHandler()
 	{
 		$this->requestHandler->setConfiguration($this->configuration);
 		$this->requestHandler->setRouter($this->router);
 	}
 
+	/**
+	 * Detects the type of request that has been received and instantiates the
+	 * corresponding subclass of Request
+	 * 
+	 * @access private
+	 * @return \Tree\Request\Request
+	 */
 	private function detectRequest()
 	{
 		return new Request_Http;
