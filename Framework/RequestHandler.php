@@ -2,8 +2,7 @@
 
 namespace Tree\Framework;
 
-use \Tree\Interfaces\HtmlResponseGenerator;
-
+use \Tree\Component\Action_HtmlResponseGenerator;
 use \Tree\Response\Response;
 use \Tree\Response\Response_Html;
 use \Tree\Response\Response_Text;
@@ -26,9 +25,9 @@ use \Tree\Response\Response_Text;
  * @uses       \Tree\Framework\Router
  * @uses       \Tree\Request\Request
  * @uses       \Tree\Response\Response
- * @uses       \Tree\Interfaces\HtmlResponseGenerator
- * @uses       \Tree\Interfaces\JsonResponseGenerator
- * @uses       \Tree\Interfaces\TextResponseGenerator
+ * @uses       \Tree\Component\Action_HtmlResponseGenerator
+ * @uses       \Tree\Component\Action_JsonResponseGenerator
+ * @uses       \Tree\Component\Action_TextResponseGenerator
  * @version    0.00
  */
 class RequestHandler {
@@ -90,7 +89,7 @@ class RequestHandler {
 			return $this->handle500($request);
 		}
 
-		if ($return === true) {
+		if ($return === 200) {
 
 			$response = $this->getResponseFromAction($action, $spec);
 
@@ -100,7 +99,12 @@ class RequestHandler {
 				return $this->handle500($request);
 			}
 
+		} elseif ($return === 404) {
+			return $this->handle404($request);
+		} elseif ($return === 500) {
+			return $this->handle500($request);
 		}
+
 
 		// at this point the only possible state is that the action returned
 		// something other than true, false or null, which is wrong
