@@ -61,10 +61,27 @@ class ActionTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals(200, $response);
 	}
 
+	/**
+	 * Tests that supportsResponseType() can tell when the Action can return a 
+	 * response of the given type
+	 */
 	public function testRecognisesSupportedResponseFormat()
 	{
 		$responseType = 'text/html';
 		$expected     = true;
+		$output       = $this->action->supportsResponseType($responseType);
+
+		$this->assertEquals($expected, $output);
+	}
+
+	/**
+	 * Tests that supportsResponseType() can tell when the Action cannot return a 
+	 * response of the given type
+	 */
+	public function testRecognisesUnsupportedResponseFormat()
+	{
+		$responseType = 'application/json';
+		$expected     = false;
 		$output       = $this->action->supportsResponseType($responseType);
 
 		$this->assertEquals($expected, $output);
