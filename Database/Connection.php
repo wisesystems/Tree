@@ -125,9 +125,11 @@ abstract class Connection {
 		if ($this->isConnected() || $this->openConnection()) {
 			return true;
 		} else {
+
 			$message = 'Could not connect to database';
+			$code    = DatabaseException::CONNECTION_FAILED;
 			
-			throw new DatabaseException($message);
+			throw new DatabaseException($message, $code);
 		}
 	}
 
