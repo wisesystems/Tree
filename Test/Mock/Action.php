@@ -3,6 +3,7 @@
 namespace Tree\Test;
 
 use \Tree\Component\Action;
+use \Tree\Component\Action_HtmlResponseGenerator;
 
 /**
  * Mock_Action 
@@ -17,11 +18,20 @@ use \Tree\Component\Action;
  * @uses       \Tree\Component\Action
  * @version    0.00
  */
-class Mock_Action extends Action {
+class Mock_Action extends Action implements Action_HtmlResponseGenerator {
 
 	public function main(array $input)
 	{
-		return "Article: {$input['id']}";
+		if ($input['id'] == 12345) {
+			return 200;
+		} else {
+			return 404;
+		}
+	}
+
+	public function getHtmlResponse()
+	{
+		return '<p>test</p>';
 	}
 
 }

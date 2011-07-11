@@ -6,9 +6,9 @@ use \Exception;
 use \PDO;
 
 use \Tree\Database\Connection_MySql;
-use \Tree\Interfaces\HtmlResponseGenerator;
-use \Tree\Interfaces\JsonResponseGenerator;
-use \Tree\Interfaces\TextResponseGenerator;
+use \Tree\Component\Action_HtmlResponseGenerator;
+use \Tree\Component\Action_JsonResponseGenerator;
+use \Tree\Component\Action_TextResponseGenerator;
 
 /**
  * Action 
@@ -154,15 +154,15 @@ abstract class Action {
 	 */
 	public function supportsResponseType($responseType)
 	{
-		if ($responseType == 'text/html' && $this instanceof HtmlResponseGenerator) {
+		if ($responseType == 'text/html' && $this instanceof Action_HtmlResponseGenerator) {
 			return true;
 		}
 
-		if ($responseType == 'text/plain' && $this instanceof TextResponseGenerator) {
+		if ($responseType == 'text/plain' && $this instanceof Action_TextResponseGenerator) {
 			return true;
 		}
 
-		if ($responseType == 'application/json' && $this instanceof JsonResponseGenerator) {
+		if ($responseType == 'application/json' && $this instanceof Action_JsonResponseGenerator) {
 			return true;
 		}
 

@@ -4,6 +4,7 @@ namespace Tree\Test;
 
 require 'PHPUnit/Autoload.php';
 require '../Component/Action.php';
+require '../Component/Action/HtmlResponseGenerator.php';
 require 'Mock/Action.php';
 
 use \Tree\Component\Action;
@@ -57,7 +58,16 @@ class ActionTest extends PHPUnit_Framework_TestCase {
 
 		$response = $this->action->performAction();
 
-		$this->assertEquals('Article: 12345', $response);
+		$this->assertEquals(200, $response);
+	}
+
+	public function testRecognisesSupportedResponseFormat()
+	{
+		$responseType = 'text/html';
+		$expected     = true;
+		$output       = $this->action->supportsResponseType($responseType);
+
+		$this->assertEquals($expected, $output);
 	}
 
 }
