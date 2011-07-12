@@ -28,11 +28,12 @@ class Tree {
 	 * 
 	 * @static
 	 * @access public
+	 * @param  string $iniFile  The name of the INI file to configure the app
 	 */
-	public static function main()
+	public static function main($iniFile)
 	{
 		$tree = new self;
-		$tree->runFramework();
+		$tree->runFramework($iniFile);
 	}
 
 	/**
@@ -65,14 +66,15 @@ class Tree {
 	 * The overall flow of control of the framework
 	 * 
 	 * @access public
+	 * @param  string $iniFile
 	 */
-	public function runFramework()
+	public function runFramework($iniFile)
 	{
 		if (!$this->includePathContainsTree()) {
 			return false;
 		}
 
-		$this->loadDependencies();
+		$this->loadDependencies($iniFile);
 		$this->configureDependencies();
 
 		$request  = $this->detectRequest();
@@ -108,13 +110,13 @@ class Tree {
 	 * 
 	 * @access private
 	 */
-	private function loadDependencies()
+	private function loadDependencies($iniFile)
 	{
 		require_once 'Tree/Framework/Autoloader.php';
 		$this->autoloader = new Autoloader;
 		$this->autoloader->registerAutoloader();
 
-		$this->configuration  = new Configuration('Tree.ini');
+		$this->configuration  = new Configuration($iniFile);
 		$this->requestHandler = new RequestHandler;
 		$this->router         = new Router;
 	}
