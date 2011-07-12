@@ -175,7 +175,7 @@ abstract class Action {
 	 * 
 	 * @access protected
 	 * @param  string $database 
-	 * @return PDO
+	 * @return \Tree\Database\Connection
 	 */
 	protected function getDatabase($database)
 	{
