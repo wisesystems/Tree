@@ -144,7 +144,7 @@ class RequestHandler {
 	private function handle404($request)
 	{
 		$response = new Response_Html;
-		$response->setHeader('HTTP/1.0 404 Not Found');
+		$response->setStatus(404);
 		$response->setBody('<h1>404 File Not Found</h1>');
 
 		return $response;
@@ -161,7 +161,7 @@ class RequestHandler {
 	private function handle500($request)
 	{
 		$response = new Response_Html;
-		$response->setHeader('HTTP/1.0 500 Internal Server Error');
+		$response->setStatus(500);
 		$response->setBody('<h1>500 Internal Server Error</h1>');
 
 		return $response;
