@@ -2,6 +2,10 @@
 
 namespace Tree\Database;
 
+use \Tree\Database\Result;
+use \Tree\Database\Result_MySql;
+
+
 /**
  * Query 
  *
@@ -69,6 +73,20 @@ abstract class Query {
 			$value = "'$value'";
 			return $value;
 		}
+	}
+
+	/**
+	 * Returns the result of the query
+	 * 
+	 * @access public
+	 * @return \Tree\Database\Result
+	 */
+	public function getResult()
+	{
+		$sql    = $this->getSql();
+		$result = $this->connection->query($sql);
+
+		return $result;
 	}
 
 	/**
