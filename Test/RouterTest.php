@@ -54,6 +54,14 @@ class RouterTest extends PHPUnit_Framework_TestCase {
 				'input'  => '/test/{id}',
 				'output' => '|^/test/(?P<id>[^/]+)$|',
 			),
+			array(
+				'input'  => '/test/{id/\d/}',
+				'output' => '|^/test/(?P<id>\d)$|',
+			),
+			array(
+				'input'  => '/test/{id/\d{4}/}',
+				'output' => '|^/test/(?P<id>\d{4})$|',
+			),
 		);
 
 		foreach ($examples as $example) {
@@ -64,7 +72,7 @@ class RouterTest extends PHPUnit_Framework_TestCase {
 			$arguments = array($input);
 			$actual    = $method->invokeArgs($this->router, $arguments);
 
-			$this->assertEquals($actual, $expected);
+			$this->assertEquals($expected, $actual);
 
 		}
 	}

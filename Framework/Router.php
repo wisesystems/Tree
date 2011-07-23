@@ -212,9 +212,25 @@ class Router {
 		$requestPattern = trim($requestPattern, '/');
 		$requestPattern = '/' . $requestPattern;
 
-		$regEx = preg_replace(
-			'|{([^}]+)}|',
-			'(?P<$1>[^/]+)',
+		$regEx = preg_replace_callback(
+			'|{([^}]+?)(/([^/]+)/)?}|',
+			function ($matches) {
+
+				$token = $matches[0];
+				$name  = $matches[1];
+
+				if (isset($matches[3])) {
+					$pattern = $matches[3];
+				} else {
+					$pattern = '[^/]+';
+				}
+				
+				$format = '(?P<%s>%s)';
+				$string = sprintf($format, $name, $pattern);
+
+				return $string;
+
+			},
 			$requestPattern
 		);
 
