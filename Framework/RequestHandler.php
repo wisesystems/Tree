@@ -2,7 +2,11 @@
 
 namespace Tree\Framework;
 
-use \Tree\Component\Action_HtmlResponseGenerator;
+use \Tree\Behaviour\Http200Handler;
+use \Tree\Behaviour\Http404Handler;
+use \Tree\Behaviour\Http403Handler;
+use \Tree\Behaviour\Http500Handler;
+use \Tree\Component\Action;
 use \Tree\Response\Response;
 use \Tree\Response\Response_Html;
 use \Tree\Response\Response_Text;
@@ -64,51 +68,37 @@ class RequestHandler {
 		if (is_null($spec)) {
 			// this is a request whose URL doesn't match any of the patterns in these
 			// router, the simplest kind of 404
-			return $this->handle404($request);
+			return $this->handle404($request, null);
 		}
 
 		$action = $this->loadAction($spec);
-
-		if (!$action->supportsResponseType($spec[2])) {
-			// requests shouldn't be being routed to actions that can't provide a
-			// response in the right format, this is a configuration problem
-			return $this->handle500($request);
-		}
 
 		$return = $action->performAction();
 
 		if (is_null($return)) {
 			// actions return null to indicate that there is nothing to return, i.e.
 			// the given parameters don't correspond to any entity, which is a 404
-			return $this->handle404($request);
+			return $this->handle404($request, $action);
 		}
 
 		if ($return === false) {
 			// actions return false to indicate that some unexpected error has
 			// prevented them from completing, which is an internal server error
-			return $this->handle500($request);
+			return $this->handle500($request, $action);
 		}
 
 		if ($return === 200) {
-
-			$response = $this->getResponseFromAction($action, $spec);
-
-			if ($response instanceof Response) {
-				return $response;
-			} else {
-				return $this->handle500($request);
-			}
-
+			return $this->handle200($request, $action);
 		} elseif ($return === 404) {
-			return $this->handle404($request);
+			return $this->handle404($request, $action);
 		} elseif ($return === 500) {
-			return $this->handle500($request);
+			return $this->handle500($request, $action);
 		}
 
 
 		// at this point the only possible state is that the action returned
 		// something other than true, false or null, which is wrong
-		return $this->handle500($request);
+		return $this->handle500($request, $action);
 	}
 
 	/**
@@ -134,18 +124,45 @@ class RequestHandler {
 	}
 
 	/**
+	 * Returns a response suitable for sending when the action has been completed
+	 * successfully
+	 * 
+	 * @access private
+	 * @param  \Tree\Request\Request $request 
+	 * @param  \Tree\Component\Action
+	 * @return \Tree\Response\Response
+	 */
+	private function handle200($request, $action)
+	{
+		if ($action instanceof Action && $action instanceof Http200Handler) {
+			$response = $action->handle200($request);
+		} else {
+			$response = new Response_Html;
+			$response->setStatus(200);
+			$response->setBody('<h1>200 OK</h1>');
+		}
+
+		return $response;
+	}
+
+	/**
 	 * Returns a response suitable for sending when the request resource cannot
 	 * be found
 	 * 
 	 * @access private
 	 * @param  \Tree\Request\Request $request 
+	 * @param  \Tree\Component\Action
 	 * @return \Tree\Response\Response
 	 */
-	private function handle404($request)
+	private function handle404($request, $action)
 	{
-		$response = new Response_Html;
-		$response->setStatus(404);
-		$response->setBody('<h1>404 File Not Found</h1>');
+		if ($action instanceof Action && $action instanceof Http404Handler) {
+			$response = $action->handle404($request);
+		} else {
+			$response = new Response_Html;
+			$response->setStatus(404);
+			$response->setBody('<h1>404 File Not Found</h1>');
+		}
 
 		return $response;
 	}
@@ -158,11 +175,15 @@ class RequestHandler {
 	 * @param  \Tree\Request\Request $request 
 	 * @return \Tree\Response\Response
 	 */
-	private function handle500($request)
+	private function handle500($request, $action)
 	{
-		$response = new Response_Html;
-		$response->setStatus(500);
-		$response->setBody('<h1>500 Internal Server Error</h1>');
+		if ($action instanceof Action && $action instanceof Http500Handler) {
+			$response = $action->handle500($request);
+		} else {
+			$response = new Response_Html;
+			$response->setStatus(500);
+			$response->setBody('<h1>500 Internal Server Error</h1>');
+		}
 
 		return $response;
 	}
@@ -190,32 +211,6 @@ class RequestHandler {
 		$action->setConfiguration($this->configuration);
 
 		return $action;
-	}
-
-	/**
-	 * Returns a response obtained from the given action according to the response
-	 * type defined in the given route specification
-	 * 
-	 * @access private
-	 * @param  Action $action 
-	 * @param  array $spec 
-	 * @return Response
-	 */
-	private function getResponseFromAction($action, array $spec)
-	{
-		if ($spec[2] === 'text/html') {
-			return $action->getHtmlResponse();
-		}
-
-		if ($spec[2] === 'text/plain') {
-			return $action->getTextResponse();
-		}
-
-		if ($spec[2] === 'application/json') {
-			return $action->getJsonResponse();
-		}
-		
-		return null;
 	}
 
 }

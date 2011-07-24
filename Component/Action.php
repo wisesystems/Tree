@@ -6,9 +6,6 @@ use \Exception;
 use \PDO;
 
 use \Tree\Database\Connection_MySql;
-use \Tree\Component\Action_HtmlResponseGenerator;
-use \Tree\Component\Action_JsonResponseGenerator;
-use \Tree\Component\Action_TextResponseGenerator;
 
 /**
  * Action 
@@ -142,31 +139,6 @@ abstract class Action {
 		$value = $this->filterInputValue($name, $value);
 
 		$this->inputValues[$name] = $value;
-	}
-
-	/**
-	 * Indicates whether the Action is capable of returning a response of the
-	 * given mimetype
-	 * 
-	 * @access public
-	 * @param  string $responseType 
-	 * @return boolean
-	 */
-	public function supportsResponseType($responseType)
-	{
-		if ($responseType == 'text/html' && $this instanceof Action_HtmlResponseGenerator) {
-			return true;
-		}
-
-		if ($responseType == 'text/plain' && $this instanceof Action_TextResponseGenerator) {
-			return true;
-		}
-
-		if ($responseType == 'application/json' && $this instanceof Action_JsonResponseGenerator) {
-			return true;
-		}
-
-		return false;
 	}
 
 	/**
