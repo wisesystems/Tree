@@ -200,7 +200,6 @@ class RequestHandler {
 	{
 		$actionClass  = $spec[0];
 		$parameters   = $spec[1];
-		$responseType = $spec[2];
 
 		$action = new $actionClass;
 

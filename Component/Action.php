@@ -240,6 +240,8 @@ abstract class Action {
 
 		if (!isset($filter['options'])) {
 			$filter['options'] = array();
+		} else {
+			$filter['options'] = array('options' => $filter['options']);
 		}
 
 		$value = filter_var(

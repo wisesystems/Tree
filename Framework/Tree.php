@@ -165,15 +165,21 @@ class Tree {
 
 			$action   = $route['action'];
 			$pattern  = $route['pattern'];
-			$response = $route['response'];
-			
-			if (isset($route['parameters'])) {
-				$parameters = $route['parameters'];
-			} else {
-				$parameters = array();
-			}
 
-			$this->router->addRoute($pattern, $action, $response, $parameters);
+			$parameters = array();
+
+			foreach ($route as $name => $value) {
+				switch ($name) {
+					case 'action':
+						continue;
+					case 'pattern':
+						continue;
+					default:
+						$parameters[$name] = $value;
+				}
+			}
+		
+			$this->router->addRoute($pattern, $action, $parameters);
 		}
 	}
 
