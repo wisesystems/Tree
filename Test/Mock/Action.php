@@ -3,7 +3,7 @@
 namespace Tree\Test;
 
 use \Tree\Component\Action;
-use \Tree\Component\Action_HtmlResponseGenerator;
+use \Tree\Behaviour\Http200Handler;
 
 /**
  * Mock_Action 
@@ -18,7 +18,7 @@ use \Tree\Component\Action_HtmlResponseGenerator;
  * @uses       \Tree\Component\Action
  * @version    0.00
  */
-class Mock_Action extends Action implements Action_HtmlResponseGenerator {
+class Mock_Action extends Action implements Http200Handler {
 
 	public function main(array $input)
 	{
@@ -29,7 +29,7 @@ class Mock_Action extends Action implements Action_HtmlResponseGenerator {
 		}
 	}
 
-	public function getHtmlResponse()
+	public function handle200($request)
 	{
 		return '<p>test</p>';
 	}

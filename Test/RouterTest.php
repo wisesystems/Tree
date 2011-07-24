@@ -142,8 +142,8 @@ class RouterTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testRoutesValidRequestsCorrectly()
 	{
-		$this->router->addRoute('/article/{id}', 'ArticleView', 'text/html');
-		$this->router->addRoute('/article/{id}/extra', 'ArticleView', 'text/html', array(
+		$this->router->addRoute('/article/{id}', 'ArticleView');
+		$this->router->addRoute('/article/{id}/extra', 'ArticleView', array(
 			'extra' => true,
 		));
 
@@ -167,7 +167,7 @@ class RouterTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testRejectsInvalidRequests()
 	{
-		$this->router->addRoute('/test/{hi}', 'SomeAction', 'text/html');
+		$this->router->addRoute('/test/{hi}', 'SomeAction');
 
 		$route = $this->router->getAction('/foo/bar/wut');
 
@@ -181,8 +181,8 @@ class RouterTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testGetPath()
 	{
-		$this->router->addRoute('/test/{hi}', 'SomeAction', 'text/html');
-		$this->router->addRoute('/test/{hi}/{foo}', 'OtherAction', 'text/html');
+		$this->router->addRoute('/test/{hi}', 'SomeAction');
+		$this->router->addRoute('/test/{hi}/{foo}', 'OtherAction');
 
 		$path = $this->router->getPath('SomeAction', array('hi' => 'test'));
 
@@ -195,12 +195,12 @@ class RouterTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testTwoWayMapping()
 	{
-		$this->router->addRoute('/article/{id}', 'ArticleView', 'text/html');
-		$this->router->addRoute('/article/{id}/extra', 'ArticleView', 'text/html', array(
+		$this->router->addRoute('/article/{id}', 'ArticleView');
+		$this->router->addRoute('/article/{id}/extra', 'ArticleView', array(
 			'extra' => true,
 		));
-		$this->router->addRoute('/test/{hi}', 'SomeAction', 'text/html');
-		$this->router->addRoute('/test/{hi}/{foo}', 'OtherAction', 'text/html');
+		$this->router->addRoute('/test/{hi}', 'SomeAction');
+		$this->router->addRoute('/test/{hi}/{foo}', 'OtherAction');
 
 		$paths = array(
 			'/article/12345',
@@ -231,7 +231,7 @@ class RouterTest extends PHPUnit_Framework_TestCase {
 	public function testUrlPrefix()
 	{
 		$this->router->setUrlPrefix('http://example.com');
-		$this->router->addRoute('/article/{id}', 'ArticleView', 'text/html');
+		$this->router->addRoute('/article/{id}', 'ArticleView');
 
 		$parameters = array(
 			'id' => 12345,
