@@ -2,6 +2,7 @@
 
 namespace Tree\Database;
 
+use \ArrayAccess;
 use \Countable;
 use \SeekableIterator;
 use \Tree\Exception\DatabaseException;
@@ -19,7 +20,43 @@ use \Tree\Exception\DatabaseException;
  * @uses       \SeekableIterator
  * @version    0.00
  */
-abstract class Result implements Countable, SeekableIterator {
+abstract class Result implements ArrayAccess, Countable, SeekableIterator {
+
+	/**
+	 * Converts the Result into a HTML table representation for quick and easy
+	 * debugging by simply echoing the object
+	 * 
+	 * @access public
+	 * @return string
+	 */
+	public function __toString()
+	{
+		$string = '<table border="1">';
+
+		if (count($this) > 0) {
+
+			$string .= '<tr>';
+			foreach ($this->offsetGet(0) as $name => $value) {
+				$string .= "<th>{$name}</th>";
+			}
+			$string .= '</tr>';
+
+		}
+
+		foreach ($this as $row) {
+
+			$string .= '<tr>';
+			foreach ($row as $name => $value) {
+				$string .= "<td>{$value}</td>";
+			}
+			$string .= '</tr>';
+
+		}
+
+		$string .= '</table>';
+
+		return $string;
+	}
 
 	/**
 	 * Returns the status of the result, i.e. whether the query ran successfully
@@ -122,6 +159,75 @@ abstract class Result implements Countable, SeekableIterator {
 		} else {
 			return false;
 		}
+	}
+
+	/**
+	 * ArrayAccess: Indicates whether the result set contains a row at the given
+	 * index position
+	 * 
+	 * @access public
+	 * @param  integer $index 
+	 * @return boolean
+	 */
+	public function offsetExists($index)
+	{
+		if (!$this->vendorHasResultSet()) {
+			return false;
+		}
+
+		if ($index >= 0 && $index < count($this)) {
+			return true;
+		}
+	}
+
+	/**
+	 * ArrayAccess: Returns the result set row at the given index position
+	 * 
+	 * @access public
+	 * @param  integer $index 
+	 * @return array
+	 */
+	public function offsetGet($index)
+	{
+		$currentKey = $this->key();
+
+		if ($index == $currentKey) {
+			$row = $this->current();
+		} else {
+			$this->seek($index);
+			$row = $this->current();
+			$this->seek($currentKey);
+		}
+
+		return $row;
+	}
+
+	/**
+	 * ArrayAccess: Would normally set the element at the given index position
+	 * to the given value, but doesn't because these are database query results
+	 * which are read-only
+	 * 
+	 * @access public
+	 * @param  integer $index 
+	 * @param  mixed $value 
+	 */
+	public function offsetSet($index, $value)
+	{
+		// do nothing
+		// maybe make this throw an exception?
+	}
+
+	/**
+	 * ArrayAccess: Would normally remove the element at the given index position,
+	 * but doesn't because database query results are supposed to be read-only
+	 * 
+	 * @access public
+	 * @param  integer $index 
+	 */
+	public function offsetUnset($index)
+	{
+		// do nothing
+		// maybe make this throw an exception?
 	}
 
 	abstract protected function vendorCount();
