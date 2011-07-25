@@ -21,6 +21,7 @@
 
 namespace Tree\Component;
 
+use \Tree\Behaviour\PreTemplateDisplayLogic;
 use \Tree\Exception\TemplateException;
 
 abstract class Template {
@@ -138,6 +139,10 @@ abstract class Template {
 	 */
 	private function generateOutput()
 	{
+		if ($this instanceof PreTemplateDisplayLogic) {
+			$this->preProcess();
+		}
+
 		if ($this->templateFilename === null) {
 			$message = 'No template file specified';
 			$code    = TemplateException::MISSING_TEMPLATE_FILENAME;
