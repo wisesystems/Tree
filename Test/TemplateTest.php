@@ -156,6 +156,11 @@ class TemplateTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals(TemplateException::TEMPLATE_NOT_FOUND, $code);
 	}
 
+	/**
+	 * Verifies that Template throws the right kind of TemplateException if an
+	 * attempt is made to generate output but the template file cannot be read by
+	 * the PHP processs
+	 */
 	public function testThrowsExceptionIfTemplateFileNotReadable()
 	{
 		$code = null;
