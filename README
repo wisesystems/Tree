@@ -1,0 +1,19 @@
+I've decided to add at least a basic README to this project for now, since otherwise it's completely unclear why I'm working on this.
+
+So why another PHP framework?
+
+Mainly because the existing ones that I looked at seemed to lack certain properties that I wanted.
+
+I was very eager to have a framework that could just be installed as a bunch of PHP files in some library directory out of the way. Frameworks seem to be very eager for you to 'move in' with them, putting your code in some magic directory within the framework itself in order to work. They often come with all sorts of helpful baggage such as scripts to generate and configure things. I don't want any of that. I want a framework that I can put in /usr/lib/php and forget about.
+
+Another reason for writing my own is to get to write the type of code I want to write. There's a few minor quirks in the way Tree expects an application built on it to be designed compared to other frameworks and typical PHP applications.
+
+For one, instead of big monolithic Controller classes, Tree seperates the individual controller actions out into classes of their own. This gives a bit more flexibility in how each request is handled, which is something I should probably explain in more detail eventually. Each subclass of Action has a main() method, and RequestHandler decides what to do next based on the return value of main, which is expected a HTTP status code such as 200 or 404. Just doing a 'return 404;' when something isn't found turns out to be a really pleasant way to code web applications. Have your action or some parent class implement Http404Handler, and you're set! Then when you want to override the default 404 page with something more specific on some given page, you literally *override* the handle404() method for that action.
+
+So far, I've written a few small sites based around this idea, and it's been a really nice way of working. I'm quite happy with this aspect of the design. It makes for a little bit of extra legwork and boilerplate code when addnig a new page to a site, but since most of the development process is in the maintenance phase anyway, who cares?
+
+Another quirk is the 'Template' component. At their most basic, subclasses of Template are just lists of required and optional variables for rendering some template file. The purpose of this is to acknowledge that template files are essentially little mini-programs of their own, which are as worthy of having well-defined inputs as any other program. These subclasses also serve as the perfect to put that awkward display logic that doesn't belong in the controller and is too long-winded to put into the template itself without distracting from the actual HTML.
+
+
+
+
