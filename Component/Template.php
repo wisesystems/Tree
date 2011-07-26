@@ -184,6 +184,12 @@ abstract class Template {
 			throw new TemplateException($message, $code);
 		}
 
+		if (!is_readable($absolutePath)) {
+			$message = 'Template not readable';
+			$code    = TemplateException::TEMPLATE_NOT_READABLE;
+			throw new TemplateException($message, $code);
+		}
+
 		$missingValues = $this->getMissingValues();
 
 		if (!empty($missingValues)) {
@@ -197,7 +203,7 @@ abstract class Template {
 		try {
 
 			ob_start();
-			include $this->templateFilename;
+			include $absolutePath;
 
 		} catch (Exception $e) {
 

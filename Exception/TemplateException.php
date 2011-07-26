@@ -40,5 +40,10 @@ class TemplateException extends Exception {
 	 */
 	const TEMPLATE_NOT_FOUND = 4;
 
+	/**
+	 * The template file could not be read by the PHP process
+	 */
+	const TEMPLATE_NOT_READABLE = 5;
+
 }
 

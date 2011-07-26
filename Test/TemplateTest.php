@@ -142,6 +142,7 @@ class TemplateTest extends PHPUnit_Framework_TestCase {
 	{
 		$code = null;
 
+		$this->template->setInputValue('content', 'example content');
 		$this->template->setTemplateFilename('incorrect-filename.php');
 
 		try {
@@ -150,7 +151,25 @@ class TemplateTest extends PHPUnit_Framework_TestCase {
 			$code = $e->getCode();
 		}
 
+		$this->template->setTemplateFilename('template.php');
+
 		$this->assertEquals(TemplateException::TEMPLATE_NOT_FOUND, $code);
+	}
+
+	public function testThrowsExceptionIfTemplateFileNotReadable()
+	{
+		$code = null;
+
+		$this->template->setInputValue('content', 'example content');
+		chmod('/tmp/template.php', 0220);
+
+		try {
+			$this->template->getOutput();
+		} catch (TemplateException $e) {
+			$code = $e->getCode();
+		}
+
+		$this->assertEquals(TemplateException::TEMPLATE_NOT_READABLE, $code);
 	}
 
 }
