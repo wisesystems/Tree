@@ -29,16 +29,23 @@ use \Tree\Exception\TemplateException;
 class TemplateTest extends PHPUnit_Framework_TestCase {
 
 	private $template;
+	private $includePath;
 
 	public function setUp()
 	{
 		$this->template = new Mock_Template;
-		$this->template->setTemplateFilename('/tmp/template.php');
+		$this->template->setTemplateFilename('template.php');
 		file_put_contents('/tmp/template.php', 'Content: <?php echo $content; ?>');
+		
+		$this->includePath = get_include_path();
+
+		set_include_path($this->includePath . PATH_SEPARATOR . '/tmp');
+
 	}
 
 	public function tearDown()
 	{
+		set_include_path($this->includePath);
 		unlink('/tmp/template.php');
 	}
 
@@ -49,6 +56,7 @@ class TemplateTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testGetOutputReturnsOutputIfValuesPresent()
 	{
+
 		$this->template->setInputValue('content', 'example content');
 
 		$output = $this->template->getOutput();
@@ -74,11 +82,16 @@ class TemplateTest extends PHPUnit_Framework_TestCase {
 	{
 		$code = null;
 
+		$includePath = get_include_path();
+
+		set_include_path('/tmp');
 		try {
 			$this->template->getOutput();
 		} catch (TemplateException $e) {
 			$code = $e->getCode();
 		}
+
+		set_include_path($includePath);
 
 		$this->assertEquals(TemplateException::MISSING_REQUIRED_VARIABLE, $code);
 	}
@@ -118,6 +131,26 @@ class TemplateTest extends PHPUnit_Framework_TestCase {
 		}
 
 		$this->assertEquals(TemplateException::MISSING_TEMPLATE_FILENAME, $code);
+	}
+
+	/**
+	 * Verifies that Template throws the right kind of TemplateException if an
+	 * attempt is made to generate output but the template file cannot be found
+	 * in the include_path
+	 */
+	public function testThrowsExceptionIfTemplateFileNotFound()
+	{
+		$code = null;
+
+		$this->template->setTemplateFilename('incorrect-filename.php');
+
+		try {
+			$this->template->getOutput();
+		} catch (TemplateException $e) {
+			$code = $e->getCode();
+		}
+
+		$this->assertEquals(TemplateException::TEMPLATE_NOT_FOUND, $code);
 	}
 
 }

@@ -35,5 +35,10 @@ class TemplateException extends Exception {
 	 */
 	const MISSING_TEMPLATE_FILENAME = 3;
 
+	/**
+	 * The template file could not be found in the include_path
+	 */
+	const TEMPLATE_NOT_FOUND = 4;
+
 }
 

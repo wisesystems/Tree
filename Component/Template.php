@@ -128,6 +128,33 @@ abstract class Template {
 	}
 
 	/**
+	 * Finds the absolute path of the template from the relative filename in
+	 * $this->templateFilename
+	 * 
+	 * @access private
+	 * @return string
+	 */
+	private function findAbsolutePath()
+	{
+		$includePath = get_include_path();
+		$includePath = explode(PATH_SEPARATOR, $includePath);
+
+		foreach ($includePath as $path) {
+
+			$path  = rtrim($path, DIRECTORY_SEPARATOR);
+			$path .= DIRECTORY_SEPARATOR;
+
+			$absolutePath = $path . $this->templateFilename;
+
+			if (file_exists($absolutePath)) {
+				return $absolutePath;
+			}
+
+		}
+
+		return null;
+	}
+	/**
 	 * Generates the output string provided that all the required input
 	 * values are available
 	 *
@@ -146,6 +173,14 @@ abstract class Template {
 		if ($this->templateFilename === null) {
 			$message = 'No template file specified';
 			$code    = TemplateException::MISSING_TEMPLATE_FILENAME;
+			throw new TemplateException($message, $code);
+		}
+
+		$absolutePath = $this->findAbsolutePath();
+
+		if ($absolutePath === null) {
+			$message = 'Template file not found';
+			$code    = TemplateException::TEMPLATE_NOT_FOUND;
 			throw new TemplateException($message, $code);
 		}
 
