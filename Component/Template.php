@@ -76,6 +76,22 @@ abstract class Template {
 	 */
 	private static $globalValues = array();
 
+	/**
+	 * The absolute path of the directory containing the template files
+	 *
+	 * This path should be such that $templateDirectory . DIRECTORY_SEPARATOR .
+	 * $templateFilename constitutes a correct absolute path to the template
+	 *
+	 * If this isn't set, Template will still attempt to find the template file
+	 * by scanning the include_path, which may work if PHP is correctly configured
+	 * but isn't ideal from a performance point-of-view.
+	 *
+	 * @access private
+	 * @var    array
+	 * @static
+	 */
+	private static $templateDirectory;
+
 	public function __construct()
 	{
 		$this->inputValues = $this->optionalInputValues;
@@ -149,6 +165,19 @@ abstract class Template {
 	}
 
 	/**
+	 * Stores the given directory as the one to look in to find the template
+	 * filename as specified by $this->templateFilename
+	 * 
+	 * @static
+	 * @access public
+	 * @param  string $directory 
+	 */
+	public static function setTemplateDirectory($directory)
+	{
+		self::$templateDirectory = $directory;
+	}
+
+	/**
 	 * Finds the absolute path of the template from the relative filename in
 	 * $this->templateFilename
 	 * 
@@ -157,6 +186,18 @@ abstract class Template {
 	 */
 	private function findAbsolutePath()
 	{
+		if (isset(self::$templateDirectory)) {
+
+			$templateDirectory = self::$templateDirectory;
+			$templateDirectory = rtrim($templateDirectory, DIRECTORY_SEPARATOR);
+
+			$absolutePath = $templateDirectory
+				. DIRECTORY_SEPARATOR
+				. $this->templateFilename;
+
+			return $absolutePath;
+		}
+
 		$includePath = get_include_path();
 		$includePath = explode(PATH_SEPARATOR, $includePath);
 
@@ -206,7 +247,7 @@ abstract class Template {
 		}
 
 		if (!is_readable($absolutePath)) {
-			$message = 'Template not readable';
+			$message = "Template not readable";
 			$code    = TemplateException::TEMPLATE_NOT_READABLE;
 			throw new TemplateException($message, $code);
 		}

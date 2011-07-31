@@ -193,5 +193,25 @@ class TemplateTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals('Content: 123456', $output);
 	}
 
+	/**
+	 * Verifies that passing a directory name to Template via
+	 * setTemplateDirectory() causes Template to use that directory name to
+	 * generate an absolute path to all template files
+	 */
+	public function testFindsTemplateFileFromAbsolutePath()
+	{
+		$this->template->setInputValue('content', 'example content');
+
+		// takes /tmp back out of include_path so that getOutput will throw an
+		// exception when it can't find the file from its relative path
+		set_include_path($this->includePath);
+
+		Template::setTemplateDirectory('/tmp');
+		$this->template->setTemplateFilename('template.php');
+
+		$output = $this->template->getOutput();
+		$this->assertEquals('Content: example content', $output);
+	}
+
 }
 

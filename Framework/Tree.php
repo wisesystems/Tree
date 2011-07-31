@@ -208,6 +208,10 @@ class Tree {
 	 */
 	private function configureTemplate(array $config)
 	{
+		if (isset($config['directory'])) {
+			Template::setTemplateDirectory($config['directory']);
+		}
+
 		if (isset($config['globals']) && is_array($config['globals'])) {
 			foreach ($config['globals'] as $name => $value) {
 				
