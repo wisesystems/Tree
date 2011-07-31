@@ -177,5 +177,21 @@ class TemplateTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals(TemplateException::TEMPLATE_NOT_READABLE, $code);
 	}
 
+	/**
+	 * Verifies that passing a name-value pair to Template::setGlobalValue causes
+	 * that variable to be available in a Template subclass even if not explicitly
+	 * set on that individual object
+	 */
+	public function testGlobalTemplateVariables()
+	{
+		$this->template->setInputValue('content', 'example content');
+		Template::setGlobalValue('someValue', 123456);
+
+		file_put_contents('/tmp/template.php', 'Content: <?php echo $someValue; ?>');
+		$output = $this->template->getOutput();
+
+		$this->assertEquals('Content: 123456', $output);
+	}
+
 }
 

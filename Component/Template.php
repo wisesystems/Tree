@@ -68,6 +68,14 @@ abstract class Template {
 	 */
 	private $outputString;
 
+	/**
+	 * An associative array of input values that are common to all templates
+	 *
+	 * @access private
+	 * @var    array
+	 */
+	private static $globalValues = array();
+
 	public function __construct()
 	{
 		$this->inputValues = $this->optionalInputValues;
@@ -125,6 +133,19 @@ abstract class Template {
 	public function setTemplateFilename($templateFilename)
 	{
 		$this->templateFilename = $templateFilename;
+	}
+
+	/**
+	 * Stores an input value to be used by all template subclasses
+	 * 
+	 * @access public
+	 * @param  string $name 
+	 * @param  mixed $value 
+	 * @static
+	 */
+	public static function setGlobalValue($name, $value)
+	{
+		self::$globalValues[$name] = $value;
 	}
 
 	/**
@@ -198,6 +219,7 @@ abstract class Template {
 			throw new TemplateException($message, $code);
 		}
 
+		extract(self::$globalValues);
 		extract($this->inputValues);
 
 		try {

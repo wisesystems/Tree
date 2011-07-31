@@ -2,6 +2,7 @@
 
 namespace Tree\Framework;
 
+use \Tree\Component\Template;
 use \Tree\Request\Request;
 use \Tree\Request\Request_Http;
 use \Tree\Response\Response;
@@ -137,6 +138,10 @@ class Tree {
 			$this->configureRoutes($this->configuration['routes']);
 		}
 
+		if (isset($this->configuration['template'])) {
+			$this->configureTemplate($this->configuration['template']);
+		}
+
 		$this->configureRequestHandler();
 	}
 
@@ -193,6 +198,23 @@ class Tree {
 	{
 		$this->requestHandler->setConfiguration($this->configuration);
 		$this->requestHandler->setRouter($this->router);
+	}
+
+	/**
+	 * Applies the ini config values to the Template class
+	 * 
+	 * @access private
+	 * @param  array $config 
+	 */
+	private function configureTemplate(array $config)
+	{
+		if (isset($config['globals']) && is_array($config['globals'])) {
+			foreach ($config['globals'] as $name => $value) {
+				
+				Template::setGlobalValue($name, $value);
+
+			}
+		}
 	}
 
 	/**
