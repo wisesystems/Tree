@@ -78,7 +78,9 @@ abstract class Result implements ArrayAccess, Countable, SeekableIterator {
 	 */
 	public function count()
 	{
-		$this->requireResultSet();
+		if (!$this->vendorHasResultSet()) {
+			return 0;
+		}
 		return $this->vendorCount();
 	}
 
