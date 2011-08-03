@@ -43,6 +43,20 @@ abstract class Query {
 	}
 
 	/**
+	 * Returns the SQL generated for the query
+	 *
+	 * Intended for ease of debugging in that a simple 'echo $query;'
+	 * instantly shows the SQL.
+	 * 
+	 * @access public
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return $this->getSql();
+	}
+
+	/**
 	 * Formats the given variable as a string to be used in a SQL query
 	 * 
 	 * @access public
