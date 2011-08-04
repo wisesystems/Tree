@@ -2,6 +2,19 @@
 
 namespace Tree\Orm;
 
+/**
+ * Entity 
+ *
+ * Base class for the individual entites that comprise the model of an
+ * application
+ * 
+ * @author     Henry Smith <henry@henrysmith.org> 
+ * @copyright  2011 Henry Smith
+ * @license    GPLv2.0
+ * @package    Tree
+ * @subpackage Orm
+ * @version    0.00
+ */
 class Entity {
 
 	public function commitEntity()
