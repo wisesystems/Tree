@@ -1,5 +1,16 @@
 <?php
 
+namespace Tree\Test;
+
+require_once 'PHPUnit/Autoload.php';
+require_once '../Component/Template.php';
+require_once '../Exception/TemplateException.php';
+require_once 'Mock/Template.php';
+
+use \PHPUnit_Framework_TestCase;
+use \Tree\Component\Template;
+use \Tree\Exception\TemplateException;
+
 /**
  * TemplateTest
  *
@@ -14,18 +25,6 @@
  * @uses       \PHPUnit_Framework_TestCase
  * @version    0.00
  */
-
-namespace Tree\Test;
-
-require 'PHPUnit/Autoload.php';
-require '../Component/Template.php';
-require '../Exception/TemplateException.php';
-require 'Mock/Template.php';
-
-use \PHPUnit_Framework_TestCase;
-use \Tree\Component\Template;
-use \Tree\Exception\TemplateException;
-
 class TemplateTest extends PHPUnit_Framework_TestCase {
 
 	private $template;

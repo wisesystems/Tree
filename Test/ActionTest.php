@@ -2,10 +2,10 @@
 
 namespace Tree\Test;
 
-require 'PHPUnit/Autoload.php';
-require '../Component/Action.php';
-require '../Behaviour/Http200Handler.php';
-require 'Mock/Action.php';
+require_once 'PHPUnit/Autoload.php';
+require_once '../Component/Action.php';
+require_once '../Behaviour/Http200Handler.php';
+require_once 'Mock/Action.php';
 
 use \Tree\Component\Action;
 use \PHPUnit_Framework_TestCase;

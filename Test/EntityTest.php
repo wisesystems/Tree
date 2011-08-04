@@ -2,8 +2,8 @@
 
 namespace Tree\Test;
 
-require 'PHPUnit/Autoload.php';
-require '../Orm/Entity.php';
+require_once 'PHPUnit/Autoload.php';
+require_once '../Orm/Entity.php';
 
 use \Tree\Orm\Entity;
 use \PHPUnit_Framework_TestCase;
