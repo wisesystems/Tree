@@ -79,6 +79,15 @@ class Query_Select extends Query_Where {
 	 */
 	protected $orderDirections = array();
 
+	protected $whereExpression;
+
+	public function __construct($connection)
+	{
+		parent::__construct($connection);
+
+		$this->whereExpression = new Query_Where($connection);
+	}
+
 	/**
 	 * Sets the tables which should be queried
 	 *

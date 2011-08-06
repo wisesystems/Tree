@@ -15,7 +15,7 @@ namespace Tree\Database;
  * @subpackage Database
  * @version    0.00
  */
-abstract class Query_Where extends Query {
+class Query_Where extends Query {
 	
 	/**
 	 * An array of WHERE clause statements
@@ -57,6 +57,11 @@ abstract class Query_Where extends Query {
 	 * @var    integer
 	 */
 	protected $limitStart = null;
+
+	public function getSql()
+	{
+		return $this->getWhereExpression();
+	}
 
 	/**
 	 * Adds a WHERE clause with 'AND' prepended 

@@ -36,25 +36,6 @@ class Connection_MySql extends Connection {
 	private $mysqli;
 
 	/**
-	 * Indicates whether the connection is open and ready to receive queries
-	 * 
-	 * @access public
-	 * @return boolean
-	 */
-	public function isConnected()
-	{
-		if (is_null($this->mysqli)) {
-			return false;
-		}
-
-		if ($this->mysqli->connect_error) {
-			return false;
-		}
-
-		return true;
-	}
-
-	/**
 	 * Configures the connection using values from the config file
 	 * 
 	 * @access public
@@ -89,6 +70,26 @@ class Connection_MySql extends Connection {
 
 		return true;
 	}
+
+	/**
+	 * Indicates whether the connection is open and ready to receive queries
+	 * 
+	 * @access public
+	 * @return boolean
+	 */
+	protected function vendorIsConnected()
+	{
+		if (is_null($this->mysqli)) {
+			return false;
+		}
+
+		if ($this->mysqli->connect_error) {
+			return false;
+		}
+
+		return true;
+	}
+
 
 	protected function vendorEscape($string)
 	{

@@ -20,16 +20,6 @@ use \Tree\Exception\DatabaseException;
 abstract class Connection {
 
 	/**
-	 * Subclasses must implement this with a method that indicates whether their
-	 * connection is open and ready to receive queries
-	 * 
-	 * @abstract
-	 * @access public
-	 * @return boolean
-	 */
-	abstract public function isConnected();
-
-	/**
 	 * Subclasses must implement this with a method that accepts an array of config
 	 * values from the database and uses them to configure the connection
 	 * 
@@ -61,6 +51,16 @@ abstract class Connection {
 	abstract protected function vendorEscape($string);
 
 	/**
+	 * Subclasses must implement this with a method that indicates whether their
+	 * connection is open and ready to receive queries
+	 * 
+	 * @abstract
+	 * @access public
+	 * @return boolean
+	 */
+	abstract protected function vendorIsConnected();
+
+	/**
 	 * Subclasses must implement this with a method that accepts SQL and returns a
 	 * subclass of Result
 	 * 
@@ -82,6 +82,17 @@ abstract class Connection {
 	{
 		$this->requireConnection();
 		return $this->vendorEscape($string);
+	}
+
+	/**
+	 * Indicates whether the connection is open and ready to receive queries 
+	 * 
+	 * @access public
+	 * @return boolean
+	 */
+	public function isConnected()
+	{
+		return $this->vendorIsConnected();
 	}
 
 	/**

@@ -3,6 +3,8 @@
 namespace Tree\Database;
 
 use \mysqli_result;
+use \Countable;
+use \SeekableIterator;
 use \Tree\Exception\DatabaseException;
 
 /**
@@ -14,11 +16,13 @@ use \Tree\Exception\DatabaseException;
  * @package    Tree
  * @subpackage Database
  * @uses       \mysqli_result
+ * @uses       \Countable
+ * @uses       \SeekableIterator
  * @uses       \Tree\Database\Result
  * @uses       \Tree\Exception\DatabaseException
  * @version    0.00
  */
-class Result_MySql extends Result {
+class Result_MySql extends Result implements Countable, SeekableIterator {
 	
 	private $iteratorIndex = 0;
 	private $result;
@@ -30,6 +34,29 @@ class Result_MySql extends Result {
 	public function __construct($result)
 	{
 		$this->result = $result;
+	}
+
+	/**
+	 * Countable: Returns the total number of rows in the result set
+	 * 
+	 * @access public
+	 * @return integer
+	 */
+	public function count()
+	{
+		return $this->result->num_rows;
+	}
+
+	/**
+	 * SeekableIterator: Seeks the result set's internal pointer to the given 
+	 * offset
+	 * 
+	 * @access public
+	 * @param  integer $offset 
+	 */
+	public function seek($offset)
+	{
+		$this->result->data_seek($offset);
 	}
 
 	/**
@@ -56,7 +83,7 @@ class Result_MySql extends Result {
 	 */
 	protected function vendorCount()
 	{
-		return $this->result->num_rows;
+		return $this->mysqli->num_rows;
 	}
 
 	/**
@@ -93,14 +120,19 @@ class Result_MySql extends Result {
 	}
 
 	/**
-	 * Seeks the result set's internal pointer to the given offset
-	 * 
+	 * Indicates whether the result set's internal pointer has a valid value, i.e.
+	 * one that corresponds to a row in the result set 
+	 *
 	 * @access protected
-	 * @param  integer $offset 
+	 * @return boolean
 	 */
-	protected function vendorSeek($offset)
+	protected function vendorValid()
 	{
-		$this->result->data_seek($offset);
+		if ($this->iteratorIndex < $this->count()) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -115,21 +147,6 @@ class Result_MySql extends Result {
 		if ($this->result instanceof mysqli_result) {
 			return true;
 		} elseif ($this->result === true) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	/**
-	 * Indicates whether the result can be treated as a set of rows
-	 * 
-	 * @access protected
-	 * @return boolean
-	 */
-	protected function vendorHasResultSet()
-	{
-		if ($this->result instanceof mysqli_result) {
 			return true;
 		} else {
 			return false;

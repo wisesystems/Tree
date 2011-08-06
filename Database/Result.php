@@ -3,8 +3,7 @@
 namespace Tree\Database;
 
 use \ArrayAccess;
-use \Countable;
-use \SeekableIterator;
+use \Iterator;
 use \Tree\Exception\DatabaseException;
 
 /**
@@ -16,11 +15,10 @@ use \Tree\Exception\DatabaseException;
  * @license    GPLv2.0
  * @package    Tree
  * @subpackage Database
- * @uses       \Countable
- * @uses       \SeekableIterator
+ * @uses       \Iterator
  * @version    0.00
  */
-abstract class Result implements ArrayAccess, Countable, SeekableIterator {
+abstract class Result implements Iterator {
 
 	/**
 	 * Converts the Result into a HTML table representation for quick and easy
@@ -32,16 +30,6 @@ abstract class Result implements ArrayAccess, Countable, SeekableIterator {
 	public function __toString()
 	{
 		$string = '<table border="1">';
-
-		if (count($this) > 0) {
-
-			$string .= '<tr>';
-			foreach ($this->offsetGet(0) as $name => $value) {
-				$string .= "<th>{$name}</th>";
-			}
-			$string .= '</tr>';
-
-		}
 
 		foreach ($this as $row) {
 
@@ -71,20 +59,6 @@ abstract class Result implements ArrayAccess, Countable, SeekableIterator {
 	}
 
 	/**
-	 * Countable: Returns the total number of rows in the result set
-	 * 
-	 * @access public
-	 * @return integer
-	 */
-	public function count()
-	{
-		if (!$this->vendorHasResultSet()) {
-			return 0;
-		}
-		return $this->vendorCount();
-	}
-
-	/**
 	 * Iterator: Returns an associative array of the values in the row at the
 	 * current position of the result's internal pointer
 	 * 
@@ -93,7 +67,6 @@ abstract class Result implements ArrayAccess, Countable, SeekableIterator {
 	 */
 	public function current()
 	{
-		$this->requireResultSet();
 		return $this->vendorCurrent();
 	}
 
@@ -105,7 +78,6 @@ abstract class Result implements ArrayAccess, Countable, SeekableIterator {
 	 */
 	public function key()
 	{
-		$this->requireResultSet();
 		return $this->vendorKey();
 	}
 
@@ -117,7 +89,6 @@ abstract class Result implements ArrayAccess, Countable, SeekableIterator {
 	 */
 	public function next()
 	{
-		$this->requireResultSet();
 		$this->vendorNext();
 	}
 
@@ -129,21 +100,7 @@ abstract class Result implements ArrayAccess, Countable, SeekableIterator {
 	 */
 	public function rewind()
 	{
-		$this->requireResultSet();
 		$this->vendorRewind();
-	}
-
-	/**
-	 * SeekableIterator: Seeks the result set's internal pointer to the given 
-	 * offset
-	 * 
-	 * @access public
-	 * @param  integer $offset 
-	 */
-	public function seek($offset)
-	{
-		$this->requireResultSet();
-		$this->vendorSeek($offset);
 	}
 
 	/**
@@ -155,7 +112,7 @@ abstract class Result implements ArrayAccess, Countable, SeekableIterator {
 	 */
 	public function valid()
 	{
-		$this->requireResultSet();
+		return $this->vendorValid();
 		if ($this->key() >= 0 && $this->key() < $this->count()) {
 			return true;
 		} else {
@@ -163,98 +120,17 @@ abstract class Result implements ArrayAccess, Countable, SeekableIterator {
 		}
 	}
 
-	/**
-	 * ArrayAccess: Indicates whether the result set contains a row at the given
-	 * index position
-	 * 
-	 * @access public
-	 * @param  integer $index 
-	 * @return boolean
-	 */
-	public function offsetExists($index)
-	{
-		if (!$this->vendorHasResultSet()) {
-			return false;
-		}
-
-		if ($index >= 0 && $index < count($this)) {
-			return true;
-		}
-	}
-
-	/**
-	 * ArrayAccess: Returns the result set row at the given index position
-	 * 
-	 * @access public
-	 * @param  integer $index 
-	 * @return array
-	 */
-	public function offsetGet($index)
-	{
-		$currentKey = $this->key();
-
-		if ($index == $currentKey) {
-			$row = $this->current();
-		} else {
-			$this->seek($index);
-			$row = $this->current();
-			$this->seek($currentKey);
-		}
-
-		return $row;
-	}
-
-	/**
-	 * ArrayAccess: Would normally set the element at the given index position
-	 * to the given value, but doesn't because these are database query results
-	 * which are read-only
-	 * 
-	 * @access public
-	 * @param  integer $index 
-	 * @param  mixed $value 
-	 */
-	public function offsetSet($index, $value)
-	{
-		// do nothing
-		// maybe make this throw an exception?
-	}
-
-	/**
-	 * ArrayAccess: Would normally remove the element at the given index position,
-	 * but doesn't because database query results are supposed to be read-only
-	 * 
-	 * @access public
-	 * @param  integer $index 
-	 */
-	public function offsetUnset($index)
-	{
-		// do nothing
-		// maybe make this throw an exception?
-	}
-
-	abstract protected function vendorCount();
-
 	abstract protected function vendorCurrent();
 
 	abstract protected function vendorKey();
-
-	abstract protected function vendorHasResultSet();
 
 	abstract protected function vendorNext();
 
 	abstract protected function vendorRewind();
 
-	abstract protected function vendorSeek($offset);
+	abstract protected function vendorValid();
 
 	abstract protected function vendorStatus();
-
-	private function requireResultSet()
-	{
-		if (!$this->vendorHasResultSet()) {
-			$message = "Result is not a result set";
-			throw new DatabaseException($message);
-		}
-	}
 
 }
 
