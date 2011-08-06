@@ -58,16 +58,12 @@ class EntityTest extends PHPUnit_Extensions_Database_TestCase {
 		return $this->createFlatXMLDataSet('Data/entity-test-initial-state.xml');		
 	}
 
-	public function testSaveEntityInsertsNewRow()
+	public function testCommitEntityInsertsNewRow()
 	{
-		// todo: write code inserting new row
-		/*
-		e.g.:
 		$entity = new Fake_Entity($this->db);
 		$entity->title = 'this is something new';
 		$entity->body  = 'a whole new row right here';
-		$entity->saveEntity();
-		*/
+		$entity->commitEntity();
 
 		$expected = $this->createFlatXMLDataSet('Data/entity-test-after-insert.xml');
 
@@ -77,9 +73,13 @@ class EntityTest extends PHPUnit_Extensions_Database_TestCase {
 		$this->assertEquals($expected, $actual);
 	}
 
-	public function testSaveEntityUpdatesExistingRow()
+	public function testCommitEntityUpdatesExistingRow()
 	{
-		// todo: write code updating existing row
+		$entity = new Fake_Entity($this->db);
+		$entity->id    = 1;
+		$entity->title = 'GOTO considered awesome';
+		$entity->body  = 'goto rules!';
+		$entity->commitEntity();
 
 		$expected = $this->createFlatXMLDataSet('Data/entity-test-after-update.xml');
 
@@ -91,7 +91,9 @@ class EntityTest extends PHPUnit_Extensions_Database_TestCase {
 
 	public function testDeleteEntityDeletesRow()
 	{
-		// todo: write code deleting row
+		$entity = new Fake_Entity($this->db);
+		$entity->id = 1;
+		$entity->deleteEntity();
 
 		$expected = $this->createFlatXMLDataSet('Data/entity-test-after-delete.xml');
 
@@ -101,12 +103,48 @@ class EntityTest extends PHPUnit_Extensions_Database_TestCase {
 		$this->assertEquals($expected, $actual);
 	}
 
-	public function testRevertEntityRevertsChanges()
-	{
-	}
-
 	public function testHydrateEntityPopulatesEntity()
 	{
+		$entityId    = 1;
+		$entityTitle = 'GOTO considered harmful';
+		$entityBody  = 'goto sucks';
+
+		$databaseRow = array(
+			'id'    => $entityId,
+			'title' => $entityTitle,
+			'body'  => $entityBody,
+		);
+
+		$entity = new Fake_Entity;
+		$entity->hydrateEntity($databaseRow);
+
+		$this->assertEquals($entityId, $entity->id);
+		$this->assertEquals($entityTitle, $entity->title);
+		$this->assertEquals($entityBody, $entity->body);
+	}
+
+	public function testRevertEntityRevertsChanges()
+	{
+		$entityId    = 1;
+		$entityTitle = 'GOTO considered harmful';
+		$entityBody  = 'goto sucks';
+
+		$databaseRow = array(
+			'id'    => $entityId,
+			'title' => $entityTitle,
+			'body'  => $entityBody,
+		);
+
+		$entity = new Fake_Entity;
+		$entity->hydrateEntity($databaseRow);
+
+		$entity->id    = 2;
+		$entity->title = 'asdfghjkl';
+		$entity->body  = 'qwertyuiop';
+
+		$this->assertEquals($entityId, $entity->id);
+		$this->assertEquals($entityTitle, $entity->title);
+		$this->assertEquals($entityBody, $entity->body);
 	}
 
 }

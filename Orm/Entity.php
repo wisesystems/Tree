@@ -17,6 +17,14 @@ namespace Tree\Orm;
  */
 abstract class Entity {
 
+	public function __get($attribute)
+	{
+	}
+
+	public function __set($attribute, $value)
+	{
+	}
+
 	public function commitEntity()
 	{
 	}
