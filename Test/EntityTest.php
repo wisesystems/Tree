@@ -41,7 +41,7 @@ class EntityTest extends PHPUnit_Extensions_Database_TestCase {
 	{
 		$this->db = new Connection_Pdo;
 		$this->db->setIniValues(array(
-			'dsn' => 'sqlite:memory',
+			'dsn' => 'sqlite:/tmp/memory',
 		));
 		$this->db->openConnection();
 
@@ -52,7 +52,7 @@ class EntityTest extends PHPUnit_Extensions_Database_TestCase {
 
 	public function getDataSet()
 	{
-		return $this->createFlatXMLDataSet('../data.xml');		
+		return $this->createFlatXMLDataSet('Data/entity-test-initial-state.xml');		
 	}
 
 	public function testSaveEntityInsertsNewRow()
