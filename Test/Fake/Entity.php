@@ -8,5 +8,11 @@ use \Tree\Orm\Entity;
 
 class Fake_Entity extends Entity {
 
+	protected $columnList = array(
+		'id',
+		'title',
+		'body',
+	);
+
 }
 

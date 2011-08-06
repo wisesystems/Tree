@@ -59,6 +59,25 @@ class EntityTest extends PHPUnit_Extensions_Database_TestCase {
 	}
 
 	/**
+	 * Verifies that the __get and __set methods actually save entity attributes
+	 */
+	public function testMagicGetAndMagicSet()
+	{
+		$entityId    = 1;
+		$entityTitle = 'GOTO considered harmful';
+		$entityBody  = 'goto sucks';
+
+		$entity        = new Fake_Entity;
+		$entity->id    = $entityId;
+		$entity->title = $entityTitle;
+		$entity->body  = $entityBody;
+
+		$this->assertEquals($entityId, $entity->id);
+		$this->assertEquals($entityTitle, $entity->title);
+		$this->assertEquals($entityBody, $entity->body);
+	}
+
+	/**
 	 * Verifies that commitEntity saves entity data to a new database row if the
 	 * entity does not represent a row that already exists in the database
 	 */
