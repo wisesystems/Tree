@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+  <article
+      id="1"
+      title="GOTO considered harmful"
+      body="goto sucks"
+  />
+</dataset>
+

@@ -17,7 +17,7 @@ use \Tree\Database\Connection;
  */
 class Fake_BrokenConnection extends Connection {
 
-	public function isConnected()
+	protected function vendorIsConnected()
 	{
 		return false;
 	}

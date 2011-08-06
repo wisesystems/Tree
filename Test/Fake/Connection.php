@@ -20,11 +20,6 @@ use \Tree\Database\Connection;
  */
 class Fake_Connection extends Connection {
 
-	public function isConnected()
-	{
-		return true;
-	}
-
 	public function setIniValues(array $config)
 	{
 	}
@@ -42,6 +37,11 @@ class Fake_Connection extends Connection {
 	protected function vendorQuery($sql)
 	{
 		return null;
+	}
+
+	protected function vendorIsConnected()
+	{
+		return true;
 	}
 
 }

@@ -15,7 +15,7 @@ namespace Tree\Orm;
  * @subpackage Orm
  * @version    0.00
  */
-class Entity {
+abstract class Entity {
 
 	public function commitEntity()
 	{
