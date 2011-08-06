@@ -58,6 +58,10 @@ class EntityTest extends PHPUnit_Extensions_Database_TestCase {
 		return $this->createFlatXMLDataSet('Data/entity-test-initial-state.xml');		
 	}
 
+	/**
+	 * Verifies that commitEntity saves entity data to a new database row if the
+	 * entity does not represent a row that already exists in the database
+	 */
 	public function testCommitEntityInsertsNewRow()
 	{
 		$entity = new Fake_Entity($this->db);
@@ -73,6 +77,10 @@ class EntityTest extends PHPUnit_Extensions_Database_TestCase {
 		$this->assertEquals($expected, $actual);
 	}
 
+	/**
+	 * Verifies that commitEntity saves entity data to an existing database row if
+	 * the entity corresponds to one
+	 */
 	public function testCommitEntityUpdatesExistingRow()
 	{
 		$entity = new Fake_Entity($this->db);
@@ -89,6 +97,10 @@ class EntityTest extends PHPUnit_Extensions_Database_TestCase {
 		$this->assertEquals($expected, $actual);
 	}
 
+	/**
+	 * Verifies that deleteEntity successfully removes an entity's corresponding
+	 * database row if one exists
+	 */
 	public function testDeleteEntityDeletesRow()
 	{
 		$entity = new Fake_Entity($this->db);
@@ -103,6 +115,10 @@ class EntityTest extends PHPUnit_Extensions_Database_TestCase {
 		$this->assertEquals($expected, $actual);
 	}
 
+	/**
+	 * Verifies that hydrateEntity correctly populates an entity with data from 
+	 * a database row
+	 */
 	public function testHydrateEntityPopulatesEntity()
 	{
 		$entityId    = 1;
@@ -123,6 +139,10 @@ class EntityTest extends PHPUnit_Extensions_Database_TestCase {
 		$this->assertEquals($entityBody, $entity->body);
 	}
 
+	/**
+	 * Verifies that revertEntity undoes any changes to an entity's data that were
+	 * made after the entity was hydrated with data from the database
+	 */
 	public function testRevertEntityRevertsChanges()
 	{
 		$entityId    = 1;
