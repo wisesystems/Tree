@@ -5,7 +5,6 @@ namespace Tree\Database;
 use \Tree\Database\Result;
 use \Tree\Database\Result_MySql;
 
-
 /**
  * Query 
  *
