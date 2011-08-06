@@ -7,10 +7,12 @@ require_once 'PHPUnit/Extensions/Database/TestCase.php';
 require_once 'PHPUnit/Extensions/Database/DataSet/QueryDataSet.php';
 require_once '../Database/Connection.php';
 require_once '../Database/Connection/Pdo.php';
+require_once '../Exception/EntityException.php';
 require_once '../Orm/Entity.php';
 require_once 'Fake/Entity.php';
 
 use \Tree\Database\Connection_Pdo;
+use \Tree\Exception\EntityException;
 use \Tree\Orm\Entity;
 use \PHPUnit_Framework_TestCase;
 use \PHPUnit_Extensions_Database_TestCase;
@@ -75,6 +77,20 @@ class EntityTest extends PHPUnit_Extensions_Database_TestCase {
 		$this->assertEquals($entityId, $entity->id);
 		$this->assertEquals($entityTitle, $entity->title);
 		$this->assertEquals($entityBody, $entity->body);
+	}
+
+	public function testNoSuchAttributeException()
+	{
+		$entity = new Fake_Entity;
+
+		$code = null;
+		try {
+			$entity->asdfgh = 'zxcvbn';
+		} catch (EntityException $e) {
+			$code = $e->getCode();
+		}
+
+		$this->assertEquals(EntityException::NO_SUCH_ATTRIBUTE, $code);
 	}
 
 	/**

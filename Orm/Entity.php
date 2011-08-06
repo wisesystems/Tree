@@ -2,6 +2,8 @@
 
 namespace Tree\Orm;
 
+use \Tree\Exception\EntityException;
+
 /**
  * Entity 
  *
@@ -32,7 +34,9 @@ abstract class Entity {
 	public function __get($attribute)
 	{
 		if (!in_array($attribute, $this->columnList)) {
-			// throw exception
+			$message = "No such attribute: {$attribute}";
+			$code    = EntityException::NO_SUCH_ATTRIBUTE;
+			throw new EntityException($message, $code);
 		}
 
 		if (!isset($this->currentValues[$attribute])) {
@@ -45,7 +49,9 @@ abstract class Entity {
 	public function __set($name, $value)
 	{
 		if (!in_array($name, $this->columnList)) {
-			// throw exception
+			$message = "No such attribute: {$name}";
+			$code    = EntityException::NO_SUCH_ATTRIBUTE;
+			throw new EntityException($message, $code);
 		}
 
 		if (isset($this->originalValues[$name]) && $this->originalValues[$name] !== $value) {
