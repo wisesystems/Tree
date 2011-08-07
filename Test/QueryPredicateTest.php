@@ -42,8 +42,8 @@ class QueryPredicateTest extends PHPUnit_Framework_TestCase {
 	{
 		$predicate = new Query_Predicate($this->db);
 
-		$predicate->andPredicate('a > 10');
-		$predicate->orPredicate('a < 4');
+		$predicate->andPredicate('a > 10', array());
+		$predicate->orPredicate('a < 4', array());
 
 		$expression = $predicate->getSql();
 
@@ -57,8 +57,8 @@ class QueryPredicateTest extends PHPUnit_Framework_TestCase {
 	{
 		$predicate = new Query_Predicate($this->db);
 
-		$predicate->andPredicate('a > %d', 10);
-		$predicate->orPredicate('name = %s', "fred's name");
+		$predicate->andPredicate('a > %d', array(10));
+		$predicate->orPredicate('name = %s', array("fred's name"));
 
 		$expression = $predicate->getSql();
 
