@@ -211,6 +211,8 @@ class EntityTest extends PHPUnit_Extensions_Database_TestCase {
 		$entity->title = 'asdfghjkl';
 		$entity->body  = 'qwertyuiop';
 
+		$entity->revertEntity();
+
 		$this->assertEquals($entityId, $entity->id);
 		$this->assertEquals($entityTitle, $entity->title);
 		$this->assertEquals($entityBody, $entity->body);

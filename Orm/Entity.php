@@ -107,6 +107,9 @@ abstract class Entity {
 	 */
 	public function revertEntity()
 	{
+		// todo: throw exception if not hydrated
+
+		$this->currentValues = $this->originalValues;
 	}
 
 	/**
@@ -121,6 +124,7 @@ abstract class Entity {
 		foreach ($databaseRow as $name => $value) {
 		
 			if (!in_array($name, $this->columnList)) {
+				// todo: throw exception
 				continue;
 			}
 
