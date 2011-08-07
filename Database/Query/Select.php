@@ -2,6 +2,7 @@
 
 namespace Tree\Database;
 
+
 /**
  * Query_Select 
  *
@@ -13,10 +14,12 @@ namespace Tree\Database;
  * @package    Tree
  * @subpackage Database
  * @uses       \Tree\Database\Connection
- * @uses       \Tree\Database\Query_Where
+ * @uses       \Tree\Database\Query
  * @version    0.00
  */
-class Query_Select extends Query_Where {
+class Query_Select extends Query {
+
+	private $wherePredicate;
 
 	/**
 	 * A list of the columns selected by the query
@@ -81,9 +84,15 @@ class Query_Select extends Query_Where {
 
 	protected $whereExpression;
 
+	private $limitStart;
+
+	private $limitEnd;
+
 	public function __construct($connection)
 	{
 		parent::__construct($connection);
+
+		$this->wherePredicate = new Query_Predicate($connection);
 
 		$this->whereExpression = new Query_Where($connection);
 	}
@@ -133,7 +142,7 @@ class Query_Select extends Query_Where {
 	public function getSql()
 	{
 		return
-			'SELECT'
+			'SELECT '
 			. $this->getColumnExpressions()
 			. $this->getFromClause()
 			. $this->getWhereExpression()
@@ -195,6 +204,59 @@ class Query_Select extends Query_Where {
 
 		return $this;
 	}
+
+	/**
+	 * Adds an AND condition to the WHERE expression
+	 * 
+	 * @access public
+	 * @param  string $statement 
+	 */
+	public function where($statement)
+	{
+		$parameters = func_get_args();
+		array_shift($parameters);
+
+		$this->wherePredicate->andPredicate($statement, $parameters);
+	}
+
+	/**
+	 * Adds an AND condition to the WHERE expression
+	 * 
+	 * @access public
+	 * @param  string $statement 
+	 */
+	public function andWhere($statement)
+	{
+		$parameters = func_get_args();
+		array_shift($parameters);
+
+		$this->wherePredicate->andPredicate($statement, $parameters);
+	}
+
+	/**
+	 * Adds an OR condition to the WHERE expression
+	 * 
+	 * @access public
+	 * @param  string $statement 
+	 */
+	public function orWhere($statement)
+	{
+		$parameters = func_get_args();
+		array_shift($parameters);
+
+		$this->wherePredicate->orPredicate($statement, $parameters);
+	}
+
+	public function limit($start, $end = null)
+	{
+		if ($end === null) {
+			$this->limitStart = null;
+			$this->limitEnd   = $start;
+		} else {
+			$this->limitStart = $start;
+			$this->limitEnd   = $end;
+		}
+		return $this;}
 
 	/**
 	 * Adds a column to the list of columns whose values are to be selected
@@ -259,7 +321,7 @@ class Query_Select extends Query_Where {
 
 		}
 
-		$columnExpressions = "\n\t" . implode(",\n\t", $columnExpressions) . "\n";
+		$columnExpressions = implode(', ', $columnExpressions) . "\n";
 
 		return $columnExpressions;
 	}
@@ -296,8 +358,8 @@ class Query_Select extends Query_Where {
 			$fromClauses[] = $fromClause;
 		}
 
-		$fromClause  = "FROM\n\t";
-		$fromClause .= implode(",\n\t", $fromClauses);
+		$fromClause  = 'FROM ';
+		$fromClause .= implode(', ', $fromClauses);
 		$fromClause .= "\n";
 
 		return $fromClause;
@@ -315,8 +377,8 @@ class Query_Select extends Query_Where {
 		if (count($this->groupColumns) == 0) {
 			return '';
 		}
-		$groupByClause  = "GROUP BY\n\t";
-		$groupByClause .= implode(",\n\t", $this->groupColumns);
+		$groupByClause  = "GROUP BY ";
+		$groupByClause .= implode(", ", $this->groupColumns);
 		$groupByClause .= "\n";
 		return $groupByClause;
 	}
@@ -360,13 +422,52 @@ class Query_Select extends Query_Where {
 			$orderExpressions[] = $orderExpression;
 		}
 
-		$orderExpressions = "ORDER BY\n\t"
-			. implode(",\n\t", $orderExpressions)
+		$orderExpressions = 'ORDER BY '
+			. implode(', ', $orderExpressions)
 			. "\n";
 
 		return $orderExpressions;
 	}
 
+	/**
+	 * Generates and returns the WHERE expression that restricts what rows are
+	 * returned according to the values of those rows
+	 * 
+	 * @access protected
+	 * @return string
+	 */
+	protected function getWhereExpression()
+	{
+		$whereExpression = $this->wherePredicate->getSql();
+
+		if ($whereExpression == '') {
+			return '';
+		}
+
+		return "WHERE {$whereExpression}";
+	}
+
+	protected function getLimitExpression()
+	{
+		if ($this->limitStart === null && $this->limitEnd === null) {
+			return '';
+		}
+
+		$expression = 'LIMIT ';
+
+		if ($this->limitStart !== null) {
+			$expression .= $this->limitStart;
+			$expression .= ', ';
+		}
+
+		if ($this->limitEnd !== null) {
+			$expression .= $this->limitEnd;
+		}
+
+		$expression .= "\n";
+
+		return $expression;
+	}
 
 
 }
