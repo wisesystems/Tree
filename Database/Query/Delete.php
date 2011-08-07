@@ -19,7 +19,7 @@ namespace Tree\Database;
 
 namespace Tree\Database;
 
-class Query_Delete extends Query_Where {
+class Query_Delete extends Query {
 
 	/**
 	 * The name of the table to be deleted from 
@@ -28,6 +28,18 @@ class Query_Delete extends Query_Where {
 	 * @var    string
 	 */
 	protected $tableName;
+
+	private $wherePredicate;
+
+	private $limitStart;
+
+	private $limitEnd;
+
+	public function __construct($connection)
+	{
+		parent::__construct($connection);
+		$this->wherePredicate = new Query_Predicate($connection);
+	}
 
 	/**
 	 * Sets the name of the table to be deleted from 
@@ -56,10 +68,63 @@ class Query_Delete extends Query_Where {
 		$query = 'DELETE'
 			. $this->getTableExpression()
 			. $this->getWhereExpression()
-			. $this->getLimitExpression()
-			. "\n";
+			. $this->getLimitExpression();
 
 		return $query;
+	}
+
+	/**
+	 * Adds an AND condition to the WHERE expression
+	 * 
+	 * @access public
+	 * @param  string $statement 
+	 */
+	public function where($statement)
+	{
+		$parameters = func_get_args();
+		array_shift($parameters);
+
+		$this->wherePredicate->andPredicate($statement, $parameters);
+	}
+
+	/**
+	 * Adds an AND condition to the WHERE expression
+	 * 
+	 * @access public
+	 * @param  string $statement 
+	 */
+	public function andWhere($statement)
+	{
+		$parameters = func_get_args();
+		array_shift($parameters);
+
+		$this->wherePredicate->andPredicate($statement, $parameters);
+	}
+
+	/**
+	 * Adds an OR condition to the WHERE expression
+	 * 
+	 * @access public
+	 * @param  string $statement 
+	 */
+	public function orWhere($statement)
+	{
+		$parameters = func_get_args();
+		array_shift($parameters);
+
+		$this->wherePredicate->orPredicate($statement, $parameters);
+	}
+
+	public function limit($start, $end = null)
+	{
+		if ($end === null) {
+			$this->limitStart = null;
+			$this->limitEnd   = $start;
+		} else {
+			$this->limitStart = $start;
+			$this->limitEnd   = $end;
+		}
+		return $this;
 	}
 
 	/**
@@ -74,8 +139,9 @@ class Query_Delete extends Query_Where {
 	{
 		$tableName = $this->getTableName();
 
-		$expression = ' FROM `%s` ';
+		$expression = ' FROM `%s`';
 		$expression = sprintf($expression, $tableName);
+		$expression .= "\n";
 
 		return $expression;
 	}
@@ -100,6 +166,39 @@ class Query_Delete extends Query_Where {
 	protected function setTableName($tableName)
 	{
 		$this->tableName = $tableName;
+	}
+
+	protected function getWhereExpression()
+	{
+		$whereExpression = $this->wherePredicate->getSql();
+
+		if ($whereExpression == '') {
+			return '';
+		}
+
+		return "WHERE {$whereExpression}";
+	}
+
+	protected function getLimitExpression()
+	{
+		if ($this->limitStart === null && $this->limitEnd === null) {
+			return '';
+		}
+
+		$expression = 'LIMIT ';
+
+		if ($this->limitStart !== null) {
+			$expression .= $this->limitStart;
+			$expression .= ', ';
+		}
+
+		if ($this->limitEnd !== null) {
+			$expression .= $this->limitEnd;
+		}
+
+		$expression .= "\n";
+
+		return $expression;
 	}
 
 }

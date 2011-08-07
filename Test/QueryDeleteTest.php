@@ -5,7 +5,7 @@ namespace Tree\Test;
 require_once 'PHPUnit/Autoload.php';
 require_once '../Database/Connection.php';
 require_once '../Database/Query.php';
-require_once '../Database/Query/Where.php';
+require_once '../Database/Query/Predicate.php';
 require_once '../Database/Query/Delete.php';
 require_once 'Fake/Connection.php';
 
@@ -39,36 +39,42 @@ class QueryDeleteTest extends PHPUnit_Framework_TestCase {
 	public function testBasicDeleteQuery()
 	{
 		$delete = new Query_Delete($this->db);
-
 		$delete->from('sometable');
-		$sql = $delete->getSql();
 
-		$this->assertEquals("DELETE FROM `sometable` \n", $sql);
+		$expected = "DELETE FROM `sometable`\n";
+		$actual   = $delete->getSql();
+
+		$this->assertEquals($expected, $actual);
 	}
 
 	public function testDeleteWhere()
 	{
 		$delete = new Query_Delete($this->db);
-
 		$delete->from('sometable');
 		$delete->where('id = %d', 1);
 
-		$sql = $delete->getSql();
+		$expected  = "DELETE FROM `sometable`\n";
+		$expected .= "WHERE id = 1\n";
 
-		$this->assertEquals("DELETE FROM `sometable` WHERE\n\tid = 1\n\n", $sql);
+		$actual = $delete->getSql();
+
+		$this->assertEquals($expected, $actual);
 	}
 
 	public function testDeleteWhereLimit()
 	{
 		$delete = new Query_Delete($this->db);
-
 		$delete->from('sometable');
 		$delete->where('id = %d', 1);
 		$delete->limit(1);
 
-		$sql = $delete->getSql();
+		$expected  = "DELETE FROM `sometable`\n";
+		$expected .= "WHERE id = 1\n";
+		$expected .= "LIMIT 1\n";
 
-		$this->assertEquals("DELETE FROM `sometable` WHERE\n\tid = 1\nLIMIT 1\n", $sql);
+		$actual = $delete->getSql();
+
+		$this->assertEquals($expected, $actual);
 	}
 
 }
