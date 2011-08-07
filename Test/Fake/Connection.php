@@ -31,7 +31,7 @@ class Fake_Connection extends Connection {
 
 	protected function vendorEscape($string)
 	{
-		return addslashes($string);
+		return "'" . addslashes($string) . "'";
 	}
 
 	protected function vendorQuery($sql)

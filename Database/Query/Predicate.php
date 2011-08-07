@@ -159,7 +159,6 @@ class Query_Predicate {
 			return '1';
 		} else {
 			$value = $this->connection->escapeString($value);
-			$value = "'$value'";
 			return $value;
 		}
 	}
