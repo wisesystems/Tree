@@ -5,7 +5,6 @@ namespace Tree\Test;
 require_once 'PHPUnit/Autoload.php';
 require_once '../Database/Connection.php';
 require_once '../Database/Query.php';
-require_once '../Database/Query/Where.php';
 require_once '../Database/Query/Select.php';
 require_once '../Database/Query/Predicate.php';
 require_once 'Fake/Connection.php';

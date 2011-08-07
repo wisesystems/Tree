@@ -14,5 +14,11 @@ class Fake_Entity extends Entity {
 		'body',
 	);
 
+	protected $primaryKey = array(
+		'id',
+	);
+
+	protected $tableName = 'article';
+
 }
 

@@ -82,7 +82,7 @@ abstract class Query {
 		} elseif ($value === true) {
 			return '1';
 		} else {
-			$value = $this->escapeString($value);
+			$value = $this->connection->escapeString($value);
 			$value = "'$value'";
 			return $value;
 		}

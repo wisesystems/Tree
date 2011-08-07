@@ -25,6 +25,10 @@ abstract class Entity {
 
 	protected $columnList = array();
 
+	protected $primaryKey = array();
+
+	protected $tableName;
+
 	private $currentValues = array();
 
 	private $originalValues = array();
