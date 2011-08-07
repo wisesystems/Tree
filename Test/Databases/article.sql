@@ -1,3 +1,6 @@
+
+DROP TABLE IF EXISTS article;
+
 CREATE TABLE article (
 	id INTEGER(8) PRIMARY KEY,
 	title VARCHAR(255),

@@ -8,6 +8,8 @@ require_once '../Database/Connection.php';
 require_once '../Database/Connection/Pdo.php';
 require_once '../Database/Query.php';
 require_once '../Database/Query/Insert.php';
+require_once '../Database/Query/Predicate.php';
+require_once '../Database/Query/Update.php';
 require_once '../Database/Result.php';
 require_once '../Database/Result/Pdo.php';
 require_once '../Exception/EntityException.php';
@@ -50,6 +52,7 @@ class EntityDatabaseTest extends PHPUnit_Extensions_Database_TestCase {
 		));
 		$pdo = $this->db->getPdo();
 		$this->db->openConnection();
+		parent::setUp();
 	}
 
 	public function getConnection()
@@ -60,10 +63,8 @@ class EntityDatabaseTest extends PHPUnit_Extensions_Database_TestCase {
 
 	public function getDataSet()
 	{
-		if ($this->initialState === null) {
-			$this->initialState = $this->createFlatXMLDataSet('Data/entity-test-initial-state.xml');		
-		}
-		return $this->initialState;
+		$initialState = $this->createFlatXMLDataSet('Data/entity-test-initial-state.xml');		
+		return $initialState;
 	}
 
 	/**
@@ -82,7 +83,7 @@ class EntityDatabaseTest extends PHPUnit_Extensions_Database_TestCase {
 		$expected = $this->createFlatXMLDataSet('Data/entity-test-after-insert.xml');
 
 		$actual = new PHPUnit_Extensions_Database_DataSet_QueryDataSet($this->getConnection());
-		$actual->addTable('article');
+		$actual->addTable('article', 'SELECT * FROM article ORDER BY id');
 
 		$this->assertDataSetsEqual($expected, $actual);
 	}
@@ -95,6 +96,7 @@ class EntityDatabaseTest extends PHPUnit_Extensions_Database_TestCase {
 	{
 		$entity = new Fake_Entity;
 		$entity->setDatabase($this->db);
+		$entity->addState(Entity::STATE_HYDRATED);
 		$entity->id    = 1;
 		$entity->title = 'GOTO considered awesome';
 		$entity->body  = 'goto rules!';

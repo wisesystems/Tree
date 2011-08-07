@@ -229,6 +229,26 @@ abstract class Entity {
 	 */
 	private function updateEntity()
 	{
+		$query = new Query_Update($this->database);
+		$query->table($this->tableName);
+
+		foreach ($this->primaryKey as $column) {
+			$query->where("`$column` = %s", $this->$column);
+		}
+
+		foreach ($this->columnList as $column) {
+
+			if (in_array($column, $this->primaryKey)) {
+				continue;
+			}
+
+			$query->set($column, $this->$column);
+
+		}
+
+		$result = $query->getResult();
+		
+		return $result->getStatus();
 	}
 
 }
