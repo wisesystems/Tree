@@ -36,11 +36,15 @@ class Result_Pdo extends Result {
 	 * @access public
 	 * @param  PDOStatement $statement 
 	 */
-	public function __construct(PDOStatement $statement)
+	public function __construct($statement)
 	{
 		$this->statement = $statement;
 
-		$this->nextRow = $statement->fetch();
+		if ($statement instanceof PDOStatement) {
+			$this->nextRow = $statement->fetch();
+		} else {
+			$this->resultSize = 0;
+		}
 	}
 
 	/**
@@ -119,7 +123,7 @@ class Result_Pdo extends Result {
 	 */
 	protected function vendorStatus()
 	{
-		if ($this->statement->rowCount() > 0) {
+		if ($this->statement instanceof PDOStatement && $this->statement->rowCount() > 0) {
 			return true;
 		} else {
 			return false;

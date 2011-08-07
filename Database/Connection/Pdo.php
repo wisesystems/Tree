@@ -131,13 +131,7 @@ class Connection_Pdo extends Connection {
 	 */
 	protected function vendorQuery($sql)
 	{
-		$driverOptions = array(
-			PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL,
-		);
-
-		$statement = $this->pdo->prepare($sql, $driverOptions);
-		$statement->execute();
-
+		$statement = $this->pdo->query($sql);
 		$result = new Result_Pdo($statement);
 
 		return $result;

@@ -3,6 +3,8 @@
 namespace Tree\Orm;
 
 use \Tree\Exception\EntityException;
+use \Tree\Database\Query_Update;
+use \Tree\Database\Query_Insert;
 
 /**
  * Entity 
@@ -35,6 +37,8 @@ abstract class Entity {
 	private $originalValues = array();
 
 	private $state;
+
+	private $database;
 
 	/**
 	 * Returns the value of the attribute of the given name
@@ -90,6 +94,11 @@ abstract class Entity {
 	 */
 	public function commitEntity()
 	{
+		if ($this->hasState(Entity::STATE_HYDRATED)) {
+			return $this->updateEntity();
+		} else {
+			return $this->insertEntity();
+		}
 
 		return false;
 	}
@@ -145,10 +154,11 @@ abstract class Entity {
 	 * update or delete itself
 	 * 
 	 * @access public
-	 * @param  \Tree\Database\Connection $connection 
+	 * @param  \Tree\Database\Connection $database 
 	 */
-	public function setDatabaseConnection($connection)
+	public function setDatabase($database)
 	{
+		$this->database = $database;
 	}
 
 	/**
@@ -189,6 +199,36 @@ abstract class Entity {
 		} else {
 			return false;
 		}
+	}
+
+	/**
+	 * Inserts the entity's data into its corresponding database table as a new row
+	 * 
+	 * @access private
+	 * @return boolean
+	 */
+	private function insertEntity()
+	{
+		$query = new Query_Insert($this->database);
+		$query->into($this->tableName);
+
+		foreach ($this->columnList as $column) {
+			$query->set($column, $this->$column);
+		}
+		
+		$result = $query->getResult();
+
+		return $result->getStatus();
+	}
+
+	/**
+	 * Updates the entity's corresponding database row with its current data
+	 * 
+	 * @access private
+	 * @return boolean
+	 */
+	private function updateEntity()
+	{
 	}
 
 }

@@ -119,7 +119,7 @@ class Query_Insert extends Query {
 	 */
 	protected function getColumnValues()
 	{
-		$values   = array_values($this->columnValuePairs);
+		$values = array_values($this->columnValuePairs);
 
 		foreach ($values as $i => $value) {
 			$values[$i] = $this->formatValue($value);
