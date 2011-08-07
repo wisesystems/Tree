@@ -3,11 +3,9 @@
 namespace Tree\Test;
 
 require_once 'PHPUnit/Framework/TestCase.php';
-require_once '../Exception/EntityException.php';
 require_once '../Orm/Entity.php';
 require_once 'Fake/Entity.php';
 
-use \Tree\Exception\EntityException;
 use \Tree\Orm\Entity;
 use \PHPUnit_Framework_TestCase;
 
@@ -46,34 +44,6 @@ class EntityTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($entityId, $entity->id);
 		$this->assertEquals($entityTitle, $entity->title);
 		$this->assertEquals($entityBody, $entity->body);
-	}
-
-	/**
-	 * Verifies that Entity throws the right kind of EntityException if an attempt
-	 * is made to get or set an attribute that doesn't actually exist
-	 */
-	public function testNoSuchAttributeException()
-	{
-		$entity = new Fake_Entity;
-
-		$code = null;
-		try {
-			$entity->asdfgh = 'zxcvbn';
-		} catch (EntityException $e) {
-			$code = $e->getCode();
-		}
-
-		$this->assertEquals(EntityException::NO_SUCH_ATTRIBUTE, $code);
-
-		$code = null;
-		try {
-			$abc = $entity->asdfgh;
-		} catch (EntityException $e) {
-			$code = $e->getCode();
-		}
-
-		$this->assertEquals(EntityException::NO_SUCH_ATTRIBUTE, $code);
-
 	}
 
 	/**
