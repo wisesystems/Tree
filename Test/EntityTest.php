@@ -79,6 +79,10 @@ class EntityTest extends PHPUnit_Extensions_Database_TestCase {
 		$this->assertEquals($entityBody, $entity->body);
 	}
 
+	/**
+	 * Verifies that Entity throws the right kind of EntityException if an attempt
+	 * is made to get or set an attribute that doesn't actually exist
+	 */
 	public function testNoSuchAttributeException()
 	{
 		$entity = new Fake_Entity;

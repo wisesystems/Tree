@@ -77,22 +77,56 @@ abstract class Entity {
 		$this->currentValues[$name] = $value;
 	}
 
+	/**
+	 * Stores the entity's values to the database
+	 *
+	 * @access public
+	 * @return boolean
+	 */
 	public function commitEntity()
 	{
+		return false;
 	}
 
+	/**
+	 * Removes the entity's corresponding database row, if one exists
+	 * 
+	 * @access public
+	 * @return boolean
+	 */
 	public function deleteEntity()
 	{
+		return false;
 	}
 
+	/**
+	 * Resets the entity to the state it was in when it was hydrated, undoing any
+	 * changes to the values of its attributes
+	 * 
+	 * @access public
+	 */
 	public function revertEntity()
 	{
 	}
 
+	/**
+	 * Populates the entity's attributes with data from its corresponding database
+	 * row
+	 * 
+	 * @access public
+	 * @param  array $databaseRow 
+	 */
 	public function hydrateEntity($databaseRow)
 	{
 	}
 
+	/**
+	 * Sets the database connection with which the entity should is to insert,
+	 * update or delete itself
+	 * 
+	 * @access public
+	 * @param  \Tree\Database\Connection $connection 
+	 */
 	public function setDatabaseConnection($connection)
 	{
 	}
