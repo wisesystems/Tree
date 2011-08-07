@@ -218,5 +218,39 @@ class EntityTest extends PHPUnit_Extensions_Database_TestCase {
 		$this->assertEquals($entityBody, $entity->body);
 	}
 
+	/**
+	 * Verifies that calling addState sets Entity to have the given state
+	 */
+	public function testAddStateAddsState()
+	{
+		$entity = new Fake_Entity;
+		$entity->addState(Entity::STATE_HYDRATED);
+
+		$this->assertTrue($entity->hasState(Entity::STATE_HYDRATED));
+		$this->assertFalse($entity->hasState(Entity::STATE_NONE));
+		$this->assertFalse($entity->hasState(Entity::STATE_DIRTY));
+	}
+
+	/**
+	 * Verifies that calling removeState sets Entity to not have the given state
+	 */
+	public function testRemoveStateRemovesState()
+	{
+		$entity = new Fake_Entity;
+		$entity->addState(Entity::STATE_HYDRATED);
+		$entity->addState(Entity::STATE_DIRTY);
+
+		$this->assertTrue($entity->hasState(Entity::STATE_HYDRATED));
+		$this->assertTrue($entity->hasState(Entity::STATE_DIRTY));
+
+		$entity->removeState(Entity::STATE_HYDRATED);
+		$this->assertFalse($entity->hasState(Entity::STATE_HYDRATED));
+		$this->assertTrue($entity->hasState(Entity::STATE_DIRTY));
+
+		$entity->removeState(Entity::STATE_DIRTY);
+		$this->assertFalse($entity->hasState(Entity::STATE_HYDRATED));
+		$this->assertFalse($entity->hasState(Entity::STATE_DIRTY));
+	}
+
 }
 

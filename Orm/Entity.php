@@ -19,9 +19,10 @@ use \Tree\Exception\EntityException;
  */
 abstract class Entity {
 
-	const STATE_BLANK = 0;
+	const STATE_NONE = 0;
 	const STATE_HYDRATED = 1;
 	const STATE_DIRTY = 2;
+	const STATE_BITMASK = 3;
 
 	protected $columnList = array();
 
@@ -89,6 +90,7 @@ abstract class Entity {
 	 */
 	public function commitEntity()
 	{
+
 		return false;
 	}
 
@@ -147,6 +149,46 @@ abstract class Entity {
 	 */
 	public function setDatabaseConnection($connection)
 	{
+	}
+
+	/**
+	 * Sets the entity to have the given state
+	 * 
+	 * @access public
+	 * @param  integer $entityState  e.g. Entity::STATE_HYDRATED
+	 */
+	public function addState($entityState)
+	{
+		$this->state |= 1 << $entityState;
+	}
+
+	/**
+	 * Removes the given state from the entity
+	 * 
+	 * @access public
+	 * @param  integer $entityState  e.g. Entity::STATE_HYDRATED
+	 */
+	public function removeState($entityState)
+	{
+		$this->state &= ~ (1 << $entityState);
+	}
+
+	/**
+	 * Indicates whether the entity has the given state
+	 * 
+	 * @access public
+	 * @param  integer $entityState  e.g. Entity::STATE_HYDRATED
+	 * @return boolean
+	 */
+	public function hasState($entityState)
+	{
+		$mask = 1 << $entityState;
+
+		if (($mask & $this->state) === $mask) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }
