@@ -31,6 +31,14 @@ abstract class Entity {
 
 	private $state;
 
+	/**
+	 * Returns the value of the attribute of the given name
+	 * 
+	 * @access public
+	 * @param  string $attribute 
+	 * @return mixed
+	 * @throws \Tree\Exception\EntityException
+	 */
 	public function __get($attribute)
 	{
 		if (!in_array($attribute, $this->columnList)) {
@@ -46,6 +54,14 @@ abstract class Entity {
 		return $this->currentValues[$attribute];
 	}
 
+	/**
+	 * Sets the given attribute's value 
+	 * 
+	 * @access public
+	 * @param  string $name 
+	 * @param  string $value 
+	 * @throws \Tree\Exception\EntityException
+	 */
 	public function __set($name, $value)
 	{
 		if (!in_array($name, $this->columnList)) {
