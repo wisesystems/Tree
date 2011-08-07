@@ -6,9 +6,9 @@ use \Tree\Component\Action;
 use \Tree\Behaviour\Http200Handler;
 
 /**
- * Mock_Action 
+ * Fake_Action 
  *
- * A simple mock action for use in testing the Action component
+ * A simple fake action for use in testing the Action component
  * 
  * @author     Henry Smith <henry@henrysmith.org> 
  * @copyright  2011 Henry Smith
@@ -18,7 +18,7 @@ use \Tree\Behaviour\Http200Handler;
  * @uses       \Tree\Component\Action
  * @version    0.00
  */
-class Mock_Action extends Action implements Http200Handler {
+class Fake_Action extends Action implements Http200Handler {
 
 	public function main(array $input)
 	{

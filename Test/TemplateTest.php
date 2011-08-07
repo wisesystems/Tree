@@ -4,7 +4,7 @@ namespace Tree\Test;
 
 require_once '../Component/Template.php';
 require_once '../Exception/TemplateException.php';
-require_once 'Mock/Template.php';
+require_once 'Fake/Template.php';
 
 use \PHPUnit_Framework_TestCase;
 use \Tree\Component\Template;
@@ -31,7 +31,7 @@ class TemplateTest extends PHPUnit_Framework_TestCase {
 
 	public function setUp()
 	{
-		$this->template = new Mock_Template;
+		$this->template = new Fake_Template;
 		$this->template->setTemplateFilename('template.php');
 		file_put_contents('/tmp/template.php', 'Content: <?php echo $content; ?>');
 		
