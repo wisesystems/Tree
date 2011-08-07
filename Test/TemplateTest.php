@@ -2,7 +2,6 @@
 
 namespace Tree\Test;
 
-require_once 'PHPUnit/Autoload.php';
 require_once '../Component/Template.php';
 require_once '../Exception/TemplateException.php';
 require_once 'Mock/Template.php';

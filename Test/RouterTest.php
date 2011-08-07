@@ -2,7 +2,6 @@
 
 namespace Tree\Test;
 
-require_once 'PHPUnit/Autoload.php';
 require_once '../Framework/Router.php';
 
 use \Tree\Framework\Router;

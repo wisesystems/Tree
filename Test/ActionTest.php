@@ -2,7 +2,6 @@
 
 namespace Tree\Test;
 
-require_once 'PHPUnit/Autoload.php';
 require_once '../Component/Action.php';
 require_once '../Behaviour/Http200Handler.php';
 require_once 'Mock/Action.php';

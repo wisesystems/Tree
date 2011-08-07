@@ -2,7 +2,6 @@
 
 namespace Tree\Test;
 
-require_once 'PHPUnit/Autoload.php';
 require_once 'PHPUnit/Framework/TestCase.php';
 require_once '../Exception/EntityException.php';
 require_once '../Orm/Entity.php';

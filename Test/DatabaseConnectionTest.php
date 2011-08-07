@@ -2,7 +2,6 @@
 
 namespace Tree\Test;
 
-require_once 'PHPUnit/Autoload.php';
 require_once '../Database/Connection.php';
 require_once '../Exception/DatabaseException.php';
 require_once 'Fake/Connection.php';

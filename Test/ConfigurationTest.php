@@ -2,7 +2,6 @@
 
 namespace Tree\Test;
 
-require_once 'PHPUnit/Autoload.php';
 require_once '../Exception/ConfigurationException.php';
 require_once '../Framework/Configuration.php';
 

@@ -2,7 +2,6 @@
 
 namespace Tree\Test;
 
-require_once 'PHPUnit/Autoload.php';
 require_once 'PHPUnit/Extensions/Database/TestCase.php';
 require_once 'PHPUnit/Extensions/Database/DataSet/QueryDataSet.php';
 require_once '../Database/Connection.php';
