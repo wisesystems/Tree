@@ -93,7 +93,10 @@ class Connection_MySql extends Connection {
 
 	protected function vendorEscape($string)
 	{
-		return $this->mysqli->real_escape_string($string);
+		$string = $this->mysqli->real_escape_string($string);
+		$string = "'{$string}'";
+
+		return $string;
 	}
 
 	/**
