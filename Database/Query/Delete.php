@@ -13,7 +13,7 @@ namespace Tree\Database;
  * @package    Tree
  * @subpackage Database
  * @uses       \Tree\Database\Connection
- * @uses       \Tree\Database\Query_Where
+ * @uses       \Tree\Database\Query_Predicate
  * @version    0.00
  */
 

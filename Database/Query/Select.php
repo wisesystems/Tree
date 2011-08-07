@@ -93,8 +93,6 @@ class Query_Select extends Query {
 		parent::__construct($connection);
 
 		$this->wherePredicate = new Query_Predicate($connection);
-
-		$this->whereExpression = new Query_Where($connection);
 	}
 
 	/**

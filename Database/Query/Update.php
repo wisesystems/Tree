@@ -12,7 +12,7 @@ namespace Tree\Database;
  * @license    GPLv2.0
  * @package    Tree
  * @subpackage Database
- * @uses       \Tree\Database\Query_Where
+ * @uses       \Tree\Database\Query_Predicate
  * @version    0.00
  */
 class Query_Update extends Query {
