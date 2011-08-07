@@ -62,64 +62,6 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * Verifies that Configuration throws the right ConfigurationException if it
-	 * can't find the ini file
-	 */
-	public function testThrowsExceptionIfFileNotFound()
-	{
-		$config = new Configuration('notfound.ini');
-		$code   = null;
-
-		try {
-			$config->getIniValues();
-		} catch (ConfigurationException $e) {
-			$code = $e->getCode();
-		}
-
-		$this->assertEquals(ConfigurationException::FILE_NOT_FOUND, $code);
-	}
-
-	/**
-	 * Verifies that Configuration throws the right ConfigurationException if it
-	 * can't read the contents of the ini file
-	 */
-	public function testThrowsExceptionIfFileNotReadable()
-	{
-		$config = new Configuration('test.ini');
-		$code   = null;
-
-		chmod($this->absolutePath, 0220);
-
-		try {
-			$config->getIniValues();
-		} catch (ConfigurationException $e) {
-			$code = $e->getCode();
-		}
-
-		$this->assertEquals(ConfigurationException::FILE_NOT_READABLE, $code);
-	}
-
-	/**
-	 * Verifies that Configuration throws the right ConfigurationException if it
-	 * can't parse the contents of the ini file
-	 */
-	public function testThrowsExceptionIfFileNotParseable()
-	{
-		$config = new Configuration('test.ini');
-		$code   = null;
-
-		file_put_contents($this->absolutePath, ')(*&^%$£');
-
-		try {
-			$config->getIniValues();
-		} catch (ConfigurationException $e) {
-			$code = $e->getCode();
-		}
-
-		$this->assertEquals(ConfigurationException::FILE_NOT_PARSEABLE, $code);
-	}
-
-	/**
 	 * Verifies that Configuration's ArrayAccess implementation returns the
 	 * expected results
 	 */
