@@ -5,10 +5,12 @@ namespace Tree\Test;
 require_once 'PHPUnit/Autoload.php';
 require_once '../Database/Connection.php';
 require_once '../Database/Query.php';
+require_once '../Database/Query/Predicate.php';
 require_once '../Database/Query/Update.php';
 require_once 'Fake/Connection.php';
 
 use \Tree\Database\Query;
+use \Tree\Database\Query_Predicate;
 use \Tree\Database\Query_Update;
 use \PHPUnit_Framework_TestCase;
 use \Tree\Test\Fake_Connection;
@@ -38,27 +40,49 @@ class QueryUpdateTest extends PHPUnit_Framework_TestCase {
 	public function testBasicUpdateQuery()
 	{
 		$update = new Query_Update($this->db);
-
 		$update->table('sometable');
 		$update->set('id', 1);
 
-		$sql = $update->getSql();
+		$expected  = "UPDATE `sometable`\n";
+		$expected .= "SET `id` = 1\n";
 
-		$this->assertEquals("UPDATE\n\t`sometable`\nSET\n\t`id` = 1\n", $sql);
+		$actual = $update->getSql();
+
+		$this->assertEquals($expected, $actual);
 	}
 
 	public function testWhereUpdateQuery()
 	{
 		$update = new Query_Update($this->db);
-
 		$update->table('sometable');
 		$update->set('id', 1);
-		$update->where('id = %d', 2);
+		$update->where('`id` = %d', 2);
 
-		$sql = $update->getSql();
+		$expected  = "UPDATE `sometable`\n";
+		$expected .= "SET `id` = 1\n";
+		$expected .= "WHERE `id` = 2\n";
 
-		$this->assertEquals("UPDATE\n\t`sometable`\nSET\n\t`id` = 1\nWHERE\n\tid = 2\n", $sql);
+		$actual = $update->getSql();
+
+		$this->assertEquals($expected, $actual);
 	}
+
+	public function testLimitExpression()
+	{
+		$update = new Query_Update($this->db);
+		$update->table('sometable');
+		$update->set('id', 1);
+		$update->limit(1);
+
+		$expected  = "UPDATE `sometable`\n";
+		$expected .= "SET `id` = 1\n";
+		$expected .= "LIMIT 1\n";
+
+		$actual = $update->getSql();
+
+		$this->assertEquals($expected, $actual);
+	}
+
 
 }
 

@@ -15,7 +15,9 @@ namespace Tree\Database;
  * @uses       \Tree\Database\Query_Where
  * @version    0.00
  */
-class Query_Update extends Query_Where {
+class Query_Update extends Query {
+
+	private $wherePredicate;
 
 	/**
 	 * An associative array of values to be set by the query
@@ -38,6 +40,17 @@ class Query_Update extends Query_Where {
 	 */
 	protected $tableName;
 
+	private $limitStart;
+
+	private $limitEnd;
+
+	public function __construct($connection)
+	{
+		parent::__construct($connection);
+
+		$this->wherePredicate = new Query_Predicate($connection);
+	}
+
 	/**
 	 * Generates and returns the UPDATE query SQL 
 	 * 
@@ -48,11 +61,11 @@ class Query_Update extends Query_Where {
 	{
 		$tableName = $this->getTableName();
 
-		$sql = 'UPDATE'
-			. "\n\t"
+		$sql = 'UPDATE '
 			. "`$tableName`" . "\n"
 			. $this->getSetClause()
-			. $this->getWhereExpression();
+			. $this->getWhereExpression()
+			. $this->getLimitExpression();
 
 		return $sql;
 	}
@@ -99,6 +112,60 @@ class Query_Update extends Query_Where {
 	}
 
 	/**
+	 * Adds an AND condition to the WHERE expression
+	 * 
+	 * @access public
+	 * @param  string $statement 
+	 */
+	public function where($statement)
+	{
+		$parameters = func_get_args();
+		array_shift($parameters);
+
+		$this->wherePredicate->andPredicate($statement, $parameters);
+	}
+
+	/**
+	 * Adds an AND condition to the WHERE expression
+	 * 
+	 * @access public
+	 * @param  string $statement 
+	 */
+	public function andWhere($statement)
+	{
+		$parameters = func_get_args();
+		array_shift($parameters);
+
+		$this->wherePredicate->andPredicate($statement, $parameters);
+	}
+
+	/**
+	 * Adds an OR condition to the WHERE expression
+	 * 
+	 * @access public
+	 * @param  string $statement 
+	 */
+	public function orWhere($statement)
+	{
+		$parameters = func_get_args();
+		array_shift($parameters);
+
+		$this->wherePredicate->orPredicate($statement, $parameters);
+	}
+
+	public function limit($start, $end = null)
+	{
+		if ($end === null) {
+			$this->limitStart = null;
+			$this->limitEnd   = $start;
+		} else {
+			$this->limitStart = $start;
+			$this->limitEnd   = $end;
+		}
+		return $this;
+	}
+
+	/**
 	 * Generates and returns the full 'SET x = y ...' section of the SQL
 	 * 
 	 * @access protected
@@ -116,8 +183,8 @@ class Query_Update extends Query_Where {
 			$setClause[] = "`$name` = $value";
 		}
 		
-		$setClause = implode(",\n\t", $setClause);
-		$setClause = "SET\n\t$setClause\n";
+		$setClause = implode(",\n", $setClause);
+		$setClause = "SET {$setClause}\n";
 
 		return $setClause;
 	}
@@ -167,6 +234,39 @@ class Query_Update extends Query_Where {
 	protected function setValues($values)
 	{
 		$this->setValues = array_merge($values, $this->setValues);
+	}
+
+	protected function getWhereExpression()
+	{
+		$whereExpression = $this->wherePredicate->getSql();
+
+		if ($whereExpression == '') {
+			return '';
+		}
+
+		return "WHERE {$whereExpression}";
+	}
+
+	protected function getLimitExpression()
+	{
+		if ($this->limitStart === null && $this->limitEnd === null) {
+			return '';
+		}
+
+		$expression = 'LIMIT ';
+
+		if ($this->limitStart !== null) {
+			$expression .= $this->limitStart;
+			$expression .= ', ';
+		}
+
+		if ($this->limitEnd !== null) {
+			$expression .= $this->limitEnd;
+		}
+
+		$expression .= "\n";
+
+		return $expression;
 	}
 	
 }
