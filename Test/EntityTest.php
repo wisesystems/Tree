@@ -95,6 +95,16 @@ class EntityTest extends PHPUnit_Extensions_Database_TestCase {
 		}
 
 		$this->assertEquals(EntityException::NO_SUCH_ATTRIBUTE, $code);
+
+		$code = null;
+		try {
+			$abc = $entity->asdfgh;
+		} catch (EntityException $e) {
+			$code = $e->getCode();
+		}
+
+		$this->assertEquals(EntityException::NO_SUCH_ATTRIBUTE, $code);
+
 	}
 
 	/**

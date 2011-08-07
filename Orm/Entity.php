@@ -116,8 +116,18 @@ abstract class Entity {
 	 * @access public
 	 * @param  array $databaseRow 
 	 */
-	public function hydrateEntity($databaseRow)
+	public function hydrateEntity(array $databaseRow)
 	{
+		foreach ($databaseRow as $name => $value) {
+		
+			if (!in_array($name, $this->columnList)) {
+				continue;
+			}
+
+			$this->originalValues[$name] = $value;
+			$this->currentValues[$name]  = $value;
+
+		}
 	}
 
 	/**
