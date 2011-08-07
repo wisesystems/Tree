@@ -22,12 +22,49 @@ use \PDOStatement;
  */
 class Result_Pdo extends Result {
 
+	/**
+	 * The PDOStatement object representing the result of the query
+	 * 
+	 * @access private
+	 * @var    \PDOStatement
+	 */
 	private $statement;
 
+	/**
+	 * Internal pointer indicating the row of the result set that is currently
+	 * being pointed to (the one that will be returned by the next call to
+	 * current)
+	 * 
+	 * @access private
+	 * @var    integer
+	 */
 	private $iteratorIndex = 0;
 
+	/**
+	 * The size of the result set
+	 *
+	 * This value is only set once it is known. It is only known once we have
+	 * iterated through the entire result set and reached the end. At that point
+	 * we store this value so as to have an accurate measure of the size of the
+	 * result set.
+	 * 
+	 * @access private
+	 * @var    integer
+	 */
 	private $resultSize = null;
 
+	/**
+	 * The next row of the result set to be returned by current
+	 *
+	 * Unfortunately, PDOStatement result sets can't be counted reliably. As a
+	 * result, it's impossible to know when calling fetch() whether or not it'll
+	 * return a row. In order to be able to return a meaningful boolean value for
+	 * valid() in this class, we have to constantly pre-fetch the next row of the
+	 * result set and store it here.
+	 * 
+	 * @access private
+	 * @var    array
+	 */
 	private $nextRow = null;
 
 	/**

@@ -17,6 +17,13 @@ namespace Tree\Database;
  */
 class Query_Update extends Query {
 
+	/**
+	 * The object representing the WHERE expression which specifies which rows
+	 * are to be updated by the query
+	 * 
+	 * @access private
+	 * @var    \Tree\Database\Query_Predicate
+	 */
 	private $wherePredicate;
 
 	/**
@@ -27,23 +34,43 @@ class Query_Update extends Query {
 	 *              'article_title' => 'Example Article',
 	 *      )
 	 * 
-	 * @access protected
+	 * @access private
 	 * @var    array
 	 */
-	protected $setValues = array();
+	private $setValues = array();
 
 	/**
 	 * The name of the table to be updated 
 	 * 
-	 * @access protected
+	 * @access private
 	 * @var    string
 	 */
-	protected $tableName;
+	private $tableName;
 
+	/**
+	 * The first integer in the LIMIT expression, if any
+	 *
+	 * e.g. the 'x' in LIMIT x,y
+	 * 
+	 * @access private
+	 * @var    integer
+	 */
 	private $limitStart;
 
+	/**
+	 * The second integer in the LIMIT expression, if any
+	 *
+	 * e.g. the 'y' in LIMIT x,y
+	 * 
+	 * @access private
+	 * @var    integer
+	 */
 	private $limitEnd;
 
+	/**
+	 * @access public
+	 * @param  \Tree\Database\Connection $connection 
+	 */
 	public function __construct($connection)
 	{
 		parent::__construct($connection);
@@ -83,7 +110,7 @@ class Query_Update extends Query {
 	 * @access public
 	 * @param  string $name 
 	 * @param  string $value 
-	 * @return Query_Update
+	 * @return \Tree\Database\Query_Update
 	 */
 	public function set($name, $value = null)
 	{
@@ -103,7 +130,7 @@ class Query_Update extends Query {
 	 * 
 	 * @access public
 	 * @param  string $tableName 
-	 * @return Query_Update
+	 * @return \Tree\Database\Query_Update
 	 */
 	public function table($tableName)
 	{
@@ -116,6 +143,7 @@ class Query_Update extends Query {
 	 * 
 	 * @access public
 	 * @param  string $statement 
+	 * @return \Tree\Database\Query_Update
 	 */
 	public function where($statement)
 	{
@@ -123,6 +151,7 @@ class Query_Update extends Query {
 		array_shift($parameters);
 
 		$this->wherePredicate->andPredicate($statement, $parameters);
+		return $this;
 	}
 
 	/**
@@ -130,6 +159,7 @@ class Query_Update extends Query {
 	 * 
 	 * @access public
 	 * @param  string $statement 
+	 * @return \Tree\Database\Query_Update
 	 */
 	public function andWhere($statement)
 	{
@@ -137,6 +167,7 @@ class Query_Update extends Query {
 		array_shift($parameters);
 
 		$this->wherePredicate->andPredicate($statement, $parameters);
+		return $this;
 	}
 
 	/**
@@ -144,6 +175,7 @@ class Query_Update extends Query {
 	 * 
 	 * @access public
 	 * @param  string $statement 
+	 * @return \Tree\Database\Query_Update
 	 */
 	public function orWhere($statement)
 	{
@@ -151,8 +183,18 @@ class Query_Update extends Query {
 		array_shift($parameters);
 
 		$this->wherePredicate->orPredicate($statement, $parameters);
+		return $this;
 	}
 
+	/**
+	 * Sets the limit offsets to control which rows of the overall result set are
+	 * to actually be updated by the query
+	 *
+	 * @access public
+	 * @param  integer $start 
+	 * @param  integer $end 
+	 * @return \Tree\Database\Query_Update
+	 */
 	public function limit($start, $end = null)
 	{
 		if ($end === null) {
@@ -168,10 +210,10 @@ class Query_Update extends Query {
 	/**
 	 * Generates and returns the full 'SET x = y ...' section of the SQL
 	 * 
-	 * @access protected
+	 * @access private
 	 * @return string
 	 */
-	protected function getSetClause()
+	private function getSetClause()
 	{
 		if (count($this->setValues) == 0) {
 			return '';
@@ -192,10 +234,10 @@ class Query_Update extends Query {
 	/**
 	 * Returns the name of the database table to be modified 
 	 * 
-	 * @access protected
+	 * @access private
 	 * @return string
 	 */
-	protected function getTableName()
+	private function getTableName()
 	{
 		return $this->tableName;
 	}
@@ -203,11 +245,11 @@ class Query_Update extends Query {
 	/**
 	 * Sets the database table which is to be modified 
 	 * 
-	 * @access protected
+	 * @access private
 	 * @param  string $tableName 
 	 * @return Query_Update
 	 */
-	protected function setTableName($tableName)
+	private function setTableName($tableName)
 	{
 		$this->tableName = $tableName;
 		return $this;
@@ -216,11 +258,11 @@ class Query_Update extends Query {
 	/**
 	 * Stores a (column, value) pair to be included in the query
 	 *
-	 * @access protected
+	 * @access private
 	 * @param  string $name 
 	 * @param  string $value 
 	 */
-	protected function setValue($name, $value)
+	private function setValue($name, $value)
 	{
 		$this->setValues[$name] = $value;
 	}
@@ -228,15 +270,22 @@ class Query_Update extends Query {
 	/**
 	 * Stores a set of (column, value) pairs to be included in the query 
 	 * 
-	 * @access protected
+	 * @access private
 	 * @param  array $values 
 	 */
-	protected function setValues($values)
+	private function setValues($values)
 	{
 		$this->setValues = array_merge($values, $this->setValues);
 	}
 
-	protected function getWhereExpression()
+	/**
+	 * Generates and returns the WHERE expression that specifies which rows are to
+	 * be updated by the query
+	 * 
+	 * @access private
+	 * @return string
+	 */
+	private function getWhereExpression()
 	{
 		$whereExpression = $this->wherePredicate->getSql();
 
@@ -247,7 +296,14 @@ class Query_Update extends Query {
 		return "WHERE {$whereExpression}";
 	}
 
-	protected function getLimitExpression()
+	/**
+	 * Generates and returns the LIMIT expression which specifies which of the
+	 * rows that match the WHERE expression are to be altered
+	 * 
+	 * @access private
+	 * @return string
+	 */
+	private function getLimitExpression()
 	{
 		if ($this->limitStart === null && $this->limitEnd === null) {
 			return '';

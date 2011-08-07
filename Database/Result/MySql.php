@@ -9,6 +9,16 @@ use \Tree\Exception\DatabaseException;
 
 /**
  * Result_MySql 
+ *
+ * Models results of queries sent using Connection_MySql
+ *
+ * This class implements Countable and SeekableIterator of its own volition
+ * rather than as a requirement mandated by Result. This is because other PHP
+ * database extensions, notably PDO, don't provide as much functionality in
+ * their representations of result sets. PDOStatement result sets can't
+ * reliably be counted or seeked, whereas mysqli ones can, so despite the risk
+ * of introducing incompatibilities, the functionality is at least available
+ * here.
  * 
  * @author     Henry Smith <henry@henrysmith.org> 
  * @copyright  2011 Henry Smith
@@ -24,12 +34,27 @@ use \Tree\Exception\DatabaseException;
  */
 class Result_MySql extends Result implements Countable, SeekableIterator {
 	
+	/**
+	 * Internal pointer indicating the row of the result set that is currently
+	 * being pointed to (the one that will be returned by the next call to
+	 * current)
+	 * 
+	 * @access private
+	 * @var    integer
+	 */
 	private $iteratorIndex = 0;
+
+	/**
+	 * The mysql_result object representing the query result
+	 * 
+	 * @access private
+	 * @var    \mysqli_result
+	 */
 	private $result;
 
 	/**
 	 * @access public
-	 * @param  mixed $result 
+	 * @param  \mysqli_result $result 
 	 */
 	public function __construct($result)
 	{

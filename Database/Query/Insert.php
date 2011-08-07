@@ -21,20 +21,20 @@ class Query_Insert extends Query {
 	/**
 	 * The name of the table into which the data is to be inserted 
 	 * 
-	 * @access protected
+	 * @access private
 	 * @var    string
 	 */
-	protected $tableName;
+	private $tableName;
 
 	/**
 	 * An associative array in which the keys are names of columns of the
 	 * target database table, and the values are the values to be inserted
 	 * into those columns in the new row
 	 * 
-	 * @access protected
+	 * @access private
 	 * @var    array
 	 */
-	protected $columnValuePairs = array();
+	private $columnValuePairs = array();
 
 	/**
 	 * Generates and returns the INSERT SQL 
@@ -92,10 +92,10 @@ class Query_Insert extends Query {
 	 *
 	 * e.g. '(`user_id`, `user_name`, `user_password`)'
 	 * 
-	 * @access protected
+	 * @access private
 	 * @return string
 	 */
-	protected function getColumnNames()
+	private function getColumnNames()
 	{
 		$names = array_keys($this->columnValuePairs);
 
@@ -114,10 +114,10 @@ class Query_Insert extends Query {
 	 *
 	 * e.g. "(1234, 'admin', 'swordfish')"
 	 * 
-	 * @access protected
+	 * @access private
 	 * @return string
 	 */
-	protected function getColumnValues()
+	private function getColumnValues()
 	{
 		$values = array_values($this->columnValuePairs);
 
@@ -134,10 +134,10 @@ class Query_Insert extends Query {
 	/**
 	 * Returns the name of the table into which the data is to be inserted 
 	 * 
-	 * @access protected
+	 * @access private
 	 * @return string
 	 */
-	protected function getTableName()
+	private function getTableName()
 	{
 		return $this->tableName;
 	}
@@ -145,10 +145,10 @@ class Query_Insert extends Query {
 	/**
 	 * Sets the name of the table into which the data is to be inserted 
 	 * 
-	 * @access protected
+	 * @access private
 	 * @param  string $name 
 	 */
-	protected function setTableName($name)
+	private function setTableName($name)
 	{
 		$this->tableName = $name;
 	}
@@ -160,11 +160,11 @@ class Query_Insert extends Query {
 	 * the array in every public-facing method that needs to store this
 	 * data is to keep the data access all in one place.
 	 * 
-	 * @access protected
+	 * @access private
 	 * @param  string $column 
 	 * @param  string $value 
 	 */
-	protected function setColumnValuePair($column, $value)
+	private function setColumnValuePair($column, $value)
 	{
 		$this->columnValuePairs[$column] = $value;
 	}

@@ -21,18 +21,61 @@ use \Tree\Database\Result_MySql;
  */
 class Connection_MySql extends Connection {
 
+	/**
+	 * The username to connect with
+	 * 
+	 * @access private
+	 * @var    string
+	 */
 	private $username;
 
+	/**
+	 * The password to connect with
+	 * 
+	 * @access private
+	 * @var    string
+	 */
 	private $password;
 
+	/**
+	 * The hostname to connect to
+	 * 
+	 * @access private
+	 * @var    string
+	 */
 	private $hostname;
 
+	/**
+	 * The port to use if connecting over TCP/IP
+	 * 
+	 * @access private
+	 * @var    integer
+	 */
 	private $port;
 
+	/**
+	 * The path to the UNIX socket to be used for the connection if not connecting
+	 * over TCP/IP
+	 * 
+	 * @var mixed
+	 * @access private
+	 */
 	private $socket;
 
+	/**
+	 * The name of the database to use on the connection
+	 * 
+	 * @access private
+	 * @var    string
+	 */
 	private $database;
 
+	/**
+	 * The mysqli object representing the connection
+	 * 
+	 * @access private
+	 * @var    \mysqli
+	 */
 	private $mysqli;
 
 	/**
@@ -90,7 +133,18 @@ class Connection_MySql extends Connection {
 		return true;
 	}
 
-
+	/**
+	 * Escapes a string for use in a SQL query
+	 *
+	 * Note that this method wraps the string in single quotes. This is because
+	 * some database extensions, notably PDO, do this internally when escaping
+	 * values. It's therefore easier to have everything behave the same way, so 
+	 * this class copies that behaviour.
+	 * 
+	 * @access protected
+	 * @param  string $string 
+	 * @return string
+	 */
 	protected function vendorEscape($string)
 	{
 		$string = $this->mysqli->real_escape_string($string);

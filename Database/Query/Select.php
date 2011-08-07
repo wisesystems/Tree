@@ -18,75 +18,100 @@ namespace Tree\Database;
  */
 class Query_Select extends Query {
 
+	/**
+	 * The object that represents the predicates comprising the query's WHERE
+	 * expression
+	 * 
+	 * @access private
+	 * @var    \Tree\Database\Query_Predicate
+	 */
 	private $wherePredicate;
 
 	/**
 	 * A list of the columns selected by the query
 	 *
-	 * @access protected
+	 * @access private
 	 * @var    array $columnNames
 	 */
-	protected $columnNames = array();
+	private $columnNames = array();
 
 	/**
 	 * A list of aliases for the columns in $columnNames,
 	 *   e.g SELECT id AS $columnAlias
 	 *
-	 * @access protected
+	 * @access private
 	 * @var    array $columnAliases
 	 */
-	protected $columnAliases = array();
+	private $columnAliases = array();
 
 	/**
 	 * A list of the tables selected from by the query
 	 *
-	 * @access protected
+	 * @access private
 	 * @var    array $tableNames
 	 */
-	protected $tableNames = array();
+	private $tableNames = array();
 
 	/**
 	 * A list of aliases for the tables in $tableNames
 	 *    e.g. SELECT FROM articles a, users u ...
 	 *
-	 * @access protected
+	 * @access private
 	 * @var    array $tableAliases
 	 */
-	protected $tableAliases = array();
+	private $tableAliases = array();
 
 	/**
 	 * A list of column names by which the results should be grouped, which are
 	 * compiled into SQL GROUP BY statements.
 	 *
-	 * @access protected
+	 * @access private
 	 * @var    array $groupColumns
 	 */
-	protected $groupColumns = array();
+	private $groupColumns = array();
 	
 	/**
 	 * A list of column names by which the results should be ordered, which are
 	 * compiled into SQL ORDER BY statements.
 	 *
-	 * @access protected
+	 * @access private
 	 * @var    array $orderColumns
 	 */
-	protected $orderColumns = array();
+	private $orderColumns = array();
 
 	/**
 	 * A list of directions in which the orderings from $orderColumns should
 	 * run, i.e. either "ASC" or "DESC"
 	 *
-	 * @access protected
+	 * @access private
 	 * @var    array $orderDirections
 	 */
-	protected $orderDirections = array();
+	private $orderDirections = array();
 
-	protected $whereExpression;
-
+	/**
+	 * The first integer in the LIMIT expression, if any
+	 *
+	 * e.g. the 'x' in LIMIT x,y
+	 * 
+	 * @access private
+	 * @var    integer
+	 */
 	private $limitStart;
 
+	/**
+	 * The second integer in the LIMIT expression, if any
+	 *
+	 * e.g. the 'y' in LIMIT x,y
+	 * 
+	 * @access private
+	 * @var    integer
+	 */
 	private $limitEnd;
 
+	/**
+	 * @access public
+	 * @param  \Tree\Database\Connection $connection 
+	 */
 	public function __construct($connection)
 	{
 		parent::__construct($connection);
@@ -105,7 +130,7 @@ class Query_Select extends Query {
 	 *                 aliases 
 	 *
 	 * @access public
-	 * @return Query_Select
+	 * @return \Tree\Database\Query_Select
 	 */
 	public function from()
 	{
@@ -155,7 +180,7 @@ class Query_Select extends Query {
 	 *
 	 * @access public
 	 * @param  string $groupBy
-	 * @return Query_Select
+	 * @return \Tree\Database\Query_Select
 	 */
 	public function groupBy($columnIdentifier)
 	{
@@ -169,7 +194,7 @@ class Query_Select extends Query {
 	 * @access public
 	 * @param  string $orderBy
 	 * @param  string $direction  ( ASC | DESC )
-	 * @return Query_Select
+	 * @return \Tree\Database\Query_Select
 	 */
 	public function orderBy($columnIdentifier, $direction = '')
 	{
@@ -184,7 +209,7 @@ class Query_Select extends Query {
 	 * @param  mixed   If an array is given, the keys are treated as column names and the
 	 *                 values as aliases. Otherwise the arguments are added as column names
 	 *                 without aliases
-	 * @return Query_Select
+	 * @return \Tree\Database\Query_Select
 	 */
 	public function select()
 	{
@@ -207,6 +232,7 @@ class Query_Select extends Query {
 	 * 
 	 * @access public
 	 * @param  string $statement 
+	 * @return \Tree\Database\Query_Select
 	 */
 	public function where($statement)
 	{
@@ -214,6 +240,7 @@ class Query_Select extends Query {
 		array_shift($parameters);
 
 		$this->wherePredicate->andPredicate($statement, $parameters);
+		return $this;
 	}
 
 	/**
@@ -221,6 +248,7 @@ class Query_Select extends Query {
 	 * 
 	 * @access public
 	 * @param  string $statement 
+	 * @return \Tree\Database\Query_Select
 	 */
 	public function andWhere($statement)
 	{
@@ -228,6 +256,7 @@ class Query_Select extends Query {
 		array_shift($parameters);
 
 		$this->wherePredicate->andPredicate($statement, $parameters);
+		return $this;
 	}
 
 	/**
@@ -235,6 +264,7 @@ class Query_Select extends Query {
 	 * 
 	 * @access public
 	 * @param  string $statement 
+	 * @return \Tree\Database\Query_Select
 	 */
 	public function orWhere($statement)
 	{
@@ -242,8 +272,18 @@ class Query_Select extends Query {
 		array_shift($parameters);
 
 		$this->wherePredicate->orPredicate($statement, $parameters);
+		return $this;
 	}
 
+	/**
+	 * Sets the limit offsets to control which rows of the overall result set are
+	 * to actually be returned by the query
+	 *
+	 * @access public
+	 * @param  integer $start 
+	 * @param  integer $end 
+	 * @return \Tree\Database\Query_Select
+	 */
 	public function limit($start, $end = null)
 	{
 		if ($end === null) {
@@ -253,16 +293,17 @@ class Query_Select extends Query {
 			$this->limitStart = $start;
 			$this->limitEnd   = $end;
 		}
-		return $this;}
+		return $this;
+	}
 
 	/**
 	 * Adds a column to the list of columns whose values are to be selected
 	 * 
-	 * @access protected
+	 * @access private
 	 * @param  string $columnName   The name of the column in the table
 	 * @param  string $columnAlias  The alias of the column
 	 */
-	protected function addColumn($columnName, $columnAlias = '')
+	private function addColumn($columnName, $columnAlias = '')
 	{
 		$this->columnNames[]   = $columnName;
 		$this->columnAliases[] = $columnAlias;
@@ -271,11 +312,11 @@ class Query_Select extends Query {
 	/**
 	 * Adds an ORDER BY clause to the list
 	 *
-	 * @access protected
+	 * @access private
 	 * @param  string $columnIdentifier   The name of the column by which to order to result
 	 * @param  string $direction          ( ASC | DESC )
 	 */
-	protected function addOrderBy($columnIdentifier, $direction = '')
+	private function addOrderBy($columnIdentifier, $direction = '')
 	{
 		$this->orderColumns[]    = $columnIdentifier;
 		$this->orderDirections[] = strtoupper($direction);
@@ -284,11 +325,11 @@ class Query_Select extends Query {
 	/**
 	 * Adds a table to the list of tables to select values from
 	 *
-	 * @access protected
+	 * @access private
 	 * @param  string $tableName   The name of the table
 	 * @param  string $tableAlias  The alias of the table
 	 */
-	protected function addTable($tableName, $tableAlias = '')
+	private function addTable($tableName, $tableAlias = '')
 	{
 		$this->tableNames[]   = $tableName;
 		$this->tableAliases[] = $tableAlias;
@@ -301,10 +342,10 @@ class Query_Select extends Query {
 	 * Based on this syntax:
 	 *   column_expression ::= expression [ AS ] [ column_alias ]
 	 *
-	 * @access protected 
+	 * @access private 
 	 * @return string
 	 */
-	protected function getColumnExpressions()
+	private function getColumnExpressions()
 	{
 		$columnExpressions = array();
 
@@ -339,10 +380,10 @@ class Query_Select extends Query {
 	 *   from_clause  ::= select_table1 [INNER] JOIN select_table2  ...
 	 *   select_table ::= ( sub_select_statement ) [ AS ] [ table_alias ]
 	 *
-	 * @access protected
+	 * @access private
 	 * @return string
 	 */
-	protected function getFromClause()
+	private function getFromClause()
 	{
 		$fromClauses = array();
 
@@ -366,10 +407,10 @@ class Query_Select extends Query {
 	 * Generates and returns the GROUP BY clause grouping the results of
 	 * the query by column name
 	 * 
-	 * @access protected
+	 * @access private
 	 * @return string
 	 */
-	protected function getGroupByClause()
+	private function getGroupByClause()
 	{
 		if (count($this->groupColumns) == 0) {
 			return '';
@@ -385,10 +426,10 @@ class Query_Select extends Query {
 	 *
 	 * TODO: Implement HAVING expressions in SELECT queries
 	 * 
-	 * @access protected
+	 * @access private
 	 * @return string
 	 */
-	protected function getHavingExpression()
+	private function getHavingExpression()
 	{
 		return '';
 	}
@@ -400,10 +441,10 @@ class Query_Select extends Query {
 	 * Based on this syntax:
 	 *   order_column_expr ::= expression [ ASC | DESC ]
 	 *
-	 * @access protected
+	 * @access private
 	 * @return string
 	 */
-	protected function getOrderExpressions()
+	private function getOrderExpressions()
 	{
 		if (count($this->orderColumns) == 0) {
 			return '';
@@ -430,10 +471,10 @@ class Query_Select extends Query {
 	 * Generates and returns the WHERE expression that restricts what rows are
 	 * returned according to the values of those rows
 	 * 
-	 * @access protected
+	 * @access private
 	 * @return string
 	 */
-	protected function getWhereExpression()
+	private function getWhereExpression()
 	{
 		$whereExpression = $this->wherePredicate->getSql();
 
@@ -444,7 +485,14 @@ class Query_Select extends Query {
 		return "WHERE {$whereExpression}";
 	}
 
-	protected function getLimitExpression()
+	/**
+	 * Generates and returns the LIMIT expression specifying which rows in the set
+	 * matching the WHERE expression are actually to be returned
+	 * 
+	 * @access private
+	 * @return string
+	 */
+	private function getLimitExpression()
 	{
 		if ($this->limitStart === null && $this->limitEnd === null) {
 			return '';

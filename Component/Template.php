@@ -216,6 +216,7 @@ abstract class Template {
 
 		return null;
 	}
+
 	/**
 	 * Generates the output string provided that all the required input
 	 * values are available

@@ -29,12 +29,39 @@ class Query_Delete extends Query {
 	 */
 	protected $tableName;
 
+	/**
+	 * The object that represents and generates the WHERE expression for the SQL
+	 * query
+	 * 
+	 * @access private
+	 * @var    \Tree\Database\Query_Predicate
+	 */
 	private $wherePredicate;
 
+	/**
+	 * The first integer in the LIMIT expression, if any
+	 *
+	 * e.g. the 'x' in LIMIT x,y
+	 * 
+	 * @access private
+	 * @var    integer
+	 */
 	private $limitStart;
 
+	/**
+	 * The second integer in the LIMIT expression, if any
+	 *
+	 * e.g. the 'y' in LIMIT x,y
+	 * 
+	 * @access private
+	 * @var    integer
+	 */
 	private $limitEnd;
 
+	/**
+	 * @access public
+	 * @param  \Tree\Database\Connection $connection 
+	 */
 	public function __construct($connection)
 	{
 		parent::__construct($connection);
@@ -78,6 +105,7 @@ class Query_Delete extends Query {
 	 * 
 	 * @access public
 	 * @param  string $statement 
+	 * @return \Tree\Database\Query_Delete
 	 */
 	public function where($statement)
 	{
@@ -85,6 +113,8 @@ class Query_Delete extends Query {
 		array_shift($parameters);
 
 		$this->wherePredicate->andPredicate($statement, $parameters);
+
+		return $this;
 	}
 
 	/**
@@ -92,6 +122,7 @@ class Query_Delete extends Query {
 	 * 
 	 * @access public
 	 * @param  string $statement 
+	 * @return \Tree\Database\Query_Delete
 	 */
 	public function andWhere($statement)
 	{
@@ -99,6 +130,8 @@ class Query_Delete extends Query {
 		array_shift($parameters);
 
 		$this->wherePredicate->andPredicate($statement, $parameters);
+
+		return $this;
 	}
 
 	/**
@@ -106,6 +139,7 @@ class Query_Delete extends Query {
 	 * 
 	 * @access public
 	 * @param  string $statement 
+	 * @return \Tree\Database\Query_Delete
 	 */
 	public function orWhere($statement)
 	{
@@ -113,8 +147,23 @@ class Query_Delete extends Query {
 		array_shift($parameters);
 
 		$this->wherePredicate->orPredicate($statement, $parameters);
+
+		return $this;
 	}
 
+	/**
+	 * Sets the limit offsets to control which rows of the overall result set are
+	 * to actually be affected by the query
+	 *
+	 * In the case of a DELETE, the most common use-case for this method is likely
+	 * to be limit(1), i.e. to make sure that only one row is deleted no matter
+	 * how many match the WHERE expression.
+	 * 
+	 * @access public
+	 * @param  integer $start 
+	 * @param  integer $end 
+	 * @return \Tree\Database\Query_Delete
+	 */
 	public function limit($start, $end = null)
 	{
 		if ($end === null) {
@@ -132,10 +181,10 @@ class Query_Delete extends Query {
 	 *
 	 * e.g. "FROM `article`"
 	 * 
-	 * @access protected
+	 * @access private
 	 * @return string
 	 */
-	protected function getTableExpression()
+	private function getTableExpression()
 	{
 		$tableName = $this->getTableName();
 
@@ -149,10 +198,10 @@ class Query_Delete extends Query {
 	/**
 	 * Returns the name of the table to be deleted from 
 	 * 
-	 * @access protected
+	 * @access private
 	 * @return string
 	 */
-	protected function getTableName()
+	private function getTableName()
 	{
 		return $this->tableName;
 	}
@@ -160,15 +209,22 @@ class Query_Delete extends Query {
 	/**
 	 * Stores the name of the table to be deleted from 
 	 * 
-	 * @access protected
+	 * @access private
 	 * @param  string $tableName 
 	 */
-	protected function setTableName($tableName)
+	private function setTableName($tableName)
 	{
 		$this->tableName = $tableName;
 	}
 
-	protected function getWhereExpression()
+	/**
+	 * Generates and returns the WHERE expression that specifies which rows in the
+	 * database table are to be deleted
+	 * 
+	 * @access private
+	 * @return string
+	 */
+	private function getWhereExpression()
 	{
 		$whereExpression = $this->wherePredicate->getSql();
 
@@ -179,7 +235,14 @@ class Query_Delete extends Query {
 		return "WHERE {$whereExpression}";
 	}
 
-	protected function getLimitExpression()
+	/**
+	 * Generates and returns the LIMIT expression specifying which rows in the set
+	 * matching the WHERE expression are actually to be deleted
+	 * 
+	 * @access private
+	 * @return string
+	 */
+	private function getLimitExpression()
 	{
 		if ($this->limitStart === null && $this->limitEnd === null) {
 			return '';

@@ -60,6 +60,18 @@ abstract class Action {
 	 */
 	private $inputValues = array();
 
+	/**
+	 * Processes the request
+	 *
+	 * This method should do any requisite fetching, updating, creation, or
+	 * deletion of data required by the request. It should then return a HTTP
+	 * status code to indicate the outcome and the type of response to be sent.
+	 * 
+	 * @abstract
+	 * @access public
+	 * @param  array $input 
+	 * @return integer       e.g. 200, 404, 500
+	 */
 	abstract public function main(array $input);
 
 	/**

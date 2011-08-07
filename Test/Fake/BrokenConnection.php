@@ -7,6 +7,9 @@ use \Tree\Database\Connection;
 /**
  * Fake_BrokenConnection 
  *
+ * A Connection implementation intended to mimic a connection that is failing
+ * to open for use in verifying the error handling in this situation
+ *
  * @author     Henry Smith <henry@henrysmith.org> 
  * @copyright  2011 Henry Smith
  * @license    GPLv2.0
