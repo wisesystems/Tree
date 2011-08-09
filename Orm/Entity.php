@@ -149,8 +149,9 @@ abstract class Entity {
 		foreach ($databaseRow as $name => $value) {
 		
 			if (!in_array($name, $this->columnList)) {
-				// todo: throw exception
-				continue;
+				$message = "Hydration aborted because of invalid data: {$name}, {$value}";
+				$code    = EntityException::HYDRATED_WITH_INVALID_DATA;
+				throw new EntityException($message, $code);
 			}
 
 			$this->originalValues[$name] = $value;

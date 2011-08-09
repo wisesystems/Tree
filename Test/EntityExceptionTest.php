@@ -115,6 +115,11 @@ class EntityExceptionTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals(EntityException::NO_TABLE_NAME_SET, $code);
 	}
 	
+	/**
+	 * Verifies that Entity throws an exception if an attempt is made to revert
+	 * an entity that has no original state to revert to because it has not been
+	 * hydrated with database values
+	 */
 	public function testThrowsExceptionIfRevertingUnhydratedEntity()
 	{
 		$code = null;
@@ -126,6 +131,27 @@ class EntityExceptionTest extends PHPUnit_Framework_TestCase {
 		}
 
 		$this->assertEquals(EntityException::REVERTING_UNHYDRATED_ENTITY, $code);
+	}
+
+	/**
+	 * Verifies that Entity throws an exception if an attempt is made to hydrate
+	 * an entity with invalid data
+	 */
+	public function testThrowsExceptionIfHydratedWithInvalidData()
+	{
+		$code = null;
+
+		$invalidData = array(
+			'invalid_column' => 12345,
+		);
+
+		try {
+			$this->entity->hydrateEntity($invalidData);
+		} catch (EntityException $e) {
+			$code = $e->getCode();
+		}
+
+		$this->assertEquals(EntityException::HYDRATED_WITH_INVALID_DATA, $code);
 	}
 
 }

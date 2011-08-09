@@ -37,5 +37,12 @@ class EntityException extends Exception {
 	 */
 	const REVERTING_UNHYDRATED_ENTITY = 2;
 
+	/**
+	 * An attempt was made to hydrate an entity with data that it did not
+	 * recognise, i.e. the names of the columns did not match those in its list
+	 * of known database columns for that entity
+	 */
+	const HYDRATED_WITH_INVALID_DATA = 3;
+
 }
 
