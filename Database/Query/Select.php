@@ -62,6 +62,14 @@ class Query_Select extends Query {
 	private $tableAliases = array();
 
 	/**
+	 * An array of Query_Join objecs representing joins to other database tables
+	 * 
+	 * @access private
+	 * @var    array
+	 */
+	private $joins = array();
+
+	/**
 	 * A list of column names by which the results should be grouped, which are
 	 * compiled into SQL GROUP BY statements.
 	 *
@@ -167,6 +175,7 @@ class Query_Select extends Query {
 			'SELECT '
 			. $this->getColumnExpressions()
 			. $this->getFromClause()
+			. $this->getJoinExpressions()
 			. $this->getWhereExpression()
 			. $this->getGroupByClause()
 			. $this->getHavingExpression()
@@ -297,6 +306,20 @@ class Query_Select extends Query {
 	}
 
 	/**
+	 * Adds a Query_Join object representing another JOIN expression to be part of
+	 * the SELECT query
+	 * 
+	 * @access public
+	 * @param  \Tree\Database\Query_Join $join 
+	 * @return \Tree\Database\Query_Select
+	 */
+	public function addJoin($join)
+	{
+		$this->joins[] = $join;
+		return $this;
+	}
+
+	/**
 	 * Adds a column to the list of columns whose values are to be selected
 	 * 
 	 * @access private
@@ -401,6 +424,28 @@ class Query_Select extends Query {
 		$fromClause .= "\n";
 
 		return $fromClause;
+	}
+
+	/**
+	 * Generates and returns the JOIN expressions specifying which tables the main
+	 * table should be joined to and how
+	 * 
+	 * @access private
+	 * @return string
+	 */
+	private function getJoinExpressions()
+	{
+		if (count($this->joins) === 0) {
+			return '';
+		}
+
+		$joinExpressions = '';
+
+		foreach ($this->joins as $join) {
+			$joinExpressions .= $join->getSql();
+		}
+
+		return $joinExpressions;
 	}
 
 	/**

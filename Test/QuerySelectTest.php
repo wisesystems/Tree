@@ -6,10 +6,12 @@ require_once '../Database/Connection.php';
 require_once '../Database/Query.php';
 require_once '../Database/Query/Select.php';
 require_once '../Database/Query/Predicate.php';
+require_once '../Database/Query/Join.php';
 require_once 'Fake/Connection.php';
 
 use \Tree\Database\Query;
 use \Tree\Database\Query_Select;
+use \Tree\Database\Query_Join;
 use \PHPUnit_Framework_TestCase;
 use \Tree\Test\Fake_Connection;
 
@@ -114,6 +116,72 @@ class QuerySelectTest extends PHPUnit_Framework_TestCase {
 		$expected  = "SELECT *\n";
 		$expected .= "FROM `sometable`\n";
 		$expected .= "LIMIT 10\n";
+
+		$actual = $query->getSql();
+
+		$this->assertEquals($expected, $actual);
+	}
+
+	/**
+	 * Verifies that SELECT interacts well enough with Query_Join to be able
+	 * to add a simple join
+	 */
+	public function testSingleSimpleJoin()
+	{
+		$query = new Query_Select($this->db);
+		$query->select('*');
+		$query->from(array('sometable' => 'st'));
+
+		$join = new Query_Join($this->db);
+		$join->setTable('othertable', 'ot');
+		$join->setType('LEFT');
+		$join->on('st.ot_id = ot.ot_id');
+
+		$query->addJoin($join);
+
+		$expected  = "SELECT *\n";
+		$expected .= "FROM `sometable` `st`\n";
+		$expected .= "LEFT JOIN `othertable` `ot`\n";
+		$expected .= "ON st.ot_id = ot.ot_id\n";
+
+		$actual = $query->getSql();
+
+		$this->assertEquals($expected, $actual);
+	}
+
+	/**
+	 * Verifies that SELECT interacts well enough with Query_Join to be able
+	 * to add a longer, more involved join expression
+	 */
+	public function testMultipleComplexJoins()
+	{
+
+		$query = new Query_Select($this->db);
+		$query->select('*');
+		$query->from(array('sometable' => 'st'));
+
+		$join = new Query_Join($this->db);
+		$join->setTable('othertable', 'ot');
+		$join->setType('LEFT');
+		$join->on('st.ot_id = ot.ot_id');
+
+		$query->addJoin($join);
+
+		$join = new Query_Join($this->db);
+		$join->setTable('thirdtable', 'tt');
+		$join->setType('LEFT OUTER');
+		$join->on('st.tt_id = tt.tt_id');
+		$join->orOn("tt.tt_date > %s", '2010-01-01');
+
+		$query->addJoin($join);
+
+		$expected  = "SELECT *\n";
+		$expected .= "FROM `sometable` `st`\n";
+		$expected .= "LEFT JOIN `othertable` `ot`\n";
+		$expected .= "ON st.ot_id = ot.ot_id\n";
+		$expected .= "LEFT OUTER JOIN `thirdtable` `tt`\n";
+		$expected .= "ON st.tt_id = tt.tt_id\n";
+		$expected .= "OR tt.tt_date > '2010-01-01'\n";
 
 		$actual = $query->getSql();
 
