@@ -31,5 +31,11 @@ class EntityException extends Exception {
 	 */
 	const NO_TABLE_NAME_SET = 1;
 
+	/**
+	 * An attempt was made to revert changes to an entity, but the entity was not
+	 * hydrated and therefore had no initial database state to revert to
+	 */
+	const REVERTING_UNHYDRATED_ENTITY = 2;
+
 }
 

@@ -128,7 +128,11 @@ abstract class Entity {
 	 */
 	public function revertEntity()
 	{
-		// todo: throw exception if not hydrated
+		if (!$this->hasState(self::STATE_HYDRATED)) {
+			$message = 'Cannot revert an entity that has not been hydrated';
+			$code    = EntityException::REVERTING_UNHYDRATED_ENTITY;
+			throw new EntityException($message, $code);
+		}
 
 		$this->currentValues = $this->originalValues;
 	}

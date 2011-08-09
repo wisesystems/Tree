@@ -114,6 +114,19 @@ class EntityExceptionTest extends PHPUnit_Framework_TestCase {
 
 		$this->assertEquals(EntityException::NO_TABLE_NAME_SET, $code);
 	}
+	
+	public function testThrowsExceptionIfRevertingUnhydratedEntity()
+	{
+		$code = null;
+
+		try {
+			$this->entity->revertEntity();
+		} catch (EntityException $e) {
+			$code = $e->getCode();
+		}
+
+		$this->assertEquals(EntityException::REVERTING_UNHYDRATED_ENTITY, $code);
+	}
 
 }
 
