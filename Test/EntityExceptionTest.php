@@ -4,8 +4,13 @@ namespace Tree\Test;
 
 require_once 'PHPUnit/Framework/TestCase.php';
 require_once '../Exception/EntityException.php';
+require_once '../Database/Connection.php';
+require_once '../Database/Query.php';
+require_once '../Database/Query/Insert.php';
 require_once '../Orm/Entity.php';
 require_once 'Fake/Entity.php';
+require_once 'Fake/BrokenNoTableNameEntity.php';
+require_once 'Fake/Connection.php';
 
 use \Tree\Exception\EntityException;
 use \Tree\Orm\Entity;
@@ -85,6 +90,29 @@ class EntityExceptionTest extends PHPUnit_Framework_TestCase {
 		}
 
 		$this->assertEquals(EntityException::NO_SUCH_ATTRIBUTE, $code);
+	}
+
+	/**
+	 * Verifies that Entity throws an exception if an attempt is made to save an
+	 * entity that doesn't have a table name set, rather than just sending a junk
+	 * query to the database
+	 */
+	public function testThrowsExceptionIfTableNameMissing()
+	{
+		$connection = new Fake_Connection;
+		$entity     = new Fake_BrokenNoTableNameEntity;
+
+		$entity->setDatabase($connection);
+		
+		$code = null;
+
+		try {
+			$entity->commitEntity();
+		} catch (EntityException $e) {
+			$code = $e->getCode();
+		}
+
+		$this->assertEquals(EntityException::NO_TABLE_NAME_SET, $code);
 	}
 
 }

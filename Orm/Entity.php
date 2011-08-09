@@ -94,6 +94,12 @@ abstract class Entity {
 	 */
 	public function commitEntity()
 	{
+		if ($this->tableName === null) {
+			$message = 'No database table name set';
+			$code    = EntityException::NO_TABLE_NAME_SET;
+			throw new EntityException($message, $code);
+		}
+
 		if ($this->hasState(Entity::STATE_HYDRATED)) {
 			return $this->updateEntity();
 		} else {

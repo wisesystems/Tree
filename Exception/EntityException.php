@@ -25,5 +25,11 @@ class EntityException extends Exception {
 	 */
 	const NO_SUCH_ATTRIBUTE = 0;
 
+	/**
+	 * An attempt was made to store entity properties in the database, but the
+	 * entity did not have a database table name to save to
+	 */
+	const NO_TABLE_NAME_SET = 1;
+
 }
 
