@@ -23,7 +23,10 @@ use \Tree\Orm\Search;
  */
 class Fake_Search extends Search {
 
-	protected $entityClass = '\Tree\Test\Fake_Entity';
+	protected function getEntityClass()
+	{
+		return '\Tree\Test\Fake_Entity';
+	}
 
 }
 

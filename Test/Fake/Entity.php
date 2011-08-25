@@ -22,17 +22,23 @@ use \Tree\Orm\Entity;
  */
 class Fake_Entity extends Entity {
 
-	protected $columnList = array(
-		'id',
-		'title',
-		'body',
-	);
+	public function getEntityColumnList()
+	{
+		return array(
+			'id',
+			'title',
+			'body',
+		);
+	}
 
 	protected $primaryKey = array(
 		'id',
 	);
 
-	protected $tableName = 'article';
+	public function getEntityTableName()
+	{
+		return 'article';
+	}
 
 }
 

@@ -22,15 +22,23 @@ use \Tree\Orm\Entity;
  */
 class Fake_BrokenNoTableNameEntity extends Entity {
 
-	protected $columnList = array(
-		'id',
-		'title',
-		'body',
-	);
-
 	protected $primaryKey = array(
 		'id',
 	);
+
+	public function getEntityColumnList()
+	{
+		return array(
+			'id',
+			'title',
+			'body',
+		);
+	}
+
+	public function getEntityTableName()
+	{
+		return null;
+	}
 
 }
 

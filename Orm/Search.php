@@ -19,9 +19,33 @@ use \Tree\Database\Query_Select;
  * @uses       \Tree\Database\Query_Select
  * @version    0.00
  */
-abstract class Search {
+abstract class Search extends Query_Select {
 
-	protected $entityClass;
+	abstract protected function getEntityClass();
+
+	public function __construct($database)
+	{
+		parent::__construct($database);
+
+
+		$entityClass = $this->getEntityClass();
+		$entity      = new $entityClass;
+		$tableName   = $entity->getEntityTableName();
+		$columnList  = $entity->getEntityColumnList();
+
+
+		foreach ($columnList as $column) {
+			
+			$columnName  = "`{$tableName}`.`{$column}`";
+			$columnAlias = "{$tableName}:{$column}";
+
+			$this->addColumn($columnName, $columnAlias);
+
+		}
+
+		$this->from(array($tableName => $tableName));
+
+	}
 
 }
 

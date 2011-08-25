@@ -322,11 +322,11 @@ class Query_Select extends Query {
 	/**
 	 * Adds a column to the list of columns whose values are to be selected
 	 * 
-	 * @access private
+	 * @access protected
 	 * @param  string $columnName   The name of the column in the table
 	 * @param  string $columnAlias  The alias of the column
 	 */
-	private function addColumn($columnName, $columnAlias = '')
+	protected function addColumn($columnName, $columnAlias = '')
 	{
 		$this->columnNames[]   = $columnName;
 		$this->columnAliases[] = $columnAlias;

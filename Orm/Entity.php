@@ -30,7 +30,9 @@ abstract class Entity {
 
 	protected $primaryKey = array();
 
-	protected $tableName;
+	abstract public function getEntityColumnList();
+
+	abstract public function getEntityTableName();
 
 	private $currentValues = array();
 
@@ -50,7 +52,8 @@ abstract class Entity {
 	 */
 	public function __get($attribute)
 	{
-		if (!in_array($attribute, $this->columnList)) {
+		$columnList = $this->getEntityColumnList();
+		if (!in_array($attribute, $columnList)) {
 			$message = "No such attribute: {$attribute}";
 			$code    = EntityException::NO_SUCH_ATTRIBUTE;
 			throw new EntityException($message, $code);
@@ -73,7 +76,8 @@ abstract class Entity {
 	 */
 	public function __set($name, $value)
 	{
-		if (!in_array($name, $this->columnList)) {
+		$columnList = $this->getEntityColumnList();
+		if (!in_array($name, $columnList)) {
 			$message = "No such attribute: {$name}";
 			$code    = EntityException::NO_SUCH_ATTRIBUTE;
 			throw new EntityException($message, $code);
@@ -94,7 +98,7 @@ abstract class Entity {
 	 */
 	public function commitEntity()
 	{
-		if ($this->tableName === null) {
+		if ($this->getEntityTableName() === null) {
 			$message = 'No database table name set';
 			$code    = EntityException::NO_TABLE_NAME_SET;
 			throw new EntityException($message, $code);
@@ -146,9 +150,11 @@ abstract class Entity {
 	 */
 	public function hydrateEntity(array $databaseRow)
 	{
+		$columnList = $this->getEntityColumnList();
+
 		foreach ($databaseRow as $name => $value) {
 		
-			if (!in_array($name, $this->columnList)) {
+			if (!in_array($name, $columnList)) {
 				$message = "Hydration aborted because of invalid data: {$name}, {$value}";
 				$code    = EntityException::HYDRATED_WITH_INVALID_DATA;
 				throw new EntityException($message, $code);
@@ -221,9 +227,11 @@ abstract class Entity {
 	private function insertEntity()
 	{
 		$query = new Query_Insert($this->database);
-		$query->into($this->tableName);
+		$query->into($this->getEntityTableName());
 
-		foreach ($this->columnList as $column) {
+		$columnList = $this->getEntityColumnList();
+
+		foreach ($columnList as $column) {
 			$query->set($column, $this->$column);
 		}
 		
@@ -240,14 +248,16 @@ abstract class Entity {
 	 */
 	private function updateEntity()
 	{
+		$columnList = $this->getEntityColumnList();
+
 		$query = new Query_Update($this->database);
-		$query->table($this->tableName);
+		$query->table($this->getEntityTableName());
 
 		foreach ($this->primaryKey as $column) {
 			$query->where("`$column` = %s", $this->$column);
 		}
 
-		foreach ($this->columnList as $column) {
+		foreach ($columnList as $column) {
 
 			if (in_array($column, $this->primaryKey)) {
 				continue;
