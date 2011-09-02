@@ -21,25 +21,86 @@ use \Tree\Database\Query_Insert;
  */
 abstract class Entity {
 
-	const STATE_NONE = 0;
+	/**
+	 * Indicates that the entity has been hydrated with values from a database
+	 * table row
+	 */
 	const STATE_HYDRATED = 1;
+
+	/**
+	 * Indicates that the entity's values have been altered and now differ from
+	 * those in its corresponding database table row
+	 */
 	const STATE_DIRTY = 2;
+
+	/**
+	 * The bitmask of the Entity::$state bitfield
+	 */
 	const STATE_BITMASK = 3;
 
-	protected $primaryKey = array();
-
+	/**
+	 * To be overridden with a method that returns an array listing the column
+	 * names that comprise the entity's primary key
+	 * 
+	 * @abstract
+	 * @access public
+	 * @return array
+	 */
 	abstract public function getEntityPrimaryKey();
 
+	/**
+	 * To be overridden with a method that returns an array listing the column
+	 * names of the entity's database table
+	 * 
+	 * @abstract
+	 * @access public
+	 * @return array
+	 */
 	abstract public function getEntityColumnList();
 
+	/**
+	 * To be overridden with a method that returns a string denoting the name of
+	 * the database table corresponding to the entity
+	 * 
+	 * @abstract
+	 * @access public
+	 * @return string
+	 */
 	abstract public function getEntityTableName();
 
+	/**
+	 * Associative array of the current values of the entity's fields
+	 * 
+	 * @access private
+	 * @var    array
+	 */
 	private $currentValues = array();
 
+	/**
+	 * Associative array of the name-value pairs of data with which the entity was
+	 * originally hydrated
+	 * 
+	 * @access private
+	 * @var    array
+	 */
 	private $originalValues = array();
 
+	/**
+	 * A bitfield representing the state of the entity
+	 *
+	 * See the Entity::STATE_* constants for more information.
+	 * 
+	 * @access private
+	 * @var    integer
+	 */
 	private $state;
 
+	/**
+	 * The database connection that the entity uses to store itself
+	 * 
+	 * @access private
+	 * @var    \Tree\Database\Connection
+	 */
 	private $database;
 
 	/**
@@ -253,17 +314,18 @@ abstract class Entity {
 	private function updateEntity()
 	{
 		$columnList = $this->getEntityColumnList();
+		$primaryKey = $this->getEntityPrimaryKey();
 
 		$query = new Query_Update($this->database);
 		$query->table($this->getEntityTableName());
 
-		foreach ($this->primaryKey as $column) {
+		foreach ($primaryKey as $column) {
 			$query->where("`$column` = %s", $this->$column);
 		}
 
 		foreach ($columnList as $column) {
 
-			if (in_array($column, $this->primaryKey)) {
+			if (in_array($column, $primaryKey)) {
 				continue;
 			}
 

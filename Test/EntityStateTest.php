@@ -36,7 +36,6 @@ class EntityStateTest extends PHPUnit_Framework_TestCase {
 		$entity->addState(Entity::STATE_HYDRATED);
 
 		$this->assertTrue($entity->hasState(Entity::STATE_HYDRATED));
-		$this->assertFalse($entity->hasState(Entity::STATE_NONE));
 		$this->assertFalse($entity->hasState(Entity::STATE_DIRTY));
 	}
 
