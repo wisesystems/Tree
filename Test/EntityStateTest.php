@@ -25,7 +25,7 @@ use \PHPUnit_Framework_TestCase;
  * @uses       \Tree\Orm\Entity
  * @version    0.00
  */
-class EntityTest extends PHPUnit_Framework_TestCase {
+class EntityStateTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * Verifies that calling addState sets Entity to have the given state
