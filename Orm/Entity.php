@@ -346,6 +346,28 @@ abstract class Entity {
 	}
 
 	/**
+	 * Finds and returns the relationship of the given name
+	 * 
+	 * @access public
+	 * @param  string $name 
+	 * @return array
+	 */
+	public function getRelationshipByName($name)
+	{
+		if (!($this instanceof RelatedEntity)) {
+			return null;
+		}
+
+		$relationships = $this->getEntityRelationships();
+
+		foreach ($relationships as $relationship) {
+			if ($relationship['name'] === $name) {
+				return $relationship;
+			}
+		}
+	}
+
+	/**
 	 * Inserts the entity's data into its corresponding database table as a new row
 	 * 
 	 * @access private

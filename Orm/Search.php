@@ -2,6 +2,7 @@
 
 namespace Tree\Orm;
 
+use \Tree\Behaviour\RelatedEntity;
 use \Tree\Database\Query_Select;
 
 /**
@@ -30,6 +31,8 @@ use \Tree\Database\Query_Select;
 	 * @var    \Tree\Orm\Entity
 	 */
 	private $baseEntity;
+
+	private $withRelationships = array();
 
 	/**
 	 * @param \Tree\Database\Connection $database 
@@ -70,6 +73,16 @@ use \Tree\Database\Query_Select;
 
 		$this->from(array($tableName => $tableName));
 
+
+		foreach ($this->withRelationships as $relationshipName) {
+
+			$relationship = $this->baseEntity->getRelationshipByName($relationshipName);
+
+			var_dump($relationship);
+
+		}
+
+
 		return parent::getSql();
 	}
 
@@ -85,6 +98,23 @@ use \Tree\Database\Query_Select;
 
 		$result = new Result($databaseResult, $this->baseEntity);
 		return $result;
+	}
+
+	/**
+	 * Marks the given relationship to denote that the related entity should be
+	 * retrieved from the database 
+	 *
+	 * Only works with relationships in which there is only one row for the
+	 * corresponding related entity
+	 * 
+	 * @access public
+	 * @param  string $relationshipName 
+	 */
+	public function withRelationship($relationshipName)
+	{
+		// TODO: throw exception if no such relationship
+		// TODO: throw exception if not 1-to-1 or many-to-1
+		$this->withRelationships[] = $relationshipName;
 	}
 
 }
