@@ -13,6 +13,7 @@ use \PHPUnit_Framework_TestCase;
 /**
  * EntityStateTest 
  *
+ * Verifies that Entity's state transitions work correctly
  * 
  * @author     Henry Smith <henry@henrysmith.org> 
  * @copyright  2011 Henry Smith
