@@ -36,7 +36,7 @@ abstract class Entity {
 	/**
 	 * The bitmask of the Entity::$state bitfield
 	 */
-	const STATE_BITMASK = 3;
+	const STATE_BITMASK = 4;
 
 	/**
 	 * To be overridden with a method that returns an array listing the column
