@@ -101,17 +101,6 @@ class Result_MySql extends Result implements Countable, SeekableIterator {
 	}
 
 	/**
-	 * Returns the total number of rows in the result set
-	 * 
-	 * @access protected
-	 * @return integer
-	 */
-	protected function vendorCount()
-	{
-		return $this->mysqli->num_rows;
-	}
-
-	/**
 	 * Returns the current value of the result set's internal pointer
 	 * 
 	 * @access protected
