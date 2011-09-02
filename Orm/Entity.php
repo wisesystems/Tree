@@ -26,9 +26,9 @@ abstract class Entity {
 	const STATE_DIRTY = 2;
 	const STATE_BITMASK = 3;
 
-	protected $columnList = array();
-
 	protected $primaryKey = array();
+
+	abstract public function getEntityPrimaryKey();
 
 	abstract public function getEntityColumnList();
 

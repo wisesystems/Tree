@@ -31,9 +31,12 @@ class Fake_Entity extends Entity {
 		);
 	}
 
-	protected $primaryKey = array(
-		'id',
-	);
+	public function getEntityPrimaryKey()
+	{
+		return array(
+			'id',
+		);
+	}
 
 	public function getEntityTableName()
 	{

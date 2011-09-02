@@ -22,9 +22,12 @@ use \Tree\Orm\Entity;
  */
 class Fake_BrokenNoTableNameEntity extends Entity {
 
-	protected $primaryKey = array(
-		'id',
-	);
+	public function getEntityPrimaryKey()
+	{
+		return array(
+			'id',
+		);
+	}
 
 	public function getEntityColumnList()
 	{
