@@ -84,7 +84,7 @@ abstract class Entity {
 		}
 
 		if (isset($this->originalValues[$name]) && $this->originalValues[$name] !== $value) {
-			$this->state |= self::STATE_DIRTY;
+			$this->addState(self::STATE_DIRTY);
 		}
 
 		$this->currentValues[$name] = $value;
@@ -139,6 +139,8 @@ abstract class Entity {
 		}
 
 		$this->currentValues = $this->originalValues;
+
+		$this->removeState(self::STATE_DIRTY);
 	}
 
 	/**
@@ -164,6 +166,8 @@ abstract class Entity {
 			$this->currentValues[$name]  = $value;
 
 		}
+
+		$this->addState(self::STATE_HYDRATED);
 	}
 
 	/**
