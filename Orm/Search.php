@@ -28,6 +28,10 @@ abstract class Search extends Query_Select {
 		parent::__construct($database);
 
 
+	}
+
+	public function getSql()
+	{
 		$entityClass = $this->getEntityClass();
 		$entity      = new $entityClass;
 		$tableName   = $entity->getEntityTableName();
@@ -45,6 +49,11 @@ abstract class Search extends Query_Select {
 
 		$this->from(array($tableName => $tableName));
 
+		return parent::getSql();
+	}
+
+	public function getResult()
+	{
 	}
 
 }

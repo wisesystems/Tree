@@ -376,7 +376,7 @@ class Query_Select extends Query {
 
 			$columnExpression = $columnName;
 			if ($this->columnAliases[$i] != '') {
-				$columnExpression .= ' AS ' . $this->columnAliases[$i];
+				$columnExpression .= " AS `{$this->columnAliases[$i]}`";
 			}
 			$columnExpressions[] = $columnExpression;
 

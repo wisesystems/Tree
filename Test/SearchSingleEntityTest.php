@@ -42,10 +42,15 @@ class SearchSingleEntityTest extends PHPUnit_Framework_TestCase {
 		$this->search = new Fake_Search($db);
 	}
 
-	public function testSomething()
+	public function testGeneratesCorrectSql()
 	{
-		var_dump($this->search->getSql());
-		var_dump($this->search->getResult());
+		$expected  = 'SELECT `article`.`id` AS `article:id`, `article`.`title` AS ';
+		$expected .= '`article:title`, `article`.`body` AS `article:body`' . "\n";
+		$expected .= "FROM `article` `article`\n";
+
+		$actual = $this->search->getSql();
+
+		$this->assertEquals($expected, $actual);
 	}
 
 }
