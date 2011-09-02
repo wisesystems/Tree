@@ -42,6 +42,10 @@ class SearchSingleEntityTest extends PHPUnit_Framework_TestCase {
 		$this->search = new Fake_Search($db);
 	}
 
+	/**
+	 * Verifies that the SQL generated for the query that is to return entity data
+	 * is generated as expected
+	 */
 	public function testGeneratesCorrectSql()
 	{
 		$expected  = 'SELECT `article`.`id` AS `article:id`, `article`.`title` AS ';
