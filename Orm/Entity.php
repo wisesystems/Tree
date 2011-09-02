@@ -2,6 +2,7 @@
 
 namespace Tree\Orm;
 
+use \Tree\Behaviour\RelatedEntity;
 use \Tree\Exception\EntityException;
 use \Tree\Database\Query_Update;
 use \Tree\Database\Query_Insert;
@@ -37,6 +38,11 @@ abstract class Entity {
 	 * The bitmask of the Entity::$state bitfield
 	 */
 	const STATE_BITMASK = 4;
+
+	const RELATIONSHIP_ONE_TO_ONE = 1;
+	const RELATIONSHIP_ONE_TO_MANY = 2;
+	const RELATIONSHIP_MANY_TO_ONE = 3;
+	const RELATIONSHIP_MANY_TO_MANY = 4;
 
 	/**
 	 * To be overridden with a method that returns an array listing the column
@@ -281,6 +287,62 @@ abstract class Entity {
 		} else {
 			return false;
 		}
+	}
+
+	/**
+	 * Indicates whether the given entity is related to this one
+	 * 
+	 * @access public
+	 * @param  mixed $entity  Either an entity object or class name
+	 * @return boolean
+	 */
+	public function isRelatedToEntity($entity)
+	{
+		if (!($this instanceof RelatedEntity)) {
+			return false;
+		}
+
+		$myClass     = get_class($this);
+		$theirClass  = is_object($entity) ? get_class($entity) : $entity;
+		$theirEntity = is_object($entity) ? $entity : new $theirEntity;
+
+		if (is_object($theirEntity) && !($theirEntity instanceof RelatedEntity)) {
+			return false;
+		}
+
+
+		$myRelated    = false;
+		$theirRelated = false;
+
+	
+		$myRelationships = $this->getEntityRelationships();
+		foreach ($myRelationships as $relationship) {
+		
+			if (is_a($theirEntity, $relationship['class'])) {
+				$myRelated = true;
+				break;
+			}
+		}
+
+		
+		$theirRelationships = $theirEntity->getEntityRelationships();
+		foreach ($theirRelationships as $relationship) {
+		
+			if (is_a($this, $relationship['class'])) {
+				$theirRelated = true;
+				break;
+			}
+		}
+
+
+		if ($myRelated && $theirRelated) {
+			return true;
+		} elseif (!$myRelated && !$theirRelated) {
+			return false;
+		} else {
+			// TODO: throw relationship mismatch exception
+		}
+
 	}
 
 	/**

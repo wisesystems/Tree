@@ -19,7 +19,9 @@ use \Tree\Database\Query_Select;
  * @uses       \Tree\Database\Query_Select
  * @version    0.00
  */
-abstract class Search extends Query_Select {
+ class Search extends Query_Select {
+
+	protected $entityClass;
 
 	/**
 	 * A blank copy of the base entity being searched for
@@ -29,17 +31,19 @@ abstract class Search extends Query_Select {
 	 */
 	private $baseEntity;
 
-	abstract protected function getEntityClass();
-
 	/**
 	 * @param \Tree\Database\Connection $database 
+	 * @param string                    $entityClass [optional]
 	 */
-	public function __construct($database)
+	public function __construct($database, $entityClass = null)
 	{
 		parent::__construct($database);
 
-		$entityClass      = $this->getEntityClass();
-		$this->baseEntity = new $entityClass;
+		if ($entityClass !== null) {
+			$this->entityClass = $entityClass;
+		}
+
+		$this->baseEntity = new $this->entityClass;
 
 	}
 
