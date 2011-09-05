@@ -58,5 +58,14 @@ class EntityRelationshipTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($expected, $actual);
 	}
 
+	public function testHasRelationship()
+	{
+		$this->assertTrue($this->parent->hasEntityRelationship('attributes'));
+		$this->assertTrue($this->child->hasEntityRelationship('article'));
+
+		$this->assertFalse($this->parent->hasEntityRelationship('article'));
+		$this->assertFalse($this->child->hasEntityRelationship('attributes'));
+	}
+
 }
 

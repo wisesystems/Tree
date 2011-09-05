@@ -403,6 +403,22 @@ abstract class Entity {
 	}
 
 	/**
+	 * Indicates whether the entity has a relationship with the given name
+	 * 
+	 * @access public
+	 * @param  string $name 
+	 * @return boolean
+	 */
+	public function hasEntityRelationship($name)
+	{
+		if (is_array($this->getRelationshipByName($name))) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
 	 * Inserts the entity's data into its corresponding database table as a new row
 	 * 
 	 * @access private
