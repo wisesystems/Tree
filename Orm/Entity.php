@@ -120,17 +120,28 @@ abstract class Entity {
 	public function __get($attribute)
 	{
 		$columnList = $this->getEntityColumnList();
-		if (!in_array($attribute, $columnList)) {
-			$message = "No such attribute: {$attribute}";
-			$code    = EntityException::NO_SUCH_ATTRIBUTE;
-			throw new EntityException($message, $code);
+
+		if (in_array($attribute, $columnList)) {
+
+			if (isset($this->currentValues[$attribute])) {
+				return $this->currentValues[$attribute];
+			} else {
+				// attribute is valid but entity probably just hasn't been hydrated, so
+				// return null without throwing an exception
+				return null;
+			}
+
 		}
 
-		if (!isset($this->currentValues[$attribute])) {
-			return null;
-		}
-		
-		return $this->currentValues[$attribute];
+		/*
+		TODO:
+		Check for a relationship whose name matches $attribute.
+		If the related entity/entities are not loaded, fetch them from database.
+		*/
+
+		$message = "No such attribute: {$attribute}";
+		$code    = EntityException::NO_SUCH_ATTRIBUTE;
+		throw new EntityException($message, $code);
 	}
 
 	/**
