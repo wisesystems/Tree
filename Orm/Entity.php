@@ -92,6 +92,23 @@ abstract class Entity {
 	private $originalValues = array();
 
 	/**
+	 * Associative array of related entities that have been loaded from the
+	 * database
+	 *
+	 * Array keys are the relationship names as returned by
+	 * RelatedEntity::getEntityRelationships(). Array values are either objects
+	 * or arrays of objects depending on the cardinality of the relationship.
+	 *
+	 * TODO: This aspect of the design may need a re-think once baseline
+	 * functionality is achieved as loading all the entities into memory like this
+	 * may be a little wasteful.
+	 * 
+	 * @access private
+	 * @var    array
+	 */
+	private $relatedEntities = array();
+
+	/**
 	 * A bitfield representing the state of the entity
 	 *
 	 * See the Entity::STATE_* constants for more information.
@@ -133,11 +150,16 @@ abstract class Entity {
 
 		}
 
-		/*
-		TODO:
-		Check for a relationship whose name matches $attribute.
-		If the related entity/entities are not loaded, fetch them from database.
-		*/
+
+		if ($this instanceof RelatedEntity) {
+
+			/*
+			TODO:
+			Check for a relationship whose name matches $attribute.
+			If the related entity/entities are not loaded, fetch them from database.
+			*/
+
+		}
 
 		$message = "No such attribute: {$attribute}";
 		$code    = EntityException::NO_SUCH_ATTRIBUTE;
