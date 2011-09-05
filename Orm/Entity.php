@@ -151,15 +151,10 @@ abstract class Entity {
 		}
 
 
-		if ($this instanceof RelatedEntity) {
-
-			/*
-			TODO:
-			Check for a relationship whose name matches $attribute.
-			If the related entity/entities are not loaded, fetch them from database.
-			*/
-
+		if ($this instanceof RelatedEntity && $this->hasEntityRelationship($attribute)) {
+			return $this->getRelatedEntity($attribute);
 		}
+
 
 		$message = "No such attribute: {$attribute}";
 		$code    = EntityException::NO_SUCH_ATTRIBUTE;
@@ -471,6 +466,11 @@ abstract class Entity {
 		$result = $query->getResult();
 		
 		return $result->getStatus();
+	}
+
+	private function getRelatedEntity($relationshipName)
+	{
+
 	}
 
 }
