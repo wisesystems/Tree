@@ -266,7 +266,7 @@ abstract class Entity {
 	}
 
 	/**
-	 * Sets the database connection with which the entity should is to insert,
+	 * Sets the database connection with which the entity is to insert,
 	 * update or delete itself
 	 * 
 	 * @access public
