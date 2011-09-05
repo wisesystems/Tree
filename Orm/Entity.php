@@ -385,7 +385,7 @@ abstract class Entity {
 	 * @param  string $name 
 	 * @return array
 	 */
-	public function getRelationshipByName($name)
+	public function getEntityRelationship($name)
 	{
 		if (!($this instanceof RelatedEntity)) {
 			return null;
@@ -411,7 +411,7 @@ abstract class Entity {
 	 */
 	public function hasEntityRelationship($name)
 	{
-		if (is_array($this->getRelationshipByName($name))) {
+		if (is_array($this->getEntityRelationship($name))) {
 			return true;
 		} else {
 			return false;

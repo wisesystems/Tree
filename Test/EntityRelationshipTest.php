@@ -45,7 +45,7 @@ class EntityRelationshipTest extends PHPUnit_Framework_TestCase {
 		$this->assertFalse($this->child->isRelatedToEntity($this->unrelated));
 	}
 
-	public function testGetRelationshipByName()
+	public function testGetEntityRelationship()
 	{
 		$expected = array(
 			'name'        => 'attributes',
@@ -53,12 +53,12 @@ class EntityRelationshipTest extends PHPUnit_Framework_TestCase {
 			'class'       => '\Tree\Test\Fake_EntityChild',
 		);
 
-		$actual = $this->parent->getRelationshipByName('attributes');
+		$actual = $this->parent->getEntityRelationship('attributes');
 
 		$this->assertEquals($expected, $actual);
 	}
 
-	public function testHasRelationship()
+	public function testHasEntityRelationship()
 	{
 		$this->assertTrue($this->parent->hasEntityRelationship('attributes'));
 		$this->assertTrue($this->child->hasEntityRelationship('article'));

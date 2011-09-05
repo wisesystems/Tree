@@ -76,7 +76,7 @@ use \Tree\Database\Query_Select;
 
 		foreach ($this->withRelationships as $relationshipName) {
 
-			$relationship = $this->baseEntity->getRelationshipByName($relationshipName);
+			$relationship = $this->baseEntity->getEntityRelationship($relationshipName);
 
 			var_dump($relationship);
 
