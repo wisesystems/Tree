@@ -18,6 +18,10 @@ use \Tree\Database\Query_Insert;
  * @license    GPLv2.0
  * @package    Tree
  * @subpackage Orm
+ * @uses       \Tree\Behaviour\RelatedEntity
+ * @uses       \Tree\Exception\EntityException
+ * @uses       \Tree\Database\Query_Update
+ * @uses       \Tree\Database\Query_Insert
  * @version    0.00
  */
 abstract class Entity {
