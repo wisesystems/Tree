@@ -398,6 +398,8 @@ abstract class Entity {
 				return $relationship;
 			}
 		}
+
+		return null;
 	}
 
 	/**
