@@ -6,6 +6,7 @@ require_once '../Orm/Entity.php';
 require_once 'Fake/Entity.php';
 require_once 'Fake/EntityParent.php';
 require_once 'Fake/EntityChild.php';
+require_once 'Spy/Connection.php';
 require_once 'PHPUnit/Framework/TestCase.php';
 
 use \PHPUnit_Framework_TestCase;
@@ -65,6 +66,32 @@ class EntityRelationshipTest extends PHPUnit_Framework_TestCase {
 
 		$this->assertFalse($this->parent->hasEntityRelationship('article'));
 		$this->assertFalse($this->child->hasEntityRelationship('attributes'));
+	}
+
+	/**
+	 * Verifies that when attepting to access an entity's related entity that
+	 * isn't yet loaded, a well-formed SQL query will be sent to the database to
+	 * retrieve it
+	 */
+	public function testAutofetchingRelatedEntity()
+	{
+		$connection = new Spy_Connection;
+		$this->parent->setDatabase($connection);
+
+		$this->parent->article_id = 1;
+		$this->parent->attributes;
+
+		$this->assertTrue(isset($connection->queries[0]));
+		
+		$expected = "SELECT `article_attribute`.`id` AS `attribute:id` "
+			. "`article_attribute`.`attribute_name` AS `attribute:attribute_name` "
+			. "`article_attribute`.`attribute_value` AS `attribute:attribute_value`\n"
+			. "FROM `article_attribute` `attribute`\n"
+			. "WHERE `attribute`.`article_id` = '1'\n";
+
+		$actual = $connection->queries[0];
+
+		$this->assertEquals($expected, $actual);
 	}
 
 }

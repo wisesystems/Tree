@@ -2,7 +2,7 @@
 
 namespace Tree\Test;
 
-require_once '../Database/Connection';
+require_once '../Database/Connection.php';
 
 use \Tree\Database\Connection;
 
