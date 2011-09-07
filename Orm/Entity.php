@@ -381,10 +381,10 @@ abstract class Entity {
 	 * Finds and returns the relationship of the given name
 	 * 
 	 * @access public
-	 * @param  string $name 
+	 * @param  string $name  Either the name of the relationship or the class name
 	 * @return array
 	 */
-	public function getEntityRelationship($name)
+	public function getEntityRelationship($name = null, $class = null)
 	{
 		if (!($this instanceof RelatedEntity)) {
 			return null;
@@ -394,6 +394,9 @@ abstract class Entity {
 
 		foreach ($relationships as $relationship) {
 			if ($relationship['name'] === $name) {
+				return $relationship;
+			}
+			if ($relationship['class'] === $class) {
 				return $relationship;
 			}
 		}
