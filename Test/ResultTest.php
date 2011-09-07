@@ -26,14 +26,15 @@ use \PHPUnit_Framework_TestCase;
  */
 class ResultTest extends PHPUnit_Framework_TestCase {
 
-	private $result;
+	// apologies for the bad name, PHPUnit_Framework_Testcase has dibs on $result
+	private $res;
 
 	public function setUp()
 	{
 		$databaseResult = new Fake_ResultForResultTest;
 		$baseEntity     = new Fake_Entity;
 
-		$this->result = new Result($databaseResult, $baseEntity);
+		$this->res = new Result($databaseResult, $baseEntity);
 	}
 
 	/**
@@ -42,7 +43,7 @@ class ResultTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testCurrentReturnsEntity()
 	{
-		$entity = $this->result->current();
+		$entity = $this->res->current();
 		$this->assertTrue($entity instanceof Fake_Entity);
 	}
 
@@ -52,9 +53,9 @@ class ResultTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testNextIncrementsIteratorIndex()
 	{
-		$entityOne = $this->result->current();
-		$this->result->next();
-		$entityTwo = $this->result->current();
+		$entityOne = $this->res->current();
+		$this->res->next();
+		$entityTwo = $this->res->current();
 
 		$this->assertNotEquals($entityOne, $entityTwo);
 	}
@@ -65,7 +66,7 @@ class ResultTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testReturnsCorrectlyHydratedEntities()
 	{
-		$entity = $this->result->current();
+		$entity = $this->res->current();
 
 		$this->assertEquals('1', $entity->id);
 		$this->assertEquals('First Article', $entity->title);
