@@ -1,0 +1,88 @@
+<?php
+
+namespace Tree\Test;
+
+require_once '../Database/Connection.php';
+require_once '../Database/Query.php';
+require_once '../Database/Query/Predicate.php';
+require_once '../Database/Query/Select.php';
+require_once '../Database/Query/Join.php';
+require_once '../Orm/Entity.php';
+require_once '../Orm/Search.php';
+require_once '../Exception/SearchException.php';
+require_once 'Fake/EntityParent.php';
+require_once 'Fake/EntityChild.php';
+require_once 'Fake/SearchChild.php';
+require_once 'Fake/SearchParent.php';
+require_once 'Fake/Connection.php';
+
+use \Tree\Database\Query_Select;
+use \Tree\Orm\Entity;
+use \Tree\Orm\Search;
+use \Tree\Exception\SearchException;
+use \PHPUnit_Framework_TestCase;
+
+/**
+ * SearchExceptionTest
+ *
+ * Verifies that exceptions are thrown as expected by Search
+ * 
+ * @author     Henry Smith <henry@henrysmith.org> 
+ * @copyright  2011 Henry Smith
+ * @license    GPLv2.0
+ * @package    Tree
+ * @subpackage Test
+ * @uses       \PHPUnit_Framework_TestCase
+ * @uses       \Tree\Orm\Search
+ * @version    0.00
+ */
+class SearchExceptionTest extends PHPUnit_Framework_TestCase {
+
+	private $parentSearch;
+	private $childSearch;
+
+	public function setUp()
+	{
+		$connection = new Fake_Connection;
+
+		$this->parentSearch = new Fake_SearchParent($connection);
+		$this->childSearch  = new Fake_SearchChild($connection);
+	}
+
+	/**
+	 * Make sure that an exception is thrown if a call to withRelationship()
+	 * tries to include a relationship that would join to multiple rows and
+	 * break the query
+	 */
+	public function testThrowsExceptionIfIncludingNonexistentRelationship()
+	{
+		$code = null;
+
+		try {
+			$this->parentSearch->withRelationship('whatever');
+		} catch (SearchException $e) {
+			$code = $e->getCode();
+		}
+
+		$this->assertEquals(SearchException::NO_SUCH_RELATIONSHIP, $code);
+	}
+
+	/**
+	 * Verifies that an exception is thrown if a call to withRelationship()
+	 * tries to include a non-existent relationship
+	 */
+	public function testThrowsExceptionIfNotJoinableRelationship()
+	{
+		$code = null;
+
+		try {
+			$this->parentSearch->withRelationship('attributes');
+		} catch (SearchException $e) {
+			$code = $e->getCode();
+		}
+
+		$this->assertEquals(SearchException::CANNOT_INCLUDE_RELATIONSHIP, $code);
+	}
+
+}
+

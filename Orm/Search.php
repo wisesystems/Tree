@@ -5,6 +5,7 @@ namespace Tree\Orm;
 use \Tree\Behaviour\RelatedEntity;
 use \Tree\Database\Query_Select;
 use \Tree\Database\Query_Join;
+use \Tree\Exception\SearchException;
 
 /**
  * Search 
@@ -109,8 +110,27 @@ use \Tree\Database\Query_Join;
 	 */
 	public function withRelationship($relationshipName)
 	{
-		// TODO: throw exception if no such relationship
-		// TODO: throw exception if not 1-to-1 or many-to-1
+		$relationship = $this->baseEntity->getEntityRelationship($relationshipName);
+
+		// this is important for helping people catch little typos in a way that
+		// guides them straight to the mistake
+		if ($relationship === null) {
+			$message = "Cannot include non-existent relationship '{$relationshipName}'";
+			$code    = SearchException::NO_SUCH_RELATIONSHIP;
+			throw new SearchException($message, $code);
+		}
+
+		$joinableCardinalities = array(
+			Entity::RELATIONSHIP_ONE_TO_ONE,
+			Entity::RELATIONSHIP_MANY_TO_ONE,
+		);
+
+		if (!in_array($relationship['cardinality'], $joinableCardinalities)) {
+			$message = "Cannot join to multiple rows ({$relationshipName})";
+			$code    = SearchException::CANNOT_INCLUDE_RELATIONSHIP;
+			throw new SearchException($message, $code);
+		}
+
 		$this->withRelationships[] = $relationshipName;
 	}
 
