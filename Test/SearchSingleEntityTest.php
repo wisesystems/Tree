@@ -8,6 +8,7 @@ require_once '../Database/Query/Predicate.php';
 require_once '../Database/Query/Select.php';
 require_once '../Orm/Entity.php';
 require_once '../Orm/Search.php';
+require_once '../Orm/Result.php';
 require_once 'Fake/Entity.php';
 require_once 'Fake/Search.php';
 require_once 'Fake/Connection.php';
@@ -15,6 +16,7 @@ require_once 'Fake/Connection.php';
 use \Tree\Database\Query_Select;
 use \Tree\Orm\Entity;
 use \Tree\Orm\Search;
+use \Tree\Orm\Result;
 use \PHPUnit_Framework_TestCase;
 
 /**
@@ -55,6 +57,16 @@ class SearchSingleEntityTest extends PHPUnit_Framework_TestCase {
 		$actual = $this->search->getSql();
 
 		$this->assertEquals($expected, $actual);
+	}
+
+	/**
+	 * Verifies that Search returns a Result object
+	 */
+	public function testReturnsResult()
+	{
+		$result = $this->search->getResult();
+
+		$this->assertTrue($result instanceof Result);
 	}
 
 }
