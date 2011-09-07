@@ -148,6 +148,8 @@ use \Tree\Exception\SearchException;
 
 		$relationship = $this->baseEntity->getEntityRelationship($relationshipName);
 
+		$className  = $relationship['class'];
+		$foreignKey = $relationship['foreign-key'];
 
 		$otherEntity = new $className;
 		$otherRelationship = $otherEntity->getEntityRelationship(null, $this->entityClass);
