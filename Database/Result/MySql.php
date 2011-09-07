@@ -69,7 +69,11 @@ class Result_MySql extends Result implements Countable, SeekableIterator {
 	 */
 	public function count()
 	{
-		return $this->result->num_rows;
+		if ($this->result instanceof mysqli_result) {
+			return $this->result->num_rows;
+		} else {
+			return 0;
+		}
 	}
 
 	/**
@@ -81,7 +85,9 @@ class Result_MySql extends Result implements Countable, SeekableIterator {
 	 */
 	public function seek($offset)
 	{
-		$this->result->data_seek($offset);
+		if ($this->result instanceof mysqli_result) {
+			$this->result->data_seek($offset);
+		}
 	}
 
 	/**
