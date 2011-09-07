@@ -54,6 +54,7 @@ class Fake_EntityChild extends Entity implements RelatedEntity {
 				'name'        => 'article',
 				'cardinality' => Entity::RELATIONSHIP_MANY_TO_ONE,
 				'class'       => '\Tree\Test\Fake_EntityParent',
+				'foreign-key' => 'article_id',
 			),
 		);
 	}

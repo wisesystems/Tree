@@ -4,6 +4,7 @@ namespace Tree\Orm;
 
 use \Tree\Behaviour\RelatedEntity;
 use \Tree\Database\Query_Select;
+use \Tree\Database\Query_Join;
 
 /**
  * Search 
@@ -75,11 +76,7 @@ use \Tree\Database\Query_Select;
 
 
 		foreach ($this->withRelationships as $relationshipName) {
-
-			$relationship = $this->baseEntity->getEntityRelationship($relationshipName);
-
-			var_dump($relationship);
-
+			$this->addJoinForRelationship($relationshipName);
 		}
 
 
@@ -115,6 +112,58 @@ use \Tree\Database\Query_Select;
 		// TODO: throw exception if no such relationship
 		// TODO: throw exception if not 1-to-1 or many-to-1
 		$this->withRelationships[] = $relationshipName;
+	}
+
+	/**
+	 * Adds a JOIN clause to the query in order for it to pull in data for a
+	 * related entity in addition to the table columns of the entity itself
+	 * 
+	 * @access private
+	 * @param  string $relationshipName 
+	 */
+	private function addJoinForRelationship($relationshipName)
+	{
+		$tableName  = $this->baseEntity->getEntityTableName();
+		$columnList = $this->baseEntity->getEntityColumnList();
+
+		$relationship = $this->baseEntity->getEntityRelationship($relationshipName);
+
+		$joinableCardinalities = array(
+			Entity::RELATIONSHIP_ONE_TO_ONE,
+			Entity::RELATIONSHIP_MANY_TO_ONE,
+		);
+
+		if (!in_array($relationship['cardinality'], $joinableCardinalities)) {
+			// todo : throw exception
+			return;
+		}
+
+		$className  = $relationship['class'];
+		$foreignKey = $relationship['foreign-key'];
+
+		$otherEntity = new $className;
+		$otherRelationship = $otherEntity->getEntityRelationship(null, $this->entityClass);
+		$otherName  = $otherRelationship['name'];
+		$otherTable = $otherEntity->getEntityTableName();
+		$otherKey = $otherRelationship['foreign-key'];
+
+		$otherColumns = $otherEntity->getEntityColumnList();
+
+		foreach ($otherColumns as $column) {
+
+			$columnName  = "`{$otherTable}`.`{$column}`";
+			$columnAlias = "{$relationshipName}:{$column}";
+
+			$this->addColumn($columnName, $columnAlias);
+		}
+
+		$join = new Query_Join($this->connection);
+		$join->setTable($otherTable, $relationshipName);
+		$join->setType('LEFT');
+		$join->on("`$tableName`.`$foreignKey` = `$otherTable`.`$otherKey`");
+
+		$this->addJoin($join);
+
 	}
 
 }
