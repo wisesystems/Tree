@@ -148,18 +148,6 @@ use \Tree\Exception\SearchException;
 
 		$relationship = $this->baseEntity->getEntityRelationship($relationshipName);
 
-		$joinableCardinalities = array(
-			Entity::RELATIONSHIP_ONE_TO_ONE,
-			Entity::RELATIONSHIP_MANY_TO_ONE,
-		);
-
-		if (!in_array($relationship['cardinality'], $joinableCardinalities)) {
-			// todo : throw exception
-			return;
-		}
-
-		$className  = $relationship['class'];
-		$foreignKey = $relationship['foreign-key'];
 
 		$otherEntity = new $className;
 		$otherRelationship = $otherEntity->getEntityRelationship(null, $this->entityClass);
