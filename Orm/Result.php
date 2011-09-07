@@ -2,6 +2,7 @@
 
 namespace Tree\Orm;
 
+use \Tree\Behaviour\RelatedEntity;
 use \Iterator;
 use \Tree\Database\Result as DatabaseResult;
 
@@ -66,6 +67,28 @@ class Result implements Iterator {
 		$entityData = $this->getValuesByKeyPrefix($row, "{$tableName}:");
 
 		$entity->hydrateEntity($entityData);
+
+		if ($entity instanceof RelatedEntity) {
+
+			$relationships = $entity->getEntityRelationships();
+
+			foreach ($relationships as $relationship) {
+				
+				$data = $this->getValuesByKeyPrefix($row, "{$relationship['name']}:");
+
+				if (empty($data)) {
+					continue;
+				}
+
+				$relatedEntity = new $relationship['class'];
+				$relatedEntity->hydrateEntity($data);
+				
+				$entity->setRelatedEntity($relationship['name'], $relatedEntity);
+
+				// TODO: link related entity back to entity
+			}
+
+		}
 
 		return $entity;
 	}

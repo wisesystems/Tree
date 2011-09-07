@@ -51,6 +51,7 @@ class EntityRelationshipTest extends PHPUnit_Framework_TestCase {
 		$expected = array(
 			'name'        => 'attributes',
 			'cardinality' => Entity::RELATIONSHIP_ONE_TO_MANY,
+			'foreign-key' => 'article_id',
 			'class'       => '\Tree\Test\Fake_EntityChild',
 		);
 

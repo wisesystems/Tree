@@ -73,7 +73,7 @@ class SearchRelatedEntityTest extends PHPUnit_Framework_TestCase {
 		$expected .= "`article:article_id`, `article`.`article_title` AS `article:article_title`, ";
 		$expected .= "`article`.`article_body` AS `article:article_body`\n";
 		$expected .= "FROM `article_attribute` `article_attribute`\n";
-		$expected .= "LEFT INNER JOIN `article` `article`\n";
+		$expected .= "LEFT JOIN `article` `article`\n";
 		$expected .= "ON `article_attribute`.`article_id` = `article`.`article_id`\n";
 
 		$actual = $search->getSql();

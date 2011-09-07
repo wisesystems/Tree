@@ -475,9 +475,34 @@ abstract class Entity {
 		return $result->getStatus();
 	}
 
+	/**
+	 * Returns the entity that is related to this entity under the relationship
+	 * of the given name
+	 * 
+	 * @access private
+	 * @param  string $relationshipName 
+	 * @return \Tree\Orm\Entity
+	 */
 	private function getRelatedEntity($relationshipName)
 	{
+		if (isset($this->relatedEntities[$relationshipName])) {
+			return $this->relatedEntities[$relationshipName];
+		} else {
+			return null;
+		}
+	}
 
+	/**
+	 * Stores the given entity as a related entity under the given relationship
+	 * name
+	 * 
+	 * @access public
+	 * @param  string $relationshipName 
+	 * @param  mixed $entity  Either an entity or an array of entities
+	 */
+	public function setRelatedEntity($relationshipName, $entity)
+	{
+		$this->relatedEntities[$relationshipName] = $entity;
 	}
 
 }
