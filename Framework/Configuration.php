@@ -180,14 +180,14 @@ class Configuration implements ArrayAccess {
 			$message = "Unable to find {$this->relativePath}";
 			$code    = ConfigurationException::FILE_NOT_FOUND;
 
-			throw new ConfigurationException($message, $code);
+			throw new ConfigurationException($message, $code, $this->relativePath);
 		}
 
 		if (!is_readable($absolutePath)) {
 			$message = "Unable to read {$this->absolutePath}";
 			$code    = ConfigurationException::FILE_NOT_READABLE;
 
-			throw new ConfigurationException($message, $code);
+			throw new ConfigurationException($message, $code, $this->relativePath, $absolutePath);
 		}
 
 		// Excuse for using error suppression: parse_ini_file triggers an E_WARNING
@@ -199,7 +199,7 @@ class Configuration implements ArrayAccess {
 			$message = "Unable to parse {$this->absolutePath}";
 			$code    = ConfigurationException::FILE_NOT_PARSEABLE;
 
-			throw new ConfigurationException($message, $code);
+			throw new ConfigurationException($message, $code, $this->relativePath, $absolutePath);
 		}
 		
 		return $values;
