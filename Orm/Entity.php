@@ -162,7 +162,7 @@ abstract class Entity {
 
 		$message = "No such attribute: {$attribute}";
 		$code    = EntityException::NO_SUCH_ATTRIBUTE;
-		throw new EntityException($message, $code);
+		throw new EntityException($message, $code, $this);
 	}
 
 	/**
@@ -179,7 +179,7 @@ abstract class Entity {
 		if (!in_array($name, $columnList)) {
 			$message = "No such attribute: {$name}";
 			$code    = EntityException::NO_SUCH_ATTRIBUTE;
-			throw new EntityException($message, $code);
+			throw new EntityException($message, $code, $this);
 		}
 
 		if (isset($this->originalValues[$name]) && $this->originalValues[$name] !== $value) {
@@ -200,7 +200,7 @@ abstract class Entity {
 		if ($this->getEntityTableName() === null) {
 			$message = 'No database table name set';
 			$code    = EntityException::NO_TABLE_NAME_SET;
-			throw new EntityException($message, $code);
+			throw new EntityException($message, $code, $this);
 		}
 
 		if ($this->hasState(Entity::STATE_HYDRATED)) {
@@ -234,7 +234,7 @@ abstract class Entity {
 		if (!$this->hasState(self::STATE_HYDRATED)) {
 			$message = 'Cannot revert an entity that has not been hydrated';
 			$code    = EntityException::REVERTING_UNHYDRATED_ENTITY;
-			throw new EntityException($message, $code);
+			throw new EntityException($message, $code, $this);
 		}
 
 		$this->currentValues = $this->originalValues;
@@ -258,7 +258,7 @@ abstract class Entity {
 			if (!in_array($name, $columnList)) {
 				$message = "Hydration aborted because of invalid data: {$name}, {$value}";
 				$code    = EntityException::HYDRATED_WITH_INVALID_DATA;
-				throw new EntityException($message, $code);
+				throw new EntityException($message, $code, $this);
 			}
 
 			$this->originalValues[$name] = $value;

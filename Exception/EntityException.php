@@ -44,5 +44,37 @@ class EntityException extends Exception {
 	 */
 	const HYDRATED_WITH_INVALID_DATA = 3;
 
+	/**
+	 * The \Tree\Orm\Entity subclass that caused the exception
+	 * 
+	 * @access private
+	 * @var    \Tree\Orm\Entity
+	 */
+	private $entity;
+
+	/**
+	 * @access public
+	 * @param string           $message 
+	 * @param integer          $code 
+	 * @param \Tree\Orm\Entity $entity  [optional] The entity that caused the exception
+	 */
+	public function __construct($message, $code, $entity = null)
+	{
+		parent::__construct($message, $code);
+
+		$this->entity = $entity;
+	}
+
+	/**
+	 * Returns the Entity that caused the exception
+	 * 
+	 * @access public
+	 * @return \Tree\Orm\Entity
+	 */
+	public function getEntity()
+	{
+		return $this->entity;
+	}
+
 }
 
