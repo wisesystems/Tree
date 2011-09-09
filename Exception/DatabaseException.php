@@ -25,5 +25,37 @@ class DatabaseException extends Exception {
 	 */
 	const CONNECTION_FAILED = 0;
 
+	/**
+	 * The instance of \Tree\Database\Connection that caused the exception
+	 * 
+	 * @access private
+	 * @var    \Tree\Database\Connection
+	 */
+	private $connection;
+
+	/**
+	 * @access public
+	 * @param string                    $message 
+	 * @param integer                   $code 
+	 * @param \Tree\Database\Connection $connection [optional]
+	 */
+	public function __construct($message, $code, $connection = null)
+	{
+		parent::__construct($message, $code);
+
+		$this->connection = $connection;
+	}
+
+	/**
+	 * Returns the Connection object that caused the exception
+	 * 
+	 * @access public
+	 * @return \Tree\Database\Connection
+	 */
+	public function getConnection()
+	{
+		return $this->connection;
+	}
+
 }
 

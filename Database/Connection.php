@@ -140,7 +140,7 @@ abstract class Connection {
 			$message = 'Could not connect to database';
 			$code    = DatabaseException::CONNECTION_FAILED;
 			
-			throw new DatabaseException($message, $code);
+			throw new DatabaseException($message, $code, $this);
 		}
 	}
 
