@@ -57,10 +57,10 @@ class AutoloaderException extends Exception {
 
 	/**
 	 * @access public
-	 * @param string $message
-	 * @param string $code 
-	 * @param string $class    [optional] The class that couldn't be loaded
-	 * @param string $path     [optional] The filename that was tried
+	 * @param string  $message
+	 * @param integer $code 
+	 * @param string  $class    [optional] The class that couldn't be loaded
+	 * @param string  $path     [optional] The filename that was tried
 	 */
 	public function __construct($message, $code, $class = null, $path = null)
 	{
