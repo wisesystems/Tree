@@ -45,5 +45,37 @@ class TemplateException extends Exception {
 	 */
 	const TEMPLATE_NOT_READABLE = 5;
 
+	/**
+	 * The instance of \Tree\Component\Template that caused the exception
+	 * 
+	 * @access private
+	 * @var    \Tree\Component\Template
+	 */
+	private $template;
+
+	/**
+	 * @access public
+	 * @param  string                   $message 
+	 * @param  integer                  $code
+	 * @param  \Tree\Component\Template $template [optional]
+	 */
+	public function __construct($message, $code, $template = null)
+	{
+		parent::__construct($message, $code);
+
+		$this->template = $template;
+	}
+
+	/**
+	 * Returns the Template object that threw the exception
+	 * 
+	 * @access public
+	 * @return \Tree\Component\Template
+	 */
+	public function getTemplate()
+	{
+		return $this->template;
+	}
+
 }
 
