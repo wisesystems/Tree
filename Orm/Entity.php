@@ -488,7 +488,9 @@ abstract class Entity {
 		if (isset($this->relatedEntities[$relationshipName])) {
 			return $this->relatedEntities[$relationshipName];
 		} else {
-			return null;
+			$relatedEntity = $this->fetchRelatedEntity($relationshipName);
+			$this->relatedEntities[$relationshipName] = $relatedEntity;
+			return $relatedEntity;
 		}
 	}
 
@@ -503,6 +505,46 @@ abstract class Entity {
 	public function setRelatedEntity($relationshipName, $entity)
 	{
 		$this->relatedEntities[$relationshipName] = $entity;
+	}
+
+	private function fetchRelatedEntity($relationshipName)
+	{
+		$relationship = $this->getEntityRelationship($relationshipName);
+
+		// todo: check cardinalities and handle link tables if necessary
+
+		$search = new Search($this->database, $relationship['class']);
+
+		$foreignKey = $relationship['foreign-key'];
+		$foreignKeyValue = $this->$foreignKey;
+
+		$search->where("`{$relationship['foreign-key']}` = '%s'", $foreignKeyValue);
+
+		$result = $search->getResult();
+		
+		switch ($relationship['cardinality']) {
+
+			case self::RELATIONSHIP_MANY_TO_ONE:
+			case self::RELATIONSHIP_ONE_TO_ONE:
+
+				$entity = $result->current();
+
+				if ($entity instanceof self) {
+					return $entity;
+				} else {
+					return null;
+				}
+				
+				break;
+
+			case self::RELATIONSHIP_ONE_TO_MANY:
+				break;
+
+			case self::RELATIONSHIP_MANY_TO_MANY:
+				break;
+
+		}
+		
 	}
 
 }

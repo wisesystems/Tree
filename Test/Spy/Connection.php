@@ -20,7 +20,6 @@ use \Tree\Database\Connection;
  * @uses       \Tree\Database\Connection
  * @version    0.00
  */
-
 class Spy_Connection extends Connection {
 
 	public $queries = array();
@@ -42,7 +41,7 @@ class Spy_Connection extends Connection {
 	protected function vendorQuery($sql)
 	{
 		$this->queries[] = $sql;
-		return null;
+		return new Fake_Result;
 	}
 
 	protected function vendorIsConnected()

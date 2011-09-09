@@ -160,7 +160,7 @@ class Result implements Iterator {
 	 * @param  string $keyPrefix 
 	 * @return array
 	 */
-	private function getValuesByKeyPrefix($input, $keyPrefix)
+	private function getValuesByKeyPrefix(array $input, $keyPrefix)
 	{
 		$output = array();
 
