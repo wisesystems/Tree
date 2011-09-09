@@ -100,7 +100,7 @@ class Autoloader {
 
 					$message = "Unable to read {$absolutePath}";
 					$code    = AutoloaderException::FILE_NOT_READABLE;
-					throw new AutoloaderException($message, $code);
+					throw new AutoloaderException($message, $code, $class, $absolutePath);
 
 				} else {
 					return false;
@@ -118,7 +118,7 @@ class Autoloader {
 
 				$message = "Class {$class} not found in file {$absolutePath}";
 				$code    = AutoloaderException::CLASS_NOT_FOUND;
-				throw new AutoloaderException($message, $code);
+				throw new AutoloaderException($message, $code, $class, $absolutePath);
 
 			} else {
 				return false;
@@ -129,7 +129,7 @@ class Autoloader {
 		if ($this->isLastAutoloader()) {
 			$message = "File {$filename} not found in include_path";
 			$code    = AutoloaderException::FILE_NOT_FOUND;
-			throw new AutoloaderException($message, $code);
+			throw new AutoloaderException($message, $code, $class);
 		}
 
 		return false;

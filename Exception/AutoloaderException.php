@@ -39,5 +39,58 @@ class AutoloaderException extends Exception {
 	 */
 	const CLASS_NOT_FOUND = 2;
 
+	/**
+	 * The name of the class that could not be loaded
+	 * 
+	 * @access private
+	 * @var    string
+	 */
+	private $className;
+
+	/**
+	 * The path to the file which was determined to contain the class
+	 * 
+	 * @access private
+	 * @var    string
+	 */
+	private $absolutePath;
+
+	/**
+	 * @access public
+	 * @param string $message
+	 * @param string $code 
+	 * @param string $class    [optional] The class that couldn't be loaded
+	 * @param string $path     [optional] The filename that was tried
+	 */
+	public function __construct($message, $code, $class = null, $path = null)
+	{
+		parent::__construct($message, $code);
+
+		$this->className    = $class;
+		$this->absolutePath = $path;
+	}
+
+	/**
+	 * Returns the name of the class that failed to load
+	 * 
+	 * @access public
+	 * @return string
+	 */
+	public function getClassName()
+	{
+		return $this->className;
+	}
+
+	/**
+	 * Returns the name of the file that was thought to contain the class
+	 * 
+	 * @access public
+	 * @return string
+	 */
+	public function getAbsolutePath()
+	{
+		return $this->absolutePath;
+	}
+
 }
 
