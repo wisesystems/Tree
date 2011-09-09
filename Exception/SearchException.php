@@ -37,5 +37,37 @@ class SearchException extends Exception {
 	 */
 	const CANNOT_INCLUDE_RELATIONSHIP = 3;
 
+	/**
+	 * The instance of \Tree\Orm\Search that caused the exception
+	 * 
+	 * @access private
+	 * @var    \Tree\Orm\Search
+	 */
+	private $search;
+
+	/**
+	 * @access public
+	 * @param  string           $message 
+	 * @param  integer          $code 
+	 * @param  \Tree\Orm\Search $search  [optional]
+	 */
+	public function __construct($message, $code, $search = null)
+	{
+		parent::__construct($message, $code);
+
+		$this->search = $search;
+	}
+
+	/**
+	 * Returns the Search instance that caused the exception
+	 * 
+	 * @access public
+	 * @return \Tree\Orm\Search
+	 */
+	public function getSearch()
+	{
+		return $this->search;
+	}
+
 }
 

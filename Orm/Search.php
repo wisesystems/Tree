@@ -117,7 +117,7 @@ use \Tree\Exception\SearchException;
 		if ($relationship === null) {
 			$message = "Cannot include non-existent relationship '{$relationshipName}'";
 			$code    = SearchException::NO_SUCH_RELATIONSHIP;
-			throw new SearchException($message, $code);
+			throw new SearchException($message, $code, $this);
 		}
 
 		$joinableCardinalities = array(
@@ -128,7 +128,7 @@ use \Tree\Exception\SearchException;
 		if (!in_array($relationship['cardinality'], $joinableCardinalities)) {
 			$message = "Cannot join to multiple rows ({$relationshipName})";
 			$code    = SearchException::CANNOT_INCLUDE_RELATIONSHIP;
-			throw new SearchException($message, $code);
+			throw new SearchException($message, $code, $this);
 		}
 
 		$this->withRelationships[] = $relationshipName;
