@@ -69,6 +69,11 @@ class TemplateTest extends PHPUnit_Framework_TestCase {
 	public function testSetInputValueAcceptsValidValues()
 	{
 		$this->template->setInputValue('content', 'example content');
+
+		$expected = 'example content';
+		$actual   = $this->template->getInputValue('content');
+
+		$this->assertEquals($expected, $actual);
 	}
 
 	/**

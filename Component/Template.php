@@ -98,6 +98,22 @@ abstract class Template {
 	}
 
 	/**
+	 * Returns the input value of the given name
+	 * 
+	 * @access public
+	 * @param  string $name 
+	 * @return string
+	 */
+	public function getInputValue($name)
+	{
+		if (isset($this->inputValues[$name])) {
+			return $this->inputValues[$name];
+		} else {
+			return null;
+		}
+	}
+
+	/**
 	 * Returns the output of the template if all required input values
 	 * are available
 	 * 
