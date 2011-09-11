@@ -52,59 +52,46 @@ class ConfigurationExceptionTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Verifies that Configuration throws the right ConfigurationException if it
 	 * can't find the ini file
+	 * 
+	 * @expectedException     \Tree\Exception\ConfigurationException
+	 * @expectedExceptionCode \Tree\Exception\ConfigurationException::FILE_NOT_FOUND
 	 */
 	public function testThrowsExceptionIfFileNotFound()
 	{
 		$config = new Configuration('notfound.ini');
-		$code   = null;
-
-		try {
-			$config->getIniValues();
-		} catch (ConfigurationException $e) {
-			$code = $e->getCode();
-		}
-
-		$this->assertEquals(ConfigurationException::FILE_NOT_FOUND, $code);
+		$config->getIniValues();
 	}
 
 	/**
 	 * Verifies that Configuration throws the right ConfigurationException if it
 	 * can't read the contents of the ini file
+	 * 
+	 * @expectedException     \Tree\Exception\ConfigurationException
+	 * @expectedExceptionCode \Tree\Exception\ConfigurationException::FILE_NOT_READABLE
 	 */
 	public function testThrowsExceptionIfFileNotReadable()
 	{
 		$config = new Configuration('test.ini');
-		$code   = null;
 
 		chmod($this->absolutePath, 0220);
 
-		try {
-			$config->getIniValues();
-		} catch (ConfigurationException $e) {
-			$code = $e->getCode();
-		}
-
-		$this->assertEquals(ConfigurationException::FILE_NOT_READABLE, $code);
+		$config->getIniValues();
 	}
 
 	/**
 	 * Verifies that Configuration throws the right ConfigurationException if it
 	 * can't parse the contents of the ini file
+	 * 
+	 * @expectedException     \Tree\Exception\ConfigurationException
+	 * @expectedExceptionCode \Tree\Exception\ConfigurationException::FILE_NOT_PARSEABLE
 	 */
 	public function testThrowsExceptionIfFileNotParseable()
 	{
 		$config = new Configuration('test.ini');
-		$code   = null;
 
 		file_put_contents($this->absolutePath, ')(*&^%$£');
 
-		try {
-			$config->getIniValues();
-		} catch (ConfigurationException $e) {
-			$code = $e->getCode();
-		}
-
-		$this->assertEquals(ConfigurationException::FILE_NOT_PARSEABLE, $code);
+		$config->getIniValues();
 	}
 
 }

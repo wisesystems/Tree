@@ -68,8 +68,6 @@ class AutoloaderExceptionTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testThrowsExceptionIfFileNotReadable()
 	{
-		$code = null;
-
 		chmod($this->absolutePath, 0220);
 
 		$this->autoloader->autoloadClass($this->className);
@@ -84,8 +82,6 @@ class AutoloaderExceptionTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testThrowsExceptionIfFileNotFound()
 	{
-		$code = null;
-
 		$this->autoloader->autoloadClass('\WrongClass');
 	}
 
@@ -98,8 +94,6 @@ class AutoloaderExceptionTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testThrowsExceptionIfClassNotFound()
 	{
-		$code = null;
-
 		file_put_contents('/private/tmp/TestClassX.php', '<?php class TestClassY {}');
 
 		$this->autoloader->autoloadClass('\TestClassX');
