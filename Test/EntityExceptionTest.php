@@ -69,33 +69,35 @@ class EntityExceptionTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * Verifies that Entity throws the right kind of EntityException if an attempt
-	 * is made to get or set an attribute that doesn't actually exist
+	 * is made to set an attribute that doesn't actually exist
+	 * 
+	 * @expectedException     \Tree\Exception\EntityException
+	 * @expectedExceptionCode \Tree\Exception\EntityException::NO_SUCH_ATTRIBUTE
 	 */
-	public function testThrowsNoSuchAttributeExceptionIfBadAttribute()
+	public function testThrowsNoSuchAttributeExceptionIfSettingBadAttribute()
 	{
-		$code = null;
-		try {
-			$this->entity->asdfgh = 'zxcvbn';
-		} catch (EntityException $e) {
-			$code = $e->getCode();
-		}
+		$this->entity->asdfgh = 'zxcvbn';
+	}
 
-		$this->assertEquals(EntityException::NO_SUCH_ATTRIBUTE, $code);
-
-		$code = null;
-		try {
-			$abc = $this->entity->asdfgh;
-		} catch (EntityException $e) {
-			$code = $e->getCode();
-		}
-
-		$this->assertEquals(EntityException::NO_SUCH_ATTRIBUTE, $code);
+	/**
+	 * Verifies that Entity throws the right kind of EntityException if an attempt
+	 * is made to get an attribute that doesn't actually exist
+	 * 
+	 * @expectedException     \Tree\Exception\EntityException
+	 * @expectedExceptionCode \Tree\Exception\EntityException::NO_SUCH_ATTRIBUTE
+	 */
+	public function testThrowsNoSuchAttributeExceptionIfGettingBadAttribute()
+	{
+		$abc = $this->entity->asdfgh;
 	}
 
 	/**
 	 * Verifies that Entity throws an exception if an attempt is made to save an
 	 * entity that doesn't have a table name set, rather than just sending a junk
 	 * query to the database
+	 * 
+	 * @expectedException     \Tree\Exception\EntityException
+	 * @expectedExceptionCode \Tree\Exception\EntityException::NO_TABLE_NAME_SET
 	 */
 	public function testThrowsExceptionIfTableNameMissing()
 	{
@@ -104,54 +106,36 @@ class EntityExceptionTest extends PHPUnit_Framework_TestCase {
 
 		$entity->setDatabase($connection);
 		
-		$code = null;
-
-		try {
-			$entity->commitEntity();
-		} catch (EntityException $e) {
-			$code = $e->getCode();
-		}
-
-		$this->assertEquals(EntityException::NO_TABLE_NAME_SET, $code);
+		$entity->commitEntity();
 	}
 	
 	/**
 	 * Verifies that Entity throws an exception if an attempt is made to revert
 	 * an entity that has no original state to revert to because it has not been
 	 * hydrated with database values
+	 * 
+	 * @expectedException     \Tree\Exception\EntityException
+	 * @expectedExceptionCode \Tree\Exception\EntityException::REVERTING_UNHYDRATED_ENTITY
 	 */
 	public function testThrowsExceptionIfRevertingUnhydratedEntity()
 	{
-		$code = null;
-
-		try {
-			$this->entity->revertEntity();
-		} catch (EntityException $e) {
-			$code = $e->getCode();
-		}
-
-		$this->assertEquals(EntityException::REVERTING_UNHYDRATED_ENTITY, $code);
+		$this->entity->revertEntity();
 	}
 
 	/**
 	 * Verifies that Entity throws an exception if an attempt is made to hydrate
 	 * an entity with invalid data
+	 * 
+	 * @expectedException     \Tree\Exception\EntityException
+	 * @expectedExceptionCode \Tree\Exception\EntityException::HYDRATED_WITH_INVALID_DATA
 	 */
 	public function testThrowsExceptionIfHydratedWithInvalidData()
 	{
-		$code = null;
-
 		$invalidData = array(
 			'invalid_column' => 12345,
 		);
 
-		try {
-			$this->entity->hydrateEntity($invalidData);
-		} catch (EntityException $e) {
-			$code = $e->getCode();
-		}
-
-		$this->assertEquals(EntityException::HYDRATED_WITH_INVALID_DATA, $code);
+		$this->entity->hydrateEntity($invalidData);
 	}
 
 }
