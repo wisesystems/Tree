@@ -34,6 +34,14 @@ class QueryReplaceTest extends PHPUnit_Framework_TestCase {
 		$this->db = new Fake_Connection;
 	}
 
+	/**
+	 * Verifies that a basic REPLACE INTO query is generated correctly
+	 *
+	 * @covers \Tree\Database\Query_Replace::__construct
+	 * @covers \Tree\Database\Query_Replace::into
+	 * @covers \Tree\Database\Query_Replace::set
+	 * @covers \Tree\Database\Query_Replace::getSql
+	 */
 	public function testBasicReplaceQuery()
 	{
 		$replace = new Query_Replace($this->db);
