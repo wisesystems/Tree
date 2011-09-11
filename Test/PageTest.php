@@ -5,6 +5,7 @@ namespace Tree\Test;
 require '../Response/Response.php';
 require '../Response/Response/Html.php';
 require '../Component/Page.php';
+require_once 'Fake/Page.php';
 
 use \PHPUnit_Framework_Testcase;
 use \Tree\Component\Page;
@@ -29,7 +30,7 @@ class PageTest extends PHPUnit_Framework_Testcase {
 
 	public function setUp()
 	{
-		$this->page = new Page;
+		$this->page = new Fake_Page;
 	}
 
 	public function testAddJavascriptDependencyAddsJavascriptDependency()
