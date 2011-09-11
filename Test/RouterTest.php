@@ -38,6 +38,8 @@ class RouterTest extends PHPUnit_Framework_TestCase {
 	 * Tests that RequestRouter::generateRegEx creates well-formed regular
 	 * expressions to perform named-capture of the parameters in the
 	 * request path
+	 *
+	 * @covers \Tree\Framework\Router::generateRegEx
 	 */
 	public function testGenerateRegEx()
 	{
@@ -79,6 +81,8 @@ class RouterTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Tests that RequestRouter::parsePattern correctly extracts lists of
 	 * parameter names from request patterns
+	 *
+	 * @covers \Tree\Framework\Router::parsePattern
 	 */
 	public function testParsePattern()
 	{
@@ -115,6 +119,8 @@ class RouterTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Tests that RequestRouter::injectParameters correctly injects
 	 * parameters into request patterns to generate request paths
+	 *
+	 * @covers \Tree\Framework\Router::injectParameters
 	 */
 	public function testInjectParameters()
 	{
@@ -138,6 +144,9 @@ class RouterTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Tests that RequestRouter applies the right rules to requests and
 	 * extracts the parameters from those requests correctly
+	 *
+	 * @covers \Tree\Framework\Router::addRoute
+	 * @covers \Tree\Framework\Router::getAction
 	 */
 	public function testRoutesValidRequestsCorrectly()
 	{
@@ -163,6 +172,9 @@ class RouterTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Tests that RequestRouter doesn't inadvertantly route requests that
 	 * don't actually match any of the rules it has been given
+	 *
+	 * @covers \Tree\Framework\Router::addRoute
+	 * @covers \Tree\Framework\Router::getAction
 	 */
 	public function testRejectsInvalidRequests()
 	{
@@ -177,6 +189,9 @@ class RouterTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Tests that RequestRouter::getPath returns paths that are correctly-
 	 * formed according to the specified request routes
+	 *
+	 * @covers \Tree\Framework\Router::addRoute
+	 * @covers \Tree\Framework\Router::getPath
 	 */
 	public function testGetPath()
 	{
@@ -191,6 +206,10 @@ class RouterTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Tests that RequestRouter::getPath and RequestRouter::getAction fit
 	 * together to create a two-way mapping between actions and patterns
+	 *
+	 * @covers \Tree\Framework\Router::addRoute
+	 * @covers \Tree\Framework\Router::getPath
+	 * @covers \Tree\Framework\Router::getAction
 	 */
 	public function testTwoWayMapping()
 	{
@@ -226,6 +245,8 @@ class RouterTest extends PHPUnit_Framework_TestCase {
 	 * Tests that setting a URL prefix allows us to give RequestRouter a
 	 * full request URL and expect it to parse out the part that actually
 	 * matters
+	 *
+	 * @covers \Tree\Framework\Router::setUrlPrefix
 	 */
 	public function testUrlPrefix()
 	{

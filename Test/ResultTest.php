@@ -4,7 +4,6 @@ namespace Tree\Test;
 
 require_once '../Orm/Result.php';
 require_once 'Fake/Entity.php';
-require_once 'Fake/ResultForResultTest.php';
 
 use \Tree\Orm\Result;
 use \PHPUnit_Framework_TestCase;
@@ -40,6 +39,8 @@ class ResultTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Verifies that Result returns instances of the Entity subclass that was
 	 * originally searched for
+	 *
+	 * @covers \Tree\Orm\Result::current
 	 */
 	public function testCurrentReturnsEntity()
 	{
@@ -50,6 +51,8 @@ class ResultTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Verifies that Result returns a different entity if told to move its
 	 * internal pointer forward
+	 *
+	 * @covers \Tree\Orm\Result::next
 	 */
 	public function testNextIncrementsIteratorIndex()
 	{
@@ -63,6 +66,8 @@ class ResultTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Verifies that the entities returned by Result have been hydrated with the
 	 * result data itself
+	 *
+	 * @covers \Tree\Orm\Result::current
 	 */
 	public function testReturnsCorrectlyHydratedEntities()
 	{
