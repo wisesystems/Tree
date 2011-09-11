@@ -37,6 +37,11 @@ class QueryJoinTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * Verifies that Query_Join produces a simple one-line join expression
+	 *
+	 * @covers \Tree\Database\Query_Join::__construct
+	 * @covers \Tree\Database\Query_Join::setTable
+	 * @covers \Tree\Database\Query_Join::setType
+	 * @covers \Tree\Database\Query_Join::getSql
 	 */
 	public function testBasicJoinExpression()
 	{
@@ -52,6 +57,11 @@ class QueryJoinTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * Verifies that Query_Join handles table aliasing properly
+	 *
+	 * @covers \Tree\Database\Query_Join::__construct
+	 * @covers \Tree\Database\Query_Join::setTable
+	 * @covers \Tree\Database\Query_Join::setType
+	 * @covers \Tree\Database\Query_Join::getSql
 	 */
 	public function testTableAliasing()
 	{
@@ -65,6 +75,15 @@ class QueryJoinTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($expected, $actual);
 	}
 
+	/**
+	 * Verifies that Query_Join handles table aliasing properly
+	 *
+	 * @covers \Tree\Database\Query_Join::__construct
+	 * @covers \Tree\Database\Query_Join::setTable
+	 * @covers \Tree\Database\Query_Join::setType
+	 * @covers \Tree\Database\Query_Join::on
+	 * @covers \Tree\Database\Query_Join::getSql
+	 */
 	public function testBasicOnExpression()
 	{
 		$join = new Query_Join($this->db);
@@ -80,6 +99,15 @@ class QueryJoinTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($expected, $actual);
 	}
 
+	/**
+	 * Verifies that Query_Join handles table aliasing properly
+	 *
+	 * @covers \Tree\Database\Query_Join::__construct
+	 * @covers \Tree\Database\Query_Join::setTable
+	 * @covers \Tree\Database\Query_Join::setType
+	 * @covers \Tree\Database\Query_Join::on
+	 * @covers \Tree\Database\Query_Join::getSql
+	 */
 	public function testLongOnExpression()
 	{
 		$join = new Query_Join($this->db);
