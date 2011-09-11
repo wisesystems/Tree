@@ -36,6 +36,14 @@ class QueryUpdateTest extends PHPUnit_Framework_TestCase {
 		$this->db = new Fake_Connection;
 	}
 
+	/**
+	 * Verifis that a basic UPDATE query is generated correctly
+	 * 
+	 * @covers \Tree\Database\Query_Update::__construct
+	 * @covers \Tree\Database\Query_Update::table
+	 * @covers \Tree\Database\Query_Update::set
+	 * @covers \Tree\Database\Query_Update::getSql
+	 */
 	public function testBasicUpdateQuery()
 	{
 		$update = new Query_Update($this->db);
@@ -50,6 +58,16 @@ class QueryUpdateTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($expected, $actual);
 	}
 
+	/**
+	 * Verifies that a query with a WHERE expression is generated correctly
+	 * 
+	 * @covers \Tree\Database\Query_Update::__construct
+	 * @covers \Tree\Database\Query_Update::table
+	 * @covers \Tree\Database\Query_Update::set
+	 * @covers \Tree\Database\Query_Update::where
+	 * @covers \Tree\Database\Query_Update::getSql
+	 * @covers \Tree\Database\Query_Update::getWhereExpression
+	 */
 	public function testWhereUpdateQuery()
 	{
 		$update = new Query_Update($this->db);
@@ -66,6 +84,16 @@ class QueryUpdateTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($expected, $actual);
 	}
 
+	/**
+	 * Verifies that a query with a WHERE expression is generated correctly
+	 * 
+	 * @covers \Tree\Database\Query_Update::__construct
+	 * @covers \Tree\Database\Query_Update::table
+	 * @covers \Tree\Database\Query_Update::set
+	 * @covers \Tree\Database\Query_Update::limit
+	 * @covers \Tree\Database\Query_Update::getSql
+	 * @covers \Tree\Database\Query_Update::getLimitExpression
+	 */
 	public function testLimitExpression()
 	{
 		$update = new Query_Update($this->db);

@@ -37,6 +37,14 @@ class QuerySelectTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * Verifies that the most basic SELECT query possible is generated properly
+	 *
+	 * @covers \Tree\Database\Query_Select::__construct
+	 * @covers \Tree\Database\Query_Select::select
+	 * @covers \Tree\Database\Query_Select::addColumn
+	 * @covers \Tree\Database\Query_Select::from
+	 * @covers \Tree\Database\Query_Select::getSql
+	 * @covers \Tree\Database\Query_Select::getColumnExpression
+	 * @covers \Tree\Database\Query_Select::getFromClause
 	 */
 	public function testBasicSelectQuery()
 	{
@@ -51,6 +59,13 @@ class QuerySelectTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * Verifies that table name aliasing works
+	 *
+	 * @covers \Tree\Database\Query_Select::__construct
+	 * @covers \Tree\Database\Query_Select::select
+	 * @covers \Tree\Database\Query_Select::addColumn
+	 * @covers \Tree\Database\Query_Select::from
+	 * @covers \Tree\Database\Query_Select::getSql
+	 * @covers \Tree\Database\Query_Select::getFromClause
 	 */
 	public function testTableNameAlias()
 	{
@@ -65,6 +80,14 @@ class QuerySelectTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * Verifies that ORDER BY expressions are generated properly
+	 *
+	 * @covers \Tree\Database\Query_Select::__construct
+	 * @covers \Tree\Database\Query_Select::select
+	 * @covers \Tree\Database\Query_Select::addColumn
+	 * @covers \Tree\Database\Query_Select::from
+	 * @covers \Tree\Database\Query_Select::orderBy
+	 * @covers \Tree\Database\Query_Select::getSql
+	 * @covers \Tree\Database\Query_Select::getOrderByExpression
 	 */
 	public function testOrderBy()
 	{
@@ -81,6 +104,15 @@ class QuerySelectTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * Verifies that WHERE expressions are generated properly
+	 *
+	 * @covers \Tree\Database\Query_Select::__construct
+	 * @covers \Tree\Database\Query_Select::select
+	 * @covers \Tree\Database\Query_Select::addColumn
+	 * @covers \Tree\Database\Query_Select::from
+	 * @covers \Tree\Database\Query_Select::where
+	 * @covers \Tree\Database\Query_Select::orWhere
+	 * @covers \Tree\Database\Query_Select::getSql
+	 * @covers \Tree\Database\Query_Select::getWhereExpression
 	 */
 	public function testWhereExpression()
 	{
@@ -105,6 +137,14 @@ class QuerySelectTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * Verifies that LIMIT expressions are generated properly
+	 *
+	 * @covers \Tree\Database\Query_Select::__construct
+	 * @covers \Tree\Database\Query_Select::select
+	 * @covers \Tree\Database\Query_Select::addColumn
+	 * @covers \Tree\Database\Query_Select::from
+	 * @covers \Tree\Database\Query_Select::limit
+	 * @covers \Tree\Database\Query_Select::getSql
+	 * @covers \Tree\Database\Query_Select::getLimitExpression
 	 */
 	public function testLimitExpression()
 	{
@@ -125,6 +165,14 @@ class QuerySelectTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Verifies that SELECT interacts well enough with Query_Join to be able
 	 * to add a simple join
+	 *
+	 * @covers \Tree\Database\Query_Select::__construct
+	 * @covers \Tree\Database\Query_Select::select
+	 * @covers \Tree\Database\Query_Select::addColumn
+	 * @covers \Tree\Database\Query_Select::from
+	 * @covers \Tree\Database\Query_Select::addJoin
+	 * @covers \Tree\Database\Query_Select::getSql
+	 * @covers \Tree\Database\Query_Select::getJoinExpression
 	 */
 	public function testSingleSimpleJoin()
 	{
@@ -152,6 +200,15 @@ class QuerySelectTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Verifies that SELECT interacts well enough with Query_Join to be able
 	 * to add a longer, more involved join expression
+	 *
+	 * @covers \Tree\Database\Query_Select::__construct
+	 * @covers \Tree\Database\Query_Select::select
+	 * @covers \Tree\Database\Query_Select::addColumn
+	 * @covers \Tree\Database\Query_Select::from
+	 * @covers \Tree\Database\Query_Select::addJoin
+	 * @covers \Tree\Database\Query_Select::getSql
+	 * @covers \Tree\Database\Query_Select::getJoinExpression
+	 */
 	 */
 	public function testMultipleComplexJoins()
 	{
