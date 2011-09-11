@@ -34,6 +34,14 @@ class QueryInsertTest extends PHPUnit_Framework_TestCase {
 		$this->db = new Fake_Connection;
 	}
 
+	/**
+	 * Verifies that a basic INSERT query generates correctly
+	 * 
+	 * @covers \Tree\Database\Query_Insert::__construct
+	 * @covers \Tree\Database\Query_Insert::into
+	 * @covers \Tree\Database\Query_Insert::set
+	 * @covers \Tree\Database\Query_Insert::getSql
+	 */
 	public function testBasicInsertQuery()
 	{
 		$insert = new Query_Insert($this->db);
