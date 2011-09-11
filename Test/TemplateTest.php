@@ -46,6 +46,9 @@ class TemplateTest extends PHPUnit_Framework_TestCase {
 	 * Tests that getOutput() runs successfully if the required input
 	 * values have been set, and that it passes those values through
 	 * to generateOutput()
+	 *
+	 * @covers \Tree\Component\Template::setInputValue
+	 * @covers \Tree\Component\Template::getOutput
 	 */
 	public function testGetOutputReturnsOutputIfValuesPresent()
 	{
@@ -60,6 +63,9 @@ class TemplateTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Tests that setInputValue() runs successfully if given a permissible
 	 * input value
+	 *
+	 * @covers \Tree\Component\Template::setInputValue
+	 * @covers \Tree\Component\Template::getInputValue
 	 */
 	public function testSetInputValueAcceptsValidValues()
 	{
@@ -74,6 +80,8 @@ class TemplateTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Verifies that calling unsetInputValue() on a valid value causes that value
 	 * to be removed from the template
+	 *
+	 * @covers \Tree\Component\Template::unsetInputValue
 	 */
 	public function testUnsetInputValueRemovesValue()
 	{
@@ -90,6 +98,8 @@ class TemplateTest extends PHPUnit_Framework_TestCase {
 	 * Verifies that passing a name-value pair to Template::setGlobalValue causes
 	 * that variable to be available in a Template subclass even if not explicitly
 	 * set on that individual object
+	 *
+	 * @covers \Tree\Component\Template::setGlobalValue
 	 */
 	public function testGlobalTemplateVariables()
 	{
@@ -106,6 +116,10 @@ class TemplateTest extends PHPUnit_Framework_TestCase {
 	 * Verifies that passing a directory name to Template via
 	 * setTemplateDirectory() causes Template to use that directory name to
 	 * generate an absolute path to all template files
+	 *
+	 * @covers \Tree\Component\Template::getOutput
+	 * @covers \Tree\Component\Template::generateOutput
+	 * @covers \Tree\Component\Template::findAbsolutePath
 	 */
 	public function testFindsTemplateFileFromAbsolutePath()
 	{
@@ -121,6 +135,11 @@ class TemplateTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Verifies that the ArrayAccess implementation sets, unsets and checks values
 	 * correctly
+	 *
+	 * @covers \Tree\Component\Template::offsetGet
+	 * @covers \Tree\Component\Template::offsetExists
+	 * @covers \Tree\Component\Template::offsetSet
+	 * @covers \Tree\Component\Template::offsetUnset
 	 */
 	public function testArrayAccess()
 	{
