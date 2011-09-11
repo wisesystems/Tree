@@ -50,10 +50,10 @@ class SearchExceptionTest extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * Make sure that an exception is thrown if a call to withRelationship()
-	 * tries to include a relationship that would join to multiple rows and
-	 * break the query
+	 * Verifies that an exception is thrown if a call to withRelationship()
+	 * tries to include a non-existent relationship
 	 * 
+	 * @covers                \Tree\Orm\Search::withRelationship
 	 * @expectedException     \Tree\Exception\SearchException
 	 * @expectedExceptionCode \Tree\Exception\SearchException::NO_SUCH_RELATIONSHIP
 	 */
@@ -63,9 +63,11 @@ class SearchExceptionTest extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * Verifies that an exception is thrown if a call to withRelationship()
-	 * tries to include a non-existent relationship
+	 * Make sure that an exception is thrown if a call to withRelationship()
+	 * tries to include a relationship that would join to multiple rows and
+	 * break the query
 	 * 
+	 * @covers                \Tree\Orm\Search::withRelationship
 	 * @expectedException     \Tree\Exception\SearchException
 	 * @expectedExceptionCode \Tree\Exception\SearchException::CANNOT_INCLUDE_RELATIONSHIP
 	 */
