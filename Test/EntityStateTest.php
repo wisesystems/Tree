@@ -41,6 +41,10 @@ class EntityStateTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * Verifies that calling removeState sets Entity to not have the given state
+	 *
+	 * @covers \Tree\Orm\Entity::addState
+	 * @covers \Tree\Orm\Entity::hasState
+	 * @covers \Tree\Orm\Entity::removeState
 	 */
 	public function testRemoveStateRemovesState()
 	{
@@ -62,6 +66,8 @@ class EntityStateTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * Verifies that Entity adds and removes STATE_HYDRATED correctly
+	 *
+	 * @covers \Tree\Orm\Entity::hydrateEntity
 	 */
 	public function testHydratedState()
 	{
@@ -80,6 +86,8 @@ class EntityStateTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * Verifies that Entity adds and removes STATE_DIRTY correctly
+	 *
+	 * @covers \Tree\Orm\Entity::__set
 	 */
 	public function testDirtyState()
 	{
