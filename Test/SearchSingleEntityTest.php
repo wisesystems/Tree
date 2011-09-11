@@ -47,6 +47,8 @@ class SearchSingleEntityTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Verifies that the SQL generated for the query that is to return entity data
 	 * is generated as expected
+	 * 
+	 * @covers \Tree\Orm\Search::getSql
 	 */
 	public function testGeneratesCorrectSql()
 	{
@@ -61,6 +63,8 @@ class SearchSingleEntityTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * Verifies that Search returns a Result object
+	 *
+	 * @covers \Tree\Orm\Search::getResult
 	 */
 	public function testReturnsResult()
 	{

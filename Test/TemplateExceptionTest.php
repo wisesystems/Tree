@@ -46,6 +46,8 @@ class TemplateExceptionTest extends PHPUnit_Framework_TestCase {
 	 * attempt is made to generate output when all required inputs are not yet
 	 * available
 	 * 
+	 * @covers                \Tree\Template::getOutput
+	 * @covers                \Tree\Template::getMissingValues
 	 * @expectedException     \Tree\Exception\TemplateException
 	 * @expectedExceptionCode \Tree\Exception\TemplateException::MISSING_REQUIRED_VARIABLES
 	 */
@@ -59,6 +61,8 @@ class TemplateExceptionTest extends PHPUnit_Framework_TestCase {
 	 * attempt is made to set an input value that is not in the list of acceptable
 	 * input values
 	 * 
+	 * @covers                \Tree\Template::setInputValue
+	 * @covers                \Tree\Template::isPermissibleValue
 	 * @expectedException     \Tree\Exception\TemplateException
 	 * @expectedExceptionCode \Tree\Exception\TemplateException::INVALID_VALUE_NAME
 	 */
@@ -72,6 +76,7 @@ class TemplateExceptionTest extends PHPUnit_Framework_TestCase {
 	 * attempt is made to unset an input value that is not in the list of acceptable
 	 * input values
 	 * 
+	 * @covers                \Tree\Template::unsetInputValue
 	 * @expectedException     \Tree\Exception\TemplateException
 	 * @expectedExceptionCode \Tree\Exception\TemplateException::INVALID_VALUE_NAME
 	 */
@@ -85,6 +90,9 @@ class TemplateExceptionTest extends PHPUnit_Framework_TestCase {
 	 * attempt is made to generate output when no template filename has yet been
 	 * set
 	 * 
+	 * @covers                \Tree\Template::setTemplateFilename
+	 * @covers                \Tree\Template::getOutput
+	 * @covers                \Tree\Template::generateOutput
 	 * @expectedException     \Tree\Exception\TemplateException
 	 * @expectedExceptionCode \Tree\Exception\TemplateException::MISSING_TEMPLATE_FILENAME
 	 */
@@ -98,6 +106,9 @@ class TemplateExceptionTest extends PHPUnit_Framework_TestCase {
 	 * Verifies that Template throws the right kind of TemplateException if an
 	 * attempt is made to generate output but the template file cannot be found
 	 * 
+	 * @covers                \Tree\Template::getOutput
+	 * @covers                \Tree\Template::generateOutput
+	 * @covers                \Tree\Template::findAbsolutePath
 	 * @expectedException     \Tree\Exception\TemplateException
 	 * @expectedExceptionCode \Tree\Exception\TemplateException::TEMPLATE_NOT_FOUND
 	 */
@@ -113,6 +124,8 @@ class TemplateExceptionTest extends PHPUnit_Framework_TestCase {
 	 * attempt is made to generate output but the template file cannot be read by
 	 * the PHP processs
 	 * 
+	 * @covers                \Tree\Template::getOutput
+	 * @covers                \Tree\Template::generateOutput
 	 * @expectedException     \Tree\Exception\TemplateException
 	 * @expectedExceptionCode \Tree\Exception\TemplateException::TEMPLATE_NOT_READABLE
 	 */
@@ -127,6 +140,8 @@ class TemplateExceptionTest extends PHPUnit_Framework_TestCase {
 	 * Verifies that Template throws an exception if no static template directory
 	 * has been set
 	 * 
+	 * @covers                \Tree\Template::getOutput
+	 * @covers                \Tree\Template::generateOutput
 	 * @expectedException     \Tree\Exception\TemplateException
 	 * @expectedExceptionCode \Tree\Exception\TemplateException::TEMPLATE_DIRECTORY_NOT_SET
 	 */
