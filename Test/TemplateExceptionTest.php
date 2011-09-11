@@ -45,157 +45,96 @@ class TemplateExceptionTest extends PHPUnit_Framework_TestCase {
 	 * Verifies that Template throws the right kind of TemplateException if an
 	 * attempt is made to generate output when all required inputs are not yet
 	 * available
+	 * 
+	 * @expectedException     \Tree\Exception\TemplateException
+	 * @expectedExceptionCode \Tree\Exception\TemplateException::MISSING_REQUIRED_VARIABLES
 	 */
 	public function testThrowsExceptionIfValuesMissing()
 	{
-		$code = null;
-		$tpl  = null;
-
-		try {
-			$this->template->getOutput();
-		} catch (TemplateException $e) {
-			$code = $e->getCode();
-			$tpl  = $e->getTemplate();
-		}
-
-		$this->assertEquals(TemplateException::MISSING_REQUIRED_VARIABLE, $code);
-		$this->assertTrue($tpl instanceof Fake_Template);
+		$this->template->getOutput();
 	}
 
 	/**
 	 * Verifies that Template throws the right kind of TemplateException if an
 	 * attempt is made to set an input value that is not in the list of acceptable
 	 * input values
+	 * 
+	 * @expectedException     \Tree\Exception\TemplateException
+	 * @expectedExceptionCode \Tree\Exception\TemplateException::INVALID_VALUE_NAME
 	 */
 	public function testThrowsExceptionIfSettingInvalidValue()
 	{
-		$code = null;
-		$tpl  = null;
-
-		try {
-			$this->template->setInputValue('asdfgh', '12345');
-		} catch (TemplateException $e) {
-			$code = $e->getCode();
-			$tpl  = $e->getTemplate();
-		}
-
-		$this->assertEquals(TemplateException::INVALID_VALUE_NAME, $code);
-		$this->assertTrue($tpl instanceof Fake_Template);
+		$this->template->setInputValue('asdfgh', '12345');
 	}
 
 	/**
 	 * Verifies that Template throws the right kind of TemplateException if an
 	 * attempt is made to unset an input value that is not in the list of acceptable
 	 * input values
+	 * 
+	 * @expectedException     \Tree\Exception\TemplateException
+	 * @expectedExceptionCode \Tree\Exception\TemplateException::INVALID_VALUE_NAME
 	 */
 	public function testThrowsExceptionIfUnsettingInvalidValue()
 	{
-		$code = null;
-		$tpl  = null;
-
-		try {
-			$this->template->unsetInputValue('asdfgh', '12345');
-		} catch (TemplateException $e) {
-			$code = $e->getCode();
-			$tpl  = $e->getTemplate();
-		}
-
-		$this->assertEquals(TemplateException::INVALID_VALUE_NAME, $code);
-		$this->assertTrue($tpl instanceof Fake_Template);
+		$this->template->unsetInputValue('asdfgh', '12345');
 	}
 
 	/**
 	 * Verifies that Template throws the right kind of TemplateException if an
 	 * attempt is made to generate output when no template filename has yet been
 	 * set
+	 * 
+	 * @expectedException     \Tree\Exception\TemplateException
+	 * @expectedExceptionCode \Tree\Exception\TemplateException::MISSING_TEMPLATE_FILENAME
 	 */
 	public function testThrowsExceptionIfFilenameMissing()
 	{
-		$code = null;
-		$tpl  = null;
-
-		try {
-			$this->template->setTemplateFilename(null);
-			$this->template->getOutput();
-		} catch (TemplateException $e) {
-			$code = $e->getCode();
-			$tpl  = $e->getTemplate();
-		}
-
-		$this->assertEquals(TemplateException::MISSING_TEMPLATE_FILENAME, $code);
-		$this->assertTrue($tpl instanceof Fake_Template);
+		$this->template->setTemplateFilename(null);
+		$this->template->getOutput();
 	}
 
 	/**
 	 * Verifies that Template throws the right kind of TemplateException if an
 	 * attempt is made to generate output but the template file cannot be found
+	 * 
+	 * @expectedException     \Tree\Exception\TemplateException
+	 * @expectedExceptionCode \Tree\Exception\TemplateException::TEMPLATE_NOT_FOUND
 	 */
 	public function testThrowsExceptionIfTemplateFileNotFound()
 	{
-		$code = null;
-		$tpl  = null;
-
 		$this->template->setInputValue('content', 'example content');
 		$this->template->setTemplateFilename('incorrect-filename.php');
-
-		try {
-			$this->template->getOutput();
-		} catch (TemplateException $e) {
-			$code = $e->getCode();
-			$tpl  = $e->getTemplate();
-		}
-
-		$this->template->setTemplateFilename('template.php');
-		$this->assertTrue($tpl instanceof Fake_Template);
-
-		$this->assertEquals(TemplateException::TEMPLATE_NOT_FOUND, $code);
+		$this->template->getOutput();
 	}
 
 	/**
 	 * Verifies that Template throws the right kind of TemplateException if an
 	 * attempt is made to generate output but the template file cannot be read by
 	 * the PHP processs
+	 * 
+	 * @expectedException     \Tree\Exception\TemplateException
+	 * @expectedExceptionCode \Tree\Exception\TemplateException::TEMPLATE_NOT_READABLE
 	 */
 	public function testThrowsExceptionIfTemplateFileNotReadable()
 	{
-		$code = null;
-		$tpl  = null;
-
 		$this->template->setInputValue('content', 'example content');
 		chmod('/tmp/template.php', 0220);
-
-		try {
-			$this->template->getOutput();
-		} catch (TemplateException $e) {
-			$code = $e->getCode();
-			$tpl  = $e->getTemplate();
-		}
-
-		$this->assertEquals(TemplateException::TEMPLATE_NOT_READABLE, $code);
-		$this->assertTrue($tpl instanceof Fake_Template);
+		$this->template->getOutput();
 	}
 
 	/**
 	 * Verifies that Template throws an exception if no static template directory
 	 * has been set
+	 * 
+	 * @expectedException     \Tree\Exception\TemplateException
+	 * @expectedExceptionCode \Tree\Exception\TemplateException::TEMPLATE_DIRECTORY_NOT_SET
 	 */
 	public function testThrowsExceptionIfTemplateDirectoryNotSet()
 	{
-		$code = null;
-		$tpl  = null;
-
 		Template::setTemplateDirectory(null);
 		$this->template->setInputValue('content', 'example content');
-
-		try {
-			$this->template->getOutput();
-		} catch (TemplateException $e) {
-			$code = $e->getCode();
-			$tpl  = $e->getTemplate();
-		}
-
-		$this->assertEquals(TemplateException::TEMPLATE_DIRECTORY_NOT_SET, $code);
-		$this->assertTrue($tpl instanceof Fake_Template);
+		$this->template->getOutput();
 	}
 
 }
