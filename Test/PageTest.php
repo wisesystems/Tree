@@ -52,7 +52,7 @@ class PageTest extends PHPUnit_Framework_Testcase {
 	/**
 	 * Verifies that calling addStylesheetDependency adds the file to the list
 	 * 
-	 * @covers \Tree\Component\Page::addStylsheetDependency
+	 * @covers \Tree\Component\Page::addStylesheetDependency
 	 * @covers \Tree\Component\Page::getStylesheetDependencies
 	 */
 	public function testAddStylesheetDependencyAddsStylesheetDependency()
