@@ -36,12 +36,12 @@ use \PHPUnit_Framework_TestCase;
  */
 class SearchRelatedEntityTest extends PHPUnit_Framework_TestCase {
 
-
-	public function setUp()
-	{
-
-	}
-
+	/**
+	 * Verifies that Search generates a basic SELECT query correctly
+	 * 
+	 * @covers \Tree\Orm\Search::__construct
+	 * @covers \Tree\Orm\Search::getSql
+	 */
 	public function testGeneratesCorrectSqlWithoutRelationship()
 	{
 		$db = new Fake_Connection;
@@ -59,6 +59,13 @@ class SearchRelatedEntityTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($expected, $actual);
 	}
 
+	/**
+	 * Verifies that Search correctly generates a SELECT query if relationships
+	 * are involved
+	 * 
+	 * @covers \Tree\Orm\Search::getSql
+	 * @covers \Tree\Orm\Search::addJoinForRelationship
+	 */
 	public function testGeneratesCorrectSqlWithRelationship()
 	{
 		$db = new Fake_Connection;
