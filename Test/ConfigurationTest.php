@@ -52,6 +52,9 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Verifies that Configuration finds a file's absolute path given known
 	 * conditions
+	 * 
+	 * @covers \Tree\Framework\Configuration::findAbsolutePath
+	 * @covers \Tree\Framework\Configuration::getAbsolutePath
 	 */
 	public function testFindsAbsolutePath()
 	{
@@ -64,6 +67,11 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Verifies that Configuration's ArrayAccess implementation returns the
 	 * expected results
+	 *
+	 * @covers \Tree\Framework\Configuration::offsetExists
+	 * @covers \Tree\Framework\Configuration::offsetGet
+	 * @covers \Tree\Framework\Configuration::offsetSet
+	 * @covers \Tree\Framework\Configuration::offsetUnset
 	 */
 	public function testArrayAccess()
 	{
