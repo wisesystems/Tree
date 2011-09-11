@@ -14,10 +14,9 @@ use \Tree\Test\Fake_Connection;
 use \Tree\Test\Fake_BrokenConnection;
 
 /**
- * DatabaseConnectionTest
+ * DatabaseExceptionTest
  *
- * Verifies that database connections behave properly and report exception
- * states right
+ * Verifies that database exceptions are thrown under expected circumstances
  *
  * @author     Henry Smith <henry@henrysmith.org> 
  * @copyright  2011 Henry Smith
@@ -27,7 +26,7 @@ use \Tree\Test\Fake_BrokenConnection;
  * @uses       \Tree\Database\Connection
  * @version    0.00
  */
-class DatabaseConnectionTest extends PHPUnit_Framework_TestCase {
+class DatabaseExceptionTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * Verifies that Database throws an exception if being used when the
