@@ -209,7 +209,6 @@ class QuerySelectTest extends PHPUnit_Framework_TestCase {
 	 * @covers \Tree\Database\Query_Select::getSql
 	 * @covers \Tree\Database\Query_Select::getJoinExpression
 	 */
-	 */
 	public function testMultipleComplexJoins()
 	{
 
