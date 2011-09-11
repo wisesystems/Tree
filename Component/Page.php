@@ -19,25 +19,65 @@ use \Tree\Response\Response_Html;
  */
 class Page extends Response_Html {
 
+	/**
+	 * Array of Javascript files on which the HTML document depends and which
+	 * should be loaded with it
+	 * 
+	 * @access private
+	 * @var    array
+	 */
 	private $javascriptDependencies = array();
 
+	/**
+	 * Array of CSS stylesheets on which the HTML document depends and which
+	 * should be loaded with it
+	 * 
+	 * @access private
+	 * @var    array
+	 */
 	private $stylesheetDependencies = array();
 
+	/**
+	 * Adds a Javascript file to the list of those to be loaded by the HTML
+	 * document
+	 * 
+	 * @access public
+	 * @param  string $filename 
+	 */
 	public function addJavascriptDependency($filename)
 	{
 		$this->javascriptDependencies[] = $filename;
 	}
 
+	/**
+	 * Adds a CSS stylesheet to the list of those to be loaded by the HTML
+	 * document
+	 * 
+	 * @access public
+	 * @param  string $filename 
+	 */
 	public function addStylesheetDependency($filename)
 	{
 		$this->stylesheetDependencies[] = $filename;
 	}
 
+	/**
+	 * Returns the list of Javascript files on which the HTML document depends
+	 * 
+	 * @access public
+	 * @return array
+	 */
 	public function getJavascriptDependencies()
 	{
 		return $this->javascriptDependencies;
 	}
 
+	/**
+	 * Returns the list of CSS stylesheets on which the HTML document depends
+	 * 
+	 * @access public
+	 * @return array
+	 */
 	public function getStylesheetDependencies()
 	{
 		return $this->stylesheetDependencies;
