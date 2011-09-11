@@ -30,6 +30,9 @@ class EntityTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * Verifies that the __get and __set methods actually save entity attributes
+	 *
+	 * @covers \Tree\Orm\Entity::__get
+	 * @covers \Tree\Orm\Entity::__set
 	 */
 	public function testMagicGetAndMagicSet()
 	{
@@ -50,6 +53,8 @@ class EntityTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Verifies that hydrateEntity correctly populates an entity with data from 
 	 * a database row
+	 *
+	 * @covers \Tree\Orm\Entity::hydrateEntity
 	 */
 	public function testHydrateEntityPopulatesEntity()
 	{
@@ -74,6 +79,8 @@ class EntityTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Verifies that revertEntity undoes any changes to an entity's data that were
 	 * made after the entity was hydrated with data from the database
+	 *
+	 * @covers \Tree\Orm\Entity::revertEntity
 	 */
 	public function testRevertEntityRevertsChanges()
 	{
