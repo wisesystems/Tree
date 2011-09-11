@@ -70,6 +70,9 @@ class EntityDatabaseTest extends PHPUnit_Extensions_Database_TestCase {
 	/**
 	 * Verifies that commitEntity saves entity data to a new database row if the
 	 * entity does not represent a row that already exists in the database
+	 *
+	 * @covers \Tree\Orm\Entity::commitEntity
+	 * @covers \Tree\Orm\Entity::insertEntity
 	 */
 	public function testCommitEntityInsertsNewRow()
 	{
@@ -91,6 +94,9 @@ class EntityDatabaseTest extends PHPUnit_Extensions_Database_TestCase {
 	/**
 	 * Verifies that commitEntity saves entity data to an existing database row if
 	 * the entity corresponds to one
+	 *
+	 * @covers \Tree\Orm\Entity::commitEntity
+	 * @covers \Tree\Orm\Entity::updateEntity
 	 */
 	public function testCommitEntityUpdatesExistingRow()
 	{
@@ -113,6 +119,8 @@ class EntityDatabaseTest extends PHPUnit_Extensions_Database_TestCase {
 	/**
 	 * Verifies that deleteEntity successfully removes an entity's corresponding
 	 * database row if one exists
+	 *
+	 * @covers \Tree\Orm\Entity::deleteEntity
 	 */
 	public function testDeleteEntityDeletesRow()
 	{
