@@ -35,6 +35,13 @@ class QueryDeleteTest extends PHPUnit_Framework_TestCase {
 		$this->db = new Fake_Connection;
 	}
 
+	/**
+	 * Verifies that a basic delete query is generated correctly 
+	 * 
+	 * @covers \Tree\Database\Query_Delete::__construct
+	 * @covers \Tree\Database\Query_Delete::from
+	 * @covers \Tree\Database\Query_Delete::getSql
+	 */
 	public function testBasicDeleteQuery()
 	{
 		$delete = new Query_Delete($this->db);
@@ -46,6 +53,15 @@ class QueryDeleteTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($expected, $actual);
 	}
 
+	/**
+	 * Verifies that a delete query with a WHERE clause is generated correctly
+	 * 
+	 * @covers \Tree\Database\Query_Delete::__construct
+	 * @covers \Tree\Database\Query_Delete::from
+	 * @covers \Tree\Database\Query_Delete::where
+	 * @covers \Tree\Database\Query_Delete::getSql
+	 * @covers \Tree\Database\Query_Delete::getWhereExpression
+	 */
 	public function testDeleteWhere()
 	{
 		$delete = new Query_Delete($this->db);
@@ -60,6 +76,17 @@ class QueryDeleteTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($expected, $actual);
 	}
 
+	/**
+	 * Verifies that a delete query with a WHERE clause is generated correctly
+	 * 
+	 * @covers \Tree\Database\Query_Delete::__construct
+	 * @covers \Tree\Database\Query_Delete::from
+	 * @covers \Tree\Database\Query_Delete::where
+	 * @covers \Tree\Database\Query_Delete::limit
+	 * @covers \Tree\Database\Query_Delete::getSql
+	 * @covers \Tree\Database\Query_Delete::getWhereExpression
+	 * @covers \Tree\Database\Query_Delete::getLimitExpression
+	 */
 	public function testDeleteWhereLimit()
 	{
 		$delete = new Query_Delete($this->db);
