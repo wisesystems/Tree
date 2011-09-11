@@ -2,11 +2,27 @@
 
 namespace Tree\Test;
 
+require '../Response/Response.php';
+require '../Response/Response/Html.php';
 require '../Component/Page.php';
 
 use \PHPUnit_Framework_Testcase;
 use \Tree\Component\Page;
 
+/**
+ * PageTest 
+ *
+ * Tests the Page component
+ * 
+ * @author     Henry Smith <henry@henrysmith.org> 
+ * @copyright  2011 Henry Smith
+ * @license    GPLv2.0
+ * @package    Tree
+ * @subpackage Test
+ * @uses       \PHPUnit_Framework_Testcase
+ * @uses       \Tree\Component\Page
+ * @version    0.00
+ */
 class PageTest extends PHPUnit_Framework_Testcase {
 
 	private $page;
