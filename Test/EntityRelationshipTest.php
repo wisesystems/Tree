@@ -49,6 +49,11 @@ class EntityRelationshipTest extends PHPUnit_Framework_TestCase {
 		$this->unrelated = new Fake_Entity;
 	}
 
+	/**
+	 * Verifies that isRelatedTo returns the correct answer 
+	 * 
+	 * @covers \Tree\Orm\Entity::isRelatedToEntity
+	 */
 	public function testRelationshipDetection()
 	{
 		$this->assertTrue($this->parent->isRelatedToEntity($this->child));
@@ -57,6 +62,11 @@ class EntityRelationshipTest extends PHPUnit_Framework_TestCase {
 		$this->assertFalse($this->child->isRelatedToEntity($this->unrelated));
 	}
 
+	/**
+	 * Verifies that getEntityRelationship returns the expected data
+	 * 
+	 * @covers \Tree\Orm\Entity::getEntityRelationship
+	 */
 	public function testGetEntityRelationship()
 	{
 		$expected = array(
@@ -71,6 +81,11 @@ class EntityRelationshipTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($expected, $actual);
 	}
 
+	/**
+	 * Verifies that hasEntityRelationship returns the right answer 
+	 * 
+	 * @covers \Tree\Orm\Entity::hasEntityRelationship
+	 */
 	public function testHasEntityRelationship()
 	{
 		$this->assertTrue($this->parent->hasEntityRelationship('attributes'));
@@ -84,6 +99,10 @@ class EntityRelationshipTest extends PHPUnit_Framework_TestCase {
 	 * Verifies that when attepting to access an entity's related entity that
 	 * isn't yet loaded, a well-formed SQL query will be sent to the database to
 	 * retrieve it
+	 *
+	 * @covers \Tree\Orm\Entity::__get
+	 * @covers \Tree\Orm\Entity::getRelatedEntity
+	 * @covers \Tree\Orm\Entity::fetchRelatedEntity
 	 */
 	public function testAutofetchingRelatedEntity()
 	{
