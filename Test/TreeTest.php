@@ -27,6 +27,8 @@ class TreeTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * Verifies that Tree can tell when the include_path is set up properly 
+	 *
+	 * @covers \Tree\Framework\Tree::includePathContainsTree
 	 */
 	public function testDetectsPresenceInIncludePath()
 	{
@@ -52,6 +54,8 @@ class TreeTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * Verifies that Tree can tell when it's not in the include_path 
+	 *
+	 * @covers \Tree\Framework\Tree::includePathContainsTree
 	 */
 	public function testDetectsAbsenceFromIncludePath()
 	{
