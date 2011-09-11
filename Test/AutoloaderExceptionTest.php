@@ -62,6 +62,9 @@ class AutoloaderExceptionTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Verifies that Autoloader throws the right AutoloaderException if it can't
 	 * read the file once it's found it
+	 * 
+	 * @expectedException     \Tree\Exception\AutoloaderException
+	 * @expectedExceptionCode \Tree\Exception\AutoloaderException::FILE_NOT_READABLE
 	 */
 	public function testThrowsExceptionIfFileNotReadable()
 	{
@@ -69,35 +72,29 @@ class AutoloaderExceptionTest extends PHPUnit_Framework_TestCase {
 
 		chmod($this->absolutePath, 0220);
 
-		try {
-			$this->autoloader->autoloadClass($this->className);
-		} catch (AutoloaderException $e) {
-			$code = $e->getCode();
-		}
-
-		$this->assertEquals(AutoloaderException::FILE_NOT_READABLE, $code);
+		$this->autoloader->autoloadClass($this->className);
 	}
 
 	/**
 	 * Verifies that Autoloader throws the right AutoloaderException if it can't
 	 * find the file in the include_path
+	 * 
+	 * @expectedException     \Tree\Exception\AutoloaderException
+	 * @expectedExceptionCode \Tree\Exception\AutoloaderException::FILE_NOT_FOUND
 	 */
 	public function testThrowsExceptionIfFileNotFound()
 	{
 		$code = null;
 
-		try {
-			$this->autoloader->autoloadClass('\WrongClass');
-		} catch (AutoloaderException $e) {
-			$code = $e->getCode();
-		}
-
-		$this->assertEquals(AutoloaderException::FILE_NOT_FOUND, $code);
+		$this->autoloader->autoloadClass('\WrongClass');
 	}
 
 	/**
 	 * Verifies that Autoloader throws the right AutoloaderException if the file
 	 * it finds doesn't actually contain the class that it should
+	 * 
+	 * @expectedException     \Tree\Exception\AutoloaderException
+	 * @expectedExceptionCode \Tree\Exception\AutoloaderException::CLASS_NOT_FOUND
 	 */
 	public function testThrowsExceptionIfClassNotFound()
 	{
@@ -105,13 +102,7 @@ class AutoloaderExceptionTest extends PHPUnit_Framework_TestCase {
 
 		file_put_contents('/private/tmp/TestClassX.php', '<?php class TestClassY {}');
 
-		try {
-			$this->autoloader->autoloadClass('\TestClassX');
-		} catch (AutoloaderException $e) {
-			$code = $e->getCode();
-		}
-
-		$this->assertEquals(AutoloaderException::CLASS_NOT_FOUND, $code);
+		$this->autoloader->autoloadClass('\TestClassX');
 	}
 
 }
