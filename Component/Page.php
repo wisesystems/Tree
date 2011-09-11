@@ -114,6 +114,7 @@ abstract class Page extends Response_Html {
 	{
 		$layoutTemplate = $this->getLayoutTemplate();
 		$layoutTemplate->setInputValue('pageContent', $this->pageContent);
+		$layoutTemplate->setInputValue('stylesheets', $this->getStylesheetDependencies());
 
 		$pageHtml = $layoutTemplate->getOutput();
 
