@@ -41,10 +41,12 @@ class EntityExceptionTest extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * Verifies that Entity doesn't throw an exception if an attribute is accessed
+	 * Verifies that Entity doesn't throw an exception if an attribute is set
 	 * that is a valid attribute of that entity
+	 *
+	 * @covers \Tree\Orm\Entity::__set
 	 */
-	public function testDoesntThrowExceptionIfValidAttribute()
+	public function testDoesntThrowExceptionIfSettingValidAttribute()
 	{
 		$code = null;
 
@@ -55,7 +57,16 @@ class EntityExceptionTest extends PHPUnit_Framework_TestCase {
 		}
 
 		$this->assertNull($code);
+	}
 
+	/**
+	 * Verifies that Entity doesn't throw an exception if an attribute is accessed
+	 * that is a valid attribute of that entity
+	 *
+	 * @covers \Tree\Orm\Entity::__get
+	 */
+	public function testDoesntThrowExceptionIfGettingValidAttribute()
+	{
 		$code = null;
 
 		try {
@@ -71,6 +82,7 @@ class EntityExceptionTest extends PHPUnit_Framework_TestCase {
 	 * Verifies that Entity throws the right kind of EntityException if an attempt
 	 * is made to set an attribute that doesn't actually exist
 	 * 
+	 * @covers                \Tree\Orm\Entity::__set
 	 * @expectedException     \Tree\Exception\EntityException
 	 * @expectedExceptionCode \Tree\Exception\EntityException::NO_SUCH_ATTRIBUTE
 	 */
@@ -83,6 +95,7 @@ class EntityExceptionTest extends PHPUnit_Framework_TestCase {
 	 * Verifies that Entity throws the right kind of EntityException if an attempt
 	 * is made to get an attribute that doesn't actually exist
 	 * 
+	 * @covers                \Tree\Orm\Entity::__get
 	 * @expectedException     \Tree\Exception\EntityException
 	 * @expectedExceptionCode \Tree\Exception\EntityException::NO_SUCH_ATTRIBUTE
 	 */
@@ -96,6 +109,7 @@ class EntityExceptionTest extends PHPUnit_Framework_TestCase {
 	 * entity that doesn't have a table name set, rather than just sending a junk
 	 * query to the database
 	 * 
+	 * @covers                \Tree\Orm\Entity::commitEntity
 	 * @expectedException     \Tree\Exception\EntityException
 	 * @expectedExceptionCode \Tree\Exception\EntityException::NO_TABLE_NAME_SET
 	 */
@@ -105,7 +119,6 @@ class EntityExceptionTest extends PHPUnit_Framework_TestCase {
 		$entity     = new Fake_BrokenNoTableNameEntity;
 
 		$entity->setDatabase($connection);
-		
 		$entity->commitEntity();
 	}
 	
@@ -114,6 +127,7 @@ class EntityExceptionTest extends PHPUnit_Framework_TestCase {
 	 * an entity that has no original state to revert to because it has not been
 	 * hydrated with database values
 	 * 
+	 * @covers                \Tree\Orm\Entity::revertEntity
 	 * @expectedException     \Tree\Exception\EntityException
 	 * @expectedExceptionCode \Tree\Exception\EntityException::REVERTING_UNHYDRATED_ENTITY
 	 */
@@ -126,6 +140,7 @@ class EntityExceptionTest extends PHPUnit_Framework_TestCase {
 	 * Verifies that Entity throws an exception if an attempt is made to hydrate
 	 * an entity with invalid data
 	 * 
+	 * @covers                \Tree\Orm\Entity::hydrateEntity
 	 * @expectedException     \Tree\Exception\EntityException
 	 * @expectedExceptionCode \Tree\Exception\EntityException::HYDRATED_WITH_INVALID_DATA
 	 */
