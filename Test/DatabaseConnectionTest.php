@@ -29,18 +29,18 @@ use \Tree\Test\Fake_BrokenConnection;
  */
 class DatabaseConnectionTest extends PHPUnit_Framework_TestCase {
 
+	/**
+	 * Verifies that Database throws an exception if being used when the
+	 * connection has failed to open
+	 *
+	 * @covers            \Tree\Exception\DatabaseException::requireConnection
+	 * @expectedException \Tree\Exception\DatabaseException
+	 * @expectedException \Tree\Exception\DatabaseException::CONNECTION_FAILED
+	 */
 	public function testThrowsExceptionIfMisconfigured()
 	{
-		$db   = new Fake_BrokenConnection;
-		$code = null;
-
-		try {
-			$db->query('SELECT * FROM test');
-		} catch (DatabaseException $e) {
-			$code = $e->getCode();
-		}
-
-		$this->assertEquals(DatabaseException::CONNECTION_FAILED, $code);
+		$db = new Fake_BrokenConnection;
+		$db->query('SELECT * FROM test');
 	}
 
 }
