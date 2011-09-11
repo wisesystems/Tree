@@ -33,6 +33,12 @@ class PageTest extends PHPUnit_Framework_Testcase {
 		$this->page = new Fake_Page;
 	}
 
+	/**
+	 * Verifies that calling addJavascriptDependency adds the file to the list
+	 * 
+	 * @covers \Tree\Component\Page::addJavascriptDependency
+	 * @covers \Tree\Component\Page::getJavascriptDependencies
+	 */
 	public function testAddJavascriptDependencyAddsJavascriptDependency()
 	{
 		$this->page->addJavascriptDependency('example.js');
@@ -43,6 +49,12 @@ class PageTest extends PHPUnit_Framework_Testcase {
 		$this->assertEquals($expected, $actual);
 	}
 
+	/**
+	 * Verifies that calling addStylesheetDependency adds the file to the list
+	 * 
+	 * @covers \Tree\Component\Page::addStylsheetDependency
+	 * @covers \Tree\Component\Page::getStylesheetDependencies
+	 */
 	public function testAddStylesheetDependencyAddsStylesheetDependency()
 	{
 		$this->page->addStylesheetDependency('example.css');
