@@ -36,7 +36,7 @@ class TemplateException extends Exception {
 	const MISSING_TEMPLATE_FILENAME = 3;
 
 	/**
-	 * The template file could not be found in the include_path
+	 * The template file could not be found
 	 */
 	const TEMPLATE_NOT_FOUND = 4;
 
@@ -44,6 +44,11 @@ class TemplateException extends Exception {
 	 * The template file could not be read by the PHP process
 	 */
 	const TEMPLATE_NOT_READABLE = 5;
+
+	/**
+	 * No template directory was set, so the template couldn't be loaded
+	 */
+	const TEMPLATE_DIRECTORY_NOT_SET = 6;
 
 	/**
 	 * The instance of \Tree\Component\Template that caused the exception

@@ -30,6 +30,8 @@ class TemplateExceptionTest extends PHPUnit_Framework_TestCase {
 
 	public function setUp()
 	{
+		Template::setTemplateDirectory('/tmp');
+
 		$this->template = new Fake_Template;
 		$this->template->setTemplateFilename('template.php');
 		file_put_contents('/tmp/template.php', 'Content: <?php echo $content; ?>');
@@ -166,6 +168,26 @@ class TemplateExceptionTest extends PHPUnit_Framework_TestCase {
 		}
 
 		$this->assertEquals(TemplateException::TEMPLATE_NOT_READABLE, $code);
+	}
+
+	/**
+	 * Verifies that Template throws an exception if no static template directory
+	 * has been set
+	 */
+	public function testThrowsExceptionIfTemplateDirectoryNotSet()
+	{
+		$code = null;
+
+		Template::setTemplateDirectory(null);
+		$this->template->setInputValue('content', 'example content');
+
+		try {
+			$this->template->getOutput();
+		} catch (TemplateException $e) {
+			$code = $e->getCode();
+		}
+
+		$this->assertEquals(TemplateException::TEMPLATE_DIRECTORY_NOT_SET, $code);
 	}
 
 }

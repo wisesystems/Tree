@@ -280,25 +280,11 @@ abstract class Template implements ArrayAccess {
 				. $this->templateFilename;
 
 			return $absolutePath;
+		} else {
+			$message = 'No template directory set';
+			$code    = TemplateException::TEMPLATE_DIRECTORY_NOT_SET;
+			throw new TemplateException($message, $code);
 		}
-
-		$includePath = get_include_path();
-		$includePath = explode(PATH_SEPARATOR, $includePath);
-
-		foreach ($includePath as $path) {
-
-			$path  = rtrim($path, DIRECTORY_SEPARATOR);
-			$path .= DIRECTORY_SEPARATOR;
-
-			$absolutePath = $path . $this->templateFilename;
-
-			if (file_exists($absolutePath)) {
-				return $absolutePath;
-			}
-
-		}
-
-		return null;
 	}
 
 	/**
@@ -325,7 +311,7 @@ abstract class Template implements ArrayAccess {
 
 		$absolutePath = $this->findAbsolutePath();
 
-		if ($absolutePath === null) {
+		if (!file_exists($absolutePath)) {
 			$message = 'Template file not found';
 			$code    = TemplateException::TEMPLATE_NOT_FOUND;
 			throw new TemplateException($message, $code);

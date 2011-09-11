@@ -27,23 +27,18 @@ use \Tree\Exception\TemplateException;
 class TemplateTest extends PHPUnit_Framework_TestCase {
 
 	private $template;
-	private $includePath;
 
 	public function setUp()
 	{
+		Template::setTemplateDirectory('/tmp');
 		$this->template = new Fake_Template;
 		$this->template->setTemplateFilename('template.php');
 		file_put_contents('/tmp/template.php', 'Content: <?php echo $content; ?>');
-		
-		$this->includePath = get_include_path();
-
-		set_include_path($this->includePath . PATH_SEPARATOR . '/tmp');
-
 	}
 
 	public function tearDown()
 	{
-		set_include_path($this->includePath);
+		Template::setTemplateDirectory(null);
 		unlink('/tmp/template.php');
 	}
 
@@ -115,10 +110,6 @@ class TemplateTest extends PHPUnit_Framework_TestCase {
 	public function testFindsTemplateFileFromAbsolutePath()
 	{
 		$this->template->setInputValue('content', 'example content');
-
-		// takes /tmp back out of include_path so that getOutput will throw an
-		// exception when it can't find the file from its relative path
-		set_include_path($this->includePath);
 
 		Template::setTemplateDirectory('/tmp');
 		$this->template->setTemplateFilename('template.php');
