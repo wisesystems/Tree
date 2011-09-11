@@ -148,7 +148,7 @@ abstract class Template implements ArrayAccess {
 		if (!$this->isPermissibleValue($name)) {
 			$message = "Invalid template value: {$name}";
 			$code    = TemplateException::INVALID_VALUE_NAME;
-			throw new TemplateException($message, $code);
+			throw new TemplateException($message, $code, $this);
 		}
 
 		$this->inputValues[$name] = $value;
@@ -165,7 +165,7 @@ abstract class Template implements ArrayAccess {
 		if (!$this->isPermissibleValue($name)) {
 			$message = "Invalid template value: {$name}";
 			$code    = TemplateException::INVALID_VALUE_NAME;
-			throw new TemplateException($message, $code);
+			throw new TemplateException($message, $code, $this);
 		}
 
 		if (isset($this->inputValues[$name])) {
@@ -283,7 +283,7 @@ abstract class Template implements ArrayAccess {
 		} else {
 			$message = 'No template directory set';
 			$code    = TemplateException::TEMPLATE_DIRECTORY_NOT_SET;
-			throw new TemplateException($message, $code);
+			throw new TemplateException($message, $code, $this);
 		}
 	}
 
@@ -306,7 +306,7 @@ abstract class Template implements ArrayAccess {
 		if ($this->templateFilename === null) {
 			$message = 'No template file specified';
 			$code    = TemplateException::MISSING_TEMPLATE_FILENAME;
-			throw new TemplateException($message, $code);
+			throw new TemplateException($message, $code, $this);
 		}
 
 		$absolutePath = $this->findAbsolutePath();
@@ -314,13 +314,13 @@ abstract class Template implements ArrayAccess {
 		if (!file_exists($absolutePath)) {
 			$message = 'Template file not found';
 			$code    = TemplateException::TEMPLATE_NOT_FOUND;
-			throw new TemplateException($message, $code);
+			throw new TemplateException($message, $code, $this);
 		}
 
 		if (!is_readable($absolutePath)) {
 			$message = "Template not readable";
 			$code    = TemplateException::TEMPLATE_NOT_READABLE;
-			throw new TemplateException($message, $code);
+			throw new TemplateException($message, $code, $this);
 		}
 
 		$missingValues = $this->getMissingValues();
@@ -328,7 +328,7 @@ abstract class Template implements ArrayAccess {
 		if (!empty($missingValues)) {
 			$message = "Missing template values: {$missingValues}";
 			$code    = TemplateException::MISSING_REQUIRED_VARIABLE;
-			throw new TemplateException($message, $code);
+			throw new TemplateException($message, $code, $this);
 		}
 
 		extract(self::$globalValues);
