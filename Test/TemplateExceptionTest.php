@@ -140,8 +140,8 @@ class TemplateExceptionTest extends PHPUnit_Framework_TestCase {
 	 * Verifies that Template throws an exception if no static template directory
 	 * has been set
 	 * 
-	 * @covers                \Tree\Template::getOutput
-	 * @covers                \Tree\Template::generateOutput
+	 * @covers                \Tree\Component\Template::getOutput
+	 * @covers                \Tree\Component\Template::generateOutput
 	 * @expectedException     \Tree\Exception\TemplateException
 	 * @expectedExceptionCode \Tree\Exception\TemplateException::TEMPLATE_DIRECTORY_NOT_SET
 	 */
