@@ -26,7 +26,6 @@ use \Tree\Exception\TemplateException;
 class TemplateExceptionTest extends PHPUnit_Framework_TestCase {
 
 	private $template;
-	private $includePath;
 
 	public function setUp()
 	{
@@ -35,16 +34,10 @@ class TemplateExceptionTest extends PHPUnit_Framework_TestCase {
 		$this->template = new Fake_Template;
 		$this->template->setTemplateFilename('template.php');
 		file_put_contents('/tmp/template.php', 'Content: <?php echo $content; ?>');
-		
-		$this->includePath = get_include_path();
-
-		set_include_path($this->includePath . PATH_SEPARATOR . '/tmp');
-
 	}
 
 	public function tearDown()
 	{
-		set_include_path($this->includePath);
 		unlink('/tmp/template.php');
 	}
 
@@ -56,19 +49,17 @@ class TemplateExceptionTest extends PHPUnit_Framework_TestCase {
 	public function testThrowsExceptionIfValuesMissing()
 	{
 		$code = null;
+		$tpl  = null;
 
-		$includePath = get_include_path();
-
-		set_include_path('/tmp');
 		try {
 			$this->template->getOutput();
 		} catch (TemplateException $e) {
 			$code = $e->getCode();
+			$tpl  = $e->getTemplate();
 		}
 
-		set_include_path($includePath);
-
 		$this->assertEquals(TemplateException::MISSING_REQUIRED_VARIABLE, $code);
+		$this->assertTrue($tpl instanceof Fake_Template);
 	}
 
 	/**
@@ -79,14 +70,17 @@ class TemplateExceptionTest extends PHPUnit_Framework_TestCase {
 	public function testThrowsExceptionIfSettingInvalidValue()
 	{
 		$code = null;
+		$tpl  = null;
 
 		try {
 			$this->template->setInputValue('asdfgh', '12345');
 		} catch (TemplateException $e) {
 			$code = $e->getCode();
+			$tpl  = $e->getTemplate();
 		}
 
 		$this->assertEquals(TemplateException::INVALID_VALUE_NAME, $code);
+		$this->assertTrue($tpl instanceof Fake_Template);
 	}
 
 	/**
@@ -97,14 +91,17 @@ class TemplateExceptionTest extends PHPUnit_Framework_TestCase {
 	public function testThrowsExceptionIfUnsettingInvalidValue()
 	{
 		$code = null;
+		$tpl  = null;
 
 		try {
 			$this->template->unsetInputValue('asdfgh', '12345');
 		} catch (TemplateException $e) {
 			$code = $e->getCode();
+			$tpl  = $e->getTemplate();
 		}
 
 		$this->assertEquals(TemplateException::INVALID_VALUE_NAME, $code);
+		$this->assertTrue($tpl instanceof Fake_Template);
 	}
 
 	/**
@@ -115,25 +112,28 @@ class TemplateExceptionTest extends PHPUnit_Framework_TestCase {
 	public function testThrowsExceptionIfFilenameMissing()
 	{
 		$code = null;
+		$tpl  = null;
 
 		try {
 			$this->template->setTemplateFilename(null);
 			$this->template->getOutput();
 		} catch (TemplateException $e) {
 			$code = $e->getCode();
+			$tpl  = $e->getTemplate();
 		}
 
 		$this->assertEquals(TemplateException::MISSING_TEMPLATE_FILENAME, $code);
+		$this->assertTrue($tpl instanceof Fake_Template);
 	}
 
 	/**
 	 * Verifies that Template throws the right kind of TemplateException if an
 	 * attempt is made to generate output but the template file cannot be found
-	 * in the include_path
 	 */
 	public function testThrowsExceptionIfTemplateFileNotFound()
 	{
 		$code = null;
+		$tpl  = null;
 
 		$this->template->setInputValue('content', 'example content');
 		$this->template->setTemplateFilename('incorrect-filename.php');
@@ -142,9 +142,11 @@ class TemplateExceptionTest extends PHPUnit_Framework_TestCase {
 			$this->template->getOutput();
 		} catch (TemplateException $e) {
 			$code = $e->getCode();
+			$tpl  = $e->getTemplate();
 		}
 
 		$this->template->setTemplateFilename('template.php');
+		$this->assertTrue($tpl instanceof Fake_Template);
 
 		$this->assertEquals(TemplateException::TEMPLATE_NOT_FOUND, $code);
 	}
@@ -157,6 +159,7 @@ class TemplateExceptionTest extends PHPUnit_Framework_TestCase {
 	public function testThrowsExceptionIfTemplateFileNotReadable()
 	{
 		$code = null;
+		$tpl  = null;
 
 		$this->template->setInputValue('content', 'example content');
 		chmod('/tmp/template.php', 0220);
@@ -165,9 +168,11 @@ class TemplateExceptionTest extends PHPUnit_Framework_TestCase {
 			$this->template->getOutput();
 		} catch (TemplateException $e) {
 			$code = $e->getCode();
+			$tpl  = $e->getTemplate();
 		}
 
 		$this->assertEquals(TemplateException::TEMPLATE_NOT_READABLE, $code);
+		$this->assertTrue($tpl instanceof Fake_Template);
 	}
 
 	/**
@@ -177,6 +182,7 @@ class TemplateExceptionTest extends PHPUnit_Framework_TestCase {
 	public function testThrowsExceptionIfTemplateDirectoryNotSet()
 	{
 		$code = null;
+		$tpl  = null;
 
 		Template::setTemplateDirectory(null);
 		$this->template->setInputValue('content', 'example content');
@@ -185,9 +191,11 @@ class TemplateExceptionTest extends PHPUnit_Framework_TestCase {
 			$this->template->getOutput();
 		} catch (TemplateException $e) {
 			$code = $e->getCode();
+			$tpl  = $e->getTemplate();
 		}
 
 		$this->assertEquals(TemplateException::TEMPLATE_DIRECTORY_NOT_SET, $code);
+		$this->assertTrue($tpl instanceof Fake_Template);
 	}
 
 }
