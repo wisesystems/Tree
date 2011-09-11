@@ -53,9 +53,9 @@ class ConfigurationExceptionTest extends PHPUnit_Framework_TestCase {
 	 * Verifies that Configuration throws the right ConfigurationException if it
 	 * can't find the ini file
 	 *
-	 * @covers                \Tree\Configuration::getAbsolutePath
-	 * @covers                \Tree\Configuration::findAbsolutePath
-	 * @covers                \Tree\Configuration::parseIniFile
+	 * @covers                \Tree\Framework\Configuration::getAbsolutePath
+	 * @covers                \Tree\Framework\Configuration::findAbsolutePath
+	 * @covers                \Tree\Framework\Configuration::parseIniFile
 	 * @expectedException     \Tree\Exception\ConfigurationException
 	 * @expectedExceptionCode \Tree\Exception\ConfigurationException::FILE_NOT_FOUND
 	 */
@@ -69,7 +69,7 @@ class ConfigurationExceptionTest extends PHPUnit_Framework_TestCase {
 	 * Verifies that Configuration throws the right ConfigurationException if it
 	 * can't read the contents of the ini file
 	 * 
-	 * @covers                \Tree\Configuration::parseIniFile
+	 * @covers                \Tree\Framework\Configuration::parseIniFile
 	 * @expectedException     \Tree\Exception\ConfigurationException
 	 * @expectedExceptionCode \Tree\Exception\ConfigurationException::FILE_NOT_READABLE
 	 */
@@ -86,7 +86,7 @@ class ConfigurationExceptionTest extends PHPUnit_Framework_TestCase {
 	 * Verifies that Configuration throws the right ConfigurationException if it
 	 * can't parse the contents of the ini file
 	 * 
-	 * @covers                \Tree\Configuration::parseIniFile
+	 * @covers                \Tree\Framework\Configuration::parseIniFile
 	 * @expectedException     \Tree\Exception\ConfigurationException
 	 * @expectedExceptionCode \Tree\Exception\ConfigurationException::FILE_NOT_PARSEABLE
 	 */
