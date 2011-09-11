@@ -54,6 +54,8 @@ class AutoloaderTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * Tests Autoloader::translateClassName for PSR-0 compliance. 
+	 *
+	 * @covers \Tree\Framework\Autoloader::translateClassName
 	 */
 	public function testTranslatesClassNames()
 	{
@@ -85,6 +87,8 @@ class AutoloaderTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Verifies that Autoloader can tell when it's the last autoloader in the
 	 * autoload stack
+	 *
+	 * @covers \Tree\Framework\Autoloader::isLastAutoloader
 	 */
 	public function testKnowsIfLastAutoloader()
 	{
@@ -97,6 +101,8 @@ class AutoloaderTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Verifies that Autoloader can tell when it's not the last autoloader in the
 	 * autoload stack
+	 *
+	 * @covers \Tree\Framework\Autoloader::isLastAutoloader
 	 */
 	public function testKnowsIfNotLastAutoloader()
 	{
@@ -113,6 +119,8 @@ class AutoloaderTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Verifies that Autoloader actually manages to load a class given known valid
 	 * circumstances
+	 *
+	 * @covers \Tree\Framework\Autoloader::autoloadClass
 	 */
 	public function testLoadsValidClass()
 	{

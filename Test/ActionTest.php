@@ -34,6 +34,10 @@ class ActionTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Tests that setInputValue() stores values according the filtering
 	 * rules set using setInputFilter()
+	 *
+	 * @covers \Tree\Component\Action::setInputFilter
+	 * @covers \Tree\Component\Action::setInputValue
+	 * @covers \Tree\Component\Action::getInputValue
 	 */
 	public function testSetInputValueFiltersValue()
 	{
@@ -49,6 +53,8 @@ class ActionTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Tests that performAction() correctly passes any input values that
 	 * have been received through to the main() method
+	 *
+	 * @covers \Tree\Component\Action::performAction
 	 */
 	public function testPerformActionPassesInputToMain()
 	{

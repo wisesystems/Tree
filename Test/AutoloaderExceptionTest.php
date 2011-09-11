@@ -63,6 +63,8 @@ class AutoloaderExceptionTest extends PHPUnit_Framework_TestCase {
 	 * Verifies that Autoloader throws the right AutoloaderException if it can't
 	 * read the file once it's found it
 	 * 
+	 * @covers                \Tree\Framework\Autoloader::autoloadClass
+	 * @covers                \Tree\Framework\Autoloader::loadClassFromFile
 	 * @expectedException     \Tree\Exception\AutoloaderException
 	 * @expectedExceptionCode \Tree\Exception\AutoloaderException::FILE_NOT_READABLE
 	 */
@@ -77,6 +79,8 @@ class AutoloaderExceptionTest extends PHPUnit_Framework_TestCase {
 	 * Verifies that Autoloader throws the right AutoloaderException if it can't
 	 * find the file in the include_path
 	 * 
+	 * @covers                \Tree\Framework\Autoloader::autoloadClass
+	 * @covers                \Tree\Framework\Autoloader::loadClassFromFile
 	 * @expectedException     \Tree\Exception\AutoloaderException
 	 * @expectedExceptionCode \Tree\Exception\AutoloaderException::FILE_NOT_FOUND
 	 */
@@ -89,6 +93,8 @@ class AutoloaderExceptionTest extends PHPUnit_Framework_TestCase {
 	 * Verifies that Autoloader throws the right AutoloaderException if the file
 	 * it finds doesn't actually contain the class that it should
 	 * 
+	 * @covers                \Tree\Framework\Autoloader::autoloadClass
+	 * @covers                \Tree\Framework\Autoloader::loadClassFromFile
 	 * @expectedException     \Tree\Exception\AutoloaderException
 	 * @expectedExceptionCode \Tree\Exception\AutoloaderException::CLASS_NOT_FOUND
 	 */
