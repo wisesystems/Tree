@@ -87,7 +87,7 @@ class QuerySelectTest extends PHPUnit_Framework_TestCase {
 	 * @covers \Tree\Database\Query_Select::from
 	 * @covers \Tree\Database\Query_Select::orderBy
 	 * @covers \Tree\Database\Query_Select::getSql
-	 * @covers \Tree\Database\Query_Select::getOrderExpression
+	 * @covers \Tree\Database\Query_Select::getOrderExpressions
 	 */
 	public function testOrderBy()
 	{
