@@ -32,7 +32,7 @@ class DatabaseExceptionTest extends PHPUnit_Framework_TestCase {
 	 * Verifies that Database throws an exception if being used when the
 	 * connection has failed to open
 	 *
-	 * @covers            \Tree\Exception\DatabaseException::requireConnection
+	 * @covers            \Tree\Database\Database::requireConnection
 	 * @expectedException \Tree\Exception\DatabaseException
 	 * @expectedException \Tree\Exception\DatabaseException::CONNECTION_FAILED
 	 */
