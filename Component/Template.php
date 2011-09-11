@@ -21,10 +21,11 @@
 
 namespace Tree\Component;
 
+use \ArrayAccess;
 use \Tree\Behaviour\PreTemplateDisplayLogic;
 use \Tree\Exception\TemplateException;
 
-abstract class Template {
+abstract class Template implements ArrayAccess {
 
 	/**
 	 * An associative array mapping names of optional input values to
@@ -154,6 +155,26 @@ abstract class Template {
 	}
 
 	/**
+	 * Removes an input value from the template
+	 * 
+	 * @access public
+	 * @param  string $name  The name of the value to unset
+	 */
+	public function unsetInputValue($name)
+	{
+		if (!$this->isPermissibleValue($name)) {
+			$message = "Invalid template value: {$name}";
+			$code    = TemplateException::INVALID_VALUE_NAME;
+			throw new TemplateException($message, $code);
+		}
+
+		if (isset($this->inputValues[$name])) {
+			unset($this->inputValues[$name]);
+		}
+	}
+
+
+	/**
 	 * Sets the name of the template file to use when generating output 
 	 *
 	 * The filename given should either be a file in PHP's include_path or
@@ -191,6 +212,53 @@ abstract class Template {
 	public static function setTemplateDirectory($directory)
 	{
 		self::$templateDirectory = $directory;
+	}
+
+	/**
+	 * ArrayAccess: Indicates whether the given template input value has been set
+	 * 
+	 * @access public
+	 * @param  string $offset 
+	 * @return boolean
+	 */
+	public function offsetExists($offset)
+	{
+		return isset($this->inputValues[$offset]);
+	}
+
+	/**
+	 * ArrayAccess: Returns the template input value of the given name
+	 * 
+	 * @access public
+	 * @param  string $offset 
+	 * @return mixed
+	 */
+	public function offsetGet($offset)
+	{
+		return $this->getInputValue($offset);
+	}
+
+	/**
+	 * ArrayAccess: Stores the given template input value
+	 * 
+	 * @access public
+	 * @param  string $offset  The name of the value to store
+	 * @param  mixed  $value   The value itself
+	 */
+	public function offsetSet($offset, $value)
+	{
+		$this->setInputValue($offset, $value);
+	}
+
+	/**
+	 * ArrayAccess: Removes the given template input value
+	 * 
+	 * @access public
+	 * @param  string $offset 
+	 */
+	public function offsetUnset($offset)
+	{
+		$this->unsetInputValue($offset);
 	}
 
 	/**

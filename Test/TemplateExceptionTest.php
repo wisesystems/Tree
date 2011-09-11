@@ -74,12 +74,30 @@ class TemplateExceptionTest extends PHPUnit_Framework_TestCase {
 	 * attempt is made to set an input value that is not in the list of acceptable
 	 * input values
 	 */
-	public function testThrowsExceptionIfGivenInvalidValue()
+	public function testThrowsExceptionIfSettingInvalidValue()
 	{
 		$code = null;
 
 		try {
 			$this->template->setInputValue('asdfgh', '12345');
+		} catch (TemplateException $e) {
+			$code = $e->getCode();
+		}
+
+		$this->assertEquals(TemplateException::INVALID_VALUE_NAME, $code);
+	}
+
+	/**
+	 * Verifies that Template throws the right kind of TemplateException if an
+	 * attempt is made to unset an input value that is not in the list of acceptable
+	 * input values
+	 */
+	public function testThrowsExceptionIfUnsettingInvalidValue()
+	{
+		$code = null;
+
+		try {
+			$this->template->unsetInputValue('asdfgh', '12345');
 		} catch (TemplateException $e) {
 			$code = $e->getCode();
 		}

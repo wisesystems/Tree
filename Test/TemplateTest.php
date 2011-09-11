@@ -77,6 +77,21 @@ class TemplateTest extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
+	 * Verifies that calling unsetInputValue() on a valid value causes that value
+	 * to be removed from the template
+	 */
+	public function testUnsetInputValueRemovesValue()
+	{
+		$this->template->setInputValue('content', '12345');
+
+		$this->assertEquals('12345', $this->template->getInputValue('content'));
+
+		$this->template->unsetInputValue('content');
+
+		$this->assertEquals(null, $this->template->getInputValue('content'));
+	}
+
+	/**
 	 * Verifies that passing a name-value pair to Template::setGlobalValue causes
 	 * that variable to be available in a Template subclass even if not explicitly
 	 * set on that individual object
@@ -110,6 +125,28 @@ class TemplateTest extends PHPUnit_Framework_TestCase {
 
 		$output = $this->template->getOutput();
 		$this->assertEquals('Content: example content', $output);
+	}
+
+	/**
+	 * Verifies that the ArrayAccess implementation sets, unsets and checks values
+	 * correctly
+	 */
+	public function testArrayAccess()
+	{
+		$this->assertFalse(isset($this->template['content']));
+		$this->assertEquals(null, $this->template['content']);
+
+		$this->template['content'] = 'example content 2';
+
+		$this->assertTrue(isset($this->template['content']));
+		$this->assertEquals('example content 2', $this->template->getInputValue('content'));
+		$this->assertEquals('example content 2', $this->template['content']);
+
+		unset($this->template['content']);
+
+		$this->assertFalse(isset($this->template['content']));
+		$this->assertEquals(null, $this->template['content']);
+
 	}
 
 }
