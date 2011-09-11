@@ -36,6 +36,11 @@ class QueryPredicateTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Verifies that a simple list of parameter-less conditions is generated
 	 * correctly
+	 *
+	 * @covers \Tree\Database\Query_Predicate::__construct
+	 * @covers \Tree\Database\Query_Predicate::andPredicate
+	 * @covers \Tree\Database\Query_Predicate::orPredicate
+	 * @covers \Tree\Database\Query_Predicate::getSql
 	 */
 	public function testBasicPredicateList()
 	{
@@ -51,6 +56,12 @@ class QueryPredicateTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * Verifies that parameters are handled and escaped properly
+	 *
+	 * @covers \Tree\Database\Query_Predicate::__construct
+	 * @covers \Tree\Database\Query_Predicate::andPredicate
+	 * @covers \Tree\Database\Query_Predicate::orPredicate
+	 * @covers \Tree\Database\Query_Predicate::getSql
+	 * @covers \Tree\Database\Query_Predicate::formatValue
 	 */
 	public function testStatementParameters()
 	{
