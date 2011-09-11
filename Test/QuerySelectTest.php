@@ -43,7 +43,7 @@ class QuerySelectTest extends PHPUnit_Framework_TestCase {
 	 * @covers \Tree\Database\Query_Select::addColumn
 	 * @covers \Tree\Database\Query_Select::from
 	 * @covers \Tree\Database\Query_Select::getSql
-	 * @covers \Tree\Database\Query_Select::getColumnExpression
+	 * @covers \Tree\Database\Query_Select::getColumnExpressions
 	 * @covers \Tree\Database\Query_Select::getFromClause
 	 */
 	public function testBasicSelectQuery()
