@@ -9,4 +9,13 @@
 	strict="true"
 	syntaxCheck="false"
 	verbose="true">
+
+	<testsuites>
+
+		<testsuite name="DatabaseQuery">
+			<file>DatabaseQuery/QueryUpdateTest.php</file>
+		</testsuite>
+
+	</testsuites>
+
 </phpunit>

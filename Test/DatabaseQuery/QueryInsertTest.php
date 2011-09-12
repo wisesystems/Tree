@@ -1,6 +1,6 @@
 <?php
 
-namespace Tree\Test;
+namespace Tree\Test\DatabaseQuery;
 
 require_once '../Database/Connection.php';
 require_once '../Database/Query.php';
