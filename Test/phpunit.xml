@@ -12,11 +12,46 @@
 
 	<testsuites>
 
+		<testsuite name="Component">
+			<file>Component/ActionTest.php</file>
+			<file>Component/PageTest.php</file>
+			<file>Component/TemplateTest.php</file>
+		</testsuite>
+
 		<testsuite name="DatabaseQuery">
 			<file>DatabaseQuery/QueryUpdateTest.php</file>
 			<file>DatabaseQuery/QueryInsertTest.php</file>
+			<file>DatabaseQuery/QueryJoinTest.php</file>
+			<file>DatabaseQuery/QueryPredicateTest.php</file>
 			<file>DatabaseQuery/QueryReplaceTest.php</file>
 			<file>DatabaseQuery/QuerySelectTest.php</file>
+			<file>DatabaseQuery/QueryUpdateTest.php</file>
+		</testsuite>
+
+		<testsuite name="Exceptions">
+			<file>Exceptions/AutoloaderExceptionTest.php</file>
+			<file>Exceptions/ConfigurationExceptionTest.php</file>
+			<file>Exceptions/DatabaseExceptionTest.php</file>
+			<file>Exceptions/EntityExceptionTest.php</file>
+			<file>Exceptions/SearchExceptionTest.php</file>
+			<file>Exceptions/TemplateExceptionTest.php</file>
+		</testsuite>
+
+		<testsuite name="Framework">
+			<file>Framework/AutoloaderTest.php</file>
+			<file>Framework/ConfigurationTest.php</file>
+			<file>Framework/RouterTest.php</file>
+			<file>Framework/TreeTest.php</file>
+		</testsuite>
+
+		<testsuite name="Orm">
+			<file>Orm/EntityDatabaseTest.php</file>
+			<file>Orm/EntityRelationshipTest.php</file>
+			<file>Orm/EntityStateTest.php</file>
+			<file>Orm/EntityTest.php</file>
+			<file>Orm/ResultTest.php</file>
+			<file>Orm/SearchRelatedEntityTest.php</file>
+			<file>Orm/SearchSingleEntityTest.php</file>
 		</testsuite>
 
 	</testsuites>
