@@ -1,14 +1,15 @@
 <?php
 
-namespace Tree\Test;
+namespace Tree\Test\Orm;
 
 require_once 'PHPUnit/Framework/TestCase.php';
 require_once '../Exception/EntityException.php';
 require_once '../Orm/Entity.php';
 require_once 'Fake/Entity.php';
 
-use \Tree\Orm\Entity;
 use \PHPUnit_Framework_TestCase;
+use \Tree\Orm\Entity;
+use \Tree\Test\Fake_Entity;
 
 /**
  * EntityStateTest 

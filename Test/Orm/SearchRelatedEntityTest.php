@@ -17,6 +17,10 @@ require_once 'Fake/Connection.php';
 use \Tree\Database\Query_Select;
 use \Tree\Orm\Entity;
 use \Tree\Orm\Search;
+use \Tree\Test\Fake_EntityParent;
+use \Tree\Test\Fake_EntityChild;
+use \Tree\Test\Fake_Search;
+use \Tree\Test\Fake_Connection;
 use \PHPUnit_Framework_TestCase;
 
 /**

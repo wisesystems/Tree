@@ -1,6 +1,6 @@
 <?php
 
-namespace Tree\Test;
+namespace Tree\Test\Orm;
 
 require_once 'PHPUnit/Extensions/Database/TestCase.php';
 require_once 'PHPUnit/Extensions/Database/DataSet/QueryDataSet.php';
@@ -19,6 +19,7 @@ require_once 'Fake/Entity.php';
 use \Tree\Database\Connection_Pdo;
 use \Tree\Exception\EntityException;
 use \Tree\Orm\Entity;
+use \Tree\Test\Fake_Entity;
 use \PHPUnit_Framework_TestCase;
 use \PHPUnit_Extensions_Database_TestCase;
 use \PHPUnit_Extensions_Database_DataSet_QueryDataSet;

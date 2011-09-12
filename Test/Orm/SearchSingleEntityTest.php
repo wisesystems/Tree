@@ -17,6 +17,9 @@ use \Tree\Database\Query_Select;
 use \Tree\Orm\Entity;
 use \Tree\Orm\Search;
 use \Tree\Orm\Result;
+use \Tree\Test\Fake_Entity;
+use \Tree\Test\Fake_Search;
+use \Tree\Test\Fake_Connection;
 use \PHPUnit_Framework_TestCase;
 
 /**

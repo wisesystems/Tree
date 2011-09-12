@@ -4,8 +4,11 @@ namespace Tree\Test;
 
 require_once '../Orm/Result.php';
 require_once 'Fake/Entity.php';
+require_once 'Fake/ResultForResultTest.php';
 
 use \Tree\Orm\Result;
+use \Tree\Test\Fake_Entity;
+use \Tree\Test\Fake_ResultForResultTest;
 use \PHPUnit_Framework_TestCase;
 
 /**

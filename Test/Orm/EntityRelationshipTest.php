@@ -1,6 +1,6 @@
 <?php
 
-namespace Tree\Test;
+namespace Tree\Test\Orm;
 
 require_once '../Database/Connection.php';
 require_once '../Database/Connection/Pdo.php';
@@ -22,6 +22,11 @@ require_once 'PHPUnit/Framework/TestCase.php';
 
 use \PHPUnit_Framework_TestCase;
 use \Tree\Orm\Entity;
+use \Tree\Test\Fake_Entity;
+use \Tree\Test\Fake_EntityParent;
+use \Tree\Test\Fake_EntityChild;
+use \Tree\Test\Fake_Result;
+use \Tree\Test\Spy_Connection;
 
 /**
  * EntityRelationshipTest
