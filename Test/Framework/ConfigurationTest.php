@@ -1,6 +1,6 @@
 <?php
 
-namespace Tree\Test;
+namespace Tree\Test\Framework;
 
 require_once '../Exception/ConfigurationException.php';
 require_once '../Framework/Configuration.php';
