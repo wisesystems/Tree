@@ -26,10 +26,14 @@ class TestSuite extends PHPUnit_Framework_TestSuite {
 	{
 		$suite = new PHPUnit_Framework_TestSuite('PHPUnit Framework');
 
+		$suite->addTestSuite('\Tree\Test\Component\ActionTest');
+		$suite->addTestSuite('\Tree\Test\Component\PageTest');
+		$suite->addTestSuite('\Tree\Test\Component\TemplateTest');
 
 		return $suite;
 	}
 
 }
+
 
 
