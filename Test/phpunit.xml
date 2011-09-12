@@ -14,6 +14,9 @@
 
 		<testsuite name="DatabaseQuery">
 			<file>DatabaseQuery/QueryUpdateTest.php</file>
+			<file>DatabaseQuery/QueryInsertTest.php</file>
+			<file>DatabaseQuery/QueryReplaceTest.php</file>
+			<file>DatabaseQuery/QuerySelectTest.php</file>
 		</testsuite>
 
 	</testsuites>

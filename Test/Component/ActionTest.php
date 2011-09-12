@@ -8,7 +8,7 @@ require_once 'Fake/Action.php';
 
 use \PHPUnit_Framework_TestCase;
 use \Tree\Component\Action;
-use \Tree\Test\Fake_Action as FakeAction;
+use \Tree\Test\Fake_Action;
 
 /**
  * ActionTest 
@@ -29,7 +29,7 @@ class ActionTest extends PHPUnit_Framework_TestCase {
 
 	public function setUp()
 	{
-		$this->action = new FakeAction;
+		$this->action = new Fake_Action;
 	}
 
 	/**

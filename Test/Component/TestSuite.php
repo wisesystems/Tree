@@ -20,7 +20,7 @@ use \PHPUnit_Framework_TestSuite;
  * @license    GPLv2.0
  * @version    0.00
  */
-class TestSuite {
+class TestSuite extends PHPUnit_Framework_TestSuite {
 
 	public static function suite()
 	{
@@ -31,6 +31,5 @@ class TestSuite {
 	}
 
 }
-
 
 
