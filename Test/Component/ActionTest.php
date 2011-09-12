@@ -1,13 +1,14 @@
 <?php
 
-namespace Tree\Test;
+namespace Tree\Test\Component;
 
 require_once '../Component/Action.php';
 require_once '../Behaviour/Http200Handler.php';
 require_once 'Fake/Action.php';
 
-use \Tree\Component\Action;
 use \PHPUnit_Framework_TestCase;
+use \Tree\Component\Action;
+use \Tree\Test\Fake_Action as FakeAction;
 
 /**
  * ActionTest 
@@ -28,7 +29,7 @@ class ActionTest extends PHPUnit_Framework_TestCase {
 
 	public function setUp()
 	{
-		$this->action = new Fake_Action;
+		$this->action = new FakeAction;
 	}
 
 	/**

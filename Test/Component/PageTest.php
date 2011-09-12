@@ -1,6 +1,6 @@
 <?php
 
-namespace Tree\Test;
+namespace Tree\Test\Component;
 
 require '../Response/Response.php';
 require '../Response/Response/Html.php';
@@ -9,6 +9,7 @@ require_once 'Fake/Page.php';
 
 use \PHPUnit_Framework_Testcase;
 use \Tree\Component\Page;
+use \Tree\Test\Fake_Page as FakePage;
 
 /**
  * PageTest 
@@ -30,7 +31,7 @@ class PageTest extends PHPUnit_Framework_Testcase {
 
 	public function setUp()
 	{
-		$this->page = new Fake_Page;
+		$this->page = new FakePage;
 	}
 
 	/**

@@ -3,8 +3,11 @@
 namespace Tree\Test;
 
 require_once 'DatabaseQuery/TestSuite.php';
+require_once 'DatabaseQuery/TestSuite.php';
+require_once 'Component/TestSuite.php';
 
 use \PHPUnit_Framework_TestSuite;
+use \Tree\Test\Component\TestSuite     as Component;
 use \Tree\Test\DatabaseQuery\TestSuite as DatabaseQuery;
 
 /**
@@ -25,6 +28,7 @@ class TestSuite
 	{
 		$suite = new PHPUnit_Framework_TestSuite('PHPUnit');
 
+		$suite->addTest(Component::suite());
 		$suite->addTest(DatabaseQuery::suite());
 
 		return $suite;

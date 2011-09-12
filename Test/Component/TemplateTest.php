@@ -1,6 +1,6 @@
 <?php
 
-namespace Tree\Test;
+namespace Tree\Test\Component;
 
 require_once '../Component/Template.php';
 require_once '../Exception/TemplateException.php';
@@ -9,6 +9,7 @@ require_once 'Fake/Template.php';
 use \PHPUnit_Framework_TestCase;
 use \Tree\Component\Template;
 use \Tree\Exception\TemplateException;
+use \Tree\Test\Fake_Template as FakeTemplate;
 
 /**
  * TemplateTest
@@ -31,7 +32,7 @@ class TemplateTest extends PHPUnit_Framework_TestCase {
 	public function setUp()
 	{
 		Template::setTemplateDirectory('/tmp');
-		$this->template = new Fake_Template;
+		$this->template = new FakeTemplate;
 		$this->template->setTemplateFilename('template.php');
 		file_put_contents('/tmp/template.php', 'Content: <?php echo $content; ?>');
 	}
