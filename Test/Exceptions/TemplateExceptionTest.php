@@ -1,6 +1,6 @@
 <?php
 
-namespace Tree\Test;
+namespace Tree\Test\Exceptions;
 
 require_once '../Component/Template.php';
 require_once '../Exception/TemplateException.php';
@@ -9,6 +9,7 @@ require_once 'Fake/Template.php';
 use \PHPUnit_Framework_TestCase;
 use \Tree\Component\Template;
 use \Tree\Exception\TemplateException;
+use \Tree\Test\Fake_Template;
 
 /**
  * TemplateExceptionTest

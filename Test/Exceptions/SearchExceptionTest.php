@@ -1,6 +1,6 @@
 <?php
 
-namespace Tree\Test;
+namespace Tree\Test\Exceptions;
 
 require_once '../Database/Connection.php';
 require_once '../Database/Query.php';
@@ -20,6 +20,11 @@ use \Tree\Database\Query_Select;
 use \Tree\Orm\Entity;
 use \Tree\Orm\Search;
 use \Tree\Exception\SearchException;
+use \Tree\Test\Fake_EntityParent;
+use \Tree\Test\Fake_EntityChild;
+use \Tree\Test\Fake_SearchParent;
+use \Tree\Test\Fake_SearchChild;
+use \Tree\Test\Fake_Connection;
 use \PHPUnit_Framework_TestCase;
 
 /**

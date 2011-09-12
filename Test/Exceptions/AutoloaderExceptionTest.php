@@ -1,6 +1,6 @@
 <?php
 
-namespace Tree\Test;
+namespace Tree\Test\Exceptions;
 
 require_once '../Framework/Autoloader.php';
 require_once '../Exception/AutoloaderException.php';

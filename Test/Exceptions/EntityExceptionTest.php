@@ -1,6 +1,6 @@
 <?php
 
-namespace Tree\Test;
+namespace Tree\Test\Exceptions;
 
 require_once 'PHPUnit/Framework/TestCase.php';
 require_once '../Exception/EntityException.php';
@@ -15,6 +15,9 @@ require_once 'Fake/Connection.php';
 use \Tree\Exception\EntityException;
 use \Tree\Orm\Entity;
 use \PHPUnit_Framework_TestCase;
+use \Tree\Test\Fake_Entity;
+use \Tree\Test\Fake_BrokenNoTableNameEntity;
+use \Tree\Test\Fake_Connection;
 
 /**
  * EntityExceptionTest 

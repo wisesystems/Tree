@@ -1,6 +1,6 @@
 <?php
 
-namespace Tree\Test;
+namespace Tree\Test\Exceptions;
 
 require_once '../Database/Connection.php';
 require_once '../Exception/DatabaseException.php';
