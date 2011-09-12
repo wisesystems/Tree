@@ -39,8 +39,9 @@ class TreeTest extends PHPUnit_Framework_TestCase {
 		$method->setAccessible(true);
 
 		$directory = __DIR__;
-		$directory = dirname($directory);
-		$directory = dirname($directory);
+		$directory = dirname($directory); // Framework
+		$directory = dirname($directory); // Test
+		$directory = dirname($directory); // Tree
 		
 		$includePath = get_include_path();
 
