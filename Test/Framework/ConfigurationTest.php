@@ -25,43 +25,16 @@ use \PHPUnit_Framework_TestCase;
  */
 class ConfigurationTest extends PHPUnit_Framework_TestCase {
 
-	private $relativePath = 'test.ini';
-	private $absolutePath = '/private/tmp/test.ini';
-
-	private $includePath;
+	private $absolutePath = '/tmp/test.ini';
 
 	public function setUp()
 	{
-		$this->includePath = get_include_path();
-
-		set_include_path(
-			$this->includePath
-			. PATH_SEPARATOR
-			. dirname($this->absolutePath)
-		);
-
 		file_put_contents($this->absolutePath, 'test = 1');
 	}
 
 	public function tearDown()
 	{
-		set_include_path($this->includePath);
 		unlink($this->absolutePath);
-	}
-
-	/**
-	 * Verifies that Configuration finds a file's absolute path given known
-	 * conditions
-	 * 
-	 * @covers \Tree\Framework\Configuration::findAbsolutePath
-	 * @covers \Tree\Framework\Configuration::getAbsolutePath
-	 */
-	public function testFindsAbsolutePath()
-	{
-		$config = new Configuration($this->relativePath);
-		$output = $config->getAbsolutePath();
-
-		$this->assertEquals($this->absolutePath, $output);
 	}
 
 	/**
@@ -75,7 +48,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testArrayAccess()
 	{
-		$config = new Configuration($this->relativePath);
+		$config = new Configuration($this->absolutePath);
 
 		$this->assertTrue(isset($config['test']));
 		$this->assertEquals(1, $config['test']);

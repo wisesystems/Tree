@@ -38,14 +38,6 @@ class ConfigurationException extends Exception {
 	const FILE_NOT_PARSEABLE = 2;
 
 	/**
-	 * The relative path to the INI file that caused the exception
-	 * 
-	 * @access private
-	 * @var    string
-	 */
-	private $relativePath;
-
-	/**
 	 * The absolute path to the INI file that caused the exception
 	 * 
 	 * @access private
@@ -57,26 +49,13 @@ class ConfigurationException extends Exception {
 	 * @access public
 	 * @param string  $message  
 	 * @param integer $code 
-	 * @param string  $relative [optional] The relative path of the INI file
 	 * @param string  $absolute [optional] The absolute path of the INI file
 	 */
-	public function __construct($message, $code, $relative = null, $absolute = null)
+	public function __construct($message, $code, $absolute = null)
 	{
 		parent::__construct($message, $code);
 
-		$this->relativePath = $relative;
 		$this->absolutePath = $absolute;
-	}
-
-	/**
-	 * Returns the relative path of the INI file that caused the exception
-	 * 
-	 * @access public
-	 * @return string
-	 */
-	public function getRelativePath()
-	{
-		return $this->relativePath;
 	}
 
 	/**

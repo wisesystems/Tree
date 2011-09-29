@@ -25,27 +25,15 @@ use \PHPUnit_Framework_TestCase;
  */
 class ConfigurationExceptionTest extends PHPUnit_Framework_TestCase {
 
-	private $relativePath = 'test.ini';
 	private $absolutePath = '/private/tmp/test.ini';
-
-	private $includePath;
 
 	public function setUp()
 	{
-		$this->includePath = get_include_path();
-
-		set_include_path(
-			$this->includePath
-			. PATH_SEPARATOR
-			. dirname($this->absolutePath)
-		);
-
 		file_put_contents($this->absolutePath, 'test = 1');
 	}
 
 	public function tearDown()
 	{
-		set_include_path($this->includePath);
 		unlink($this->absolutePath);
 	}
 

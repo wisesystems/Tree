@@ -30,16 +30,6 @@ class Configuration implements ArrayAccess {
 	private $absolutePath;
 
 	/**
-	 * The base filename of the ini file
-	 *
-	 * e.g. 'config.ini'
-	 * 
-	 * @access private
-	 * @var    string
-	 */
-	private $relativePath;
-
-	/**
 	 * An associative array of the values found in the ini file 
 	 * 
 	 * @access private
@@ -49,11 +39,11 @@ class Configuration implements ArrayAccess {
 
 	/**
 	 * @access public
-	 * @param  string $relativePath 
+	 * @param  string $absolutePath 
 	 */
-	public function __construct($relativePath)
+	public function __construct($absolutePath)
 	{
-		$this->relativePath = $relativePath;
+		$this->absolutePath = $absolutePath;
 	}
 
 	/**
@@ -138,35 +128,6 @@ class Configuration implements ArrayAccess {
 	}
 
 	/**
-	 * Scans the include path attempting to find an absolute path matching the
-	 * given relative path
-	 * 
-	 * @access private
-	 * @param  string $relativePath 
-	 * @return string
-	 */
-	private function findAbsolutePath()
-	{
-		$includePath = get_include_path();
-		$includePath = explode(PATH_SEPARATOR, $includePath);
-
-		foreach ($includePath as $path) {
-
-			$path  = rtrim($path, DIRECTORY_SEPARATOR);
-			$path .= DIRECTORY_SEPARATOR;
-
-			$absolutePath = $path . $this->relativePath;
-
-			if (file_exists($absolutePath)) {
-				return $absolutePath;
-			}
-
-		}
-
-		return null;
-	}
-
-	/**
 	 * Parses the ini file and returns its contents as an associative array 
 	 * 
 	 * @access private
@@ -174,20 +135,18 @@ class Configuration implements ArrayAccess {
 	 */
 	private function parseIniFile()
 	{
-		$absolutePath = $this->getAbsolutePath();
-
-		if (is_null($absolutePath)) {
-			$message = "Unable to find {$this->relativePath}";
+		if (!file_exists($this->absolutePath)) {
+			$message = "Unable to find {$this->absolutePath}";
 			$code    = ConfigurationException::FILE_NOT_FOUND;
 
-			throw new ConfigurationException($message, $code, $this->relativePath);
+			throw new ConfigurationException($message, $code, $this->absolutePath);
 		}
 
-		if (!is_readable($absolutePath)) {
+		if (!is_readable($this->absolutePath)) {
 			$message = "Unable to read {$this->absolutePath}";
 			$code    = ConfigurationException::FILE_NOT_READABLE;
 
-			throw new ConfigurationException($message, $code, $this->relativePath, $absolutePath);
+			throw new ConfigurationException($message, $code, $this->absolutePath);
 		}
 
 		// Excuse for using error suppression: parse_ini_file triggers an E_WARNING
@@ -199,7 +158,7 @@ class Configuration implements ArrayAccess {
 			$message = "Unable to parse {$this->absolutePath}";
 			$code    = ConfigurationException::FILE_NOT_PARSEABLE;
 
-			throw new ConfigurationException($message, $code, $this->relativePath, $absolutePath);
+			throw new ConfigurationException($message, $code, $this->absolutePath);
 		}
 		
 		return $values;
