@@ -18,7 +18,6 @@
  * @subpackage Component
  * @version    0.02
  */
-
 namespace Tree\Component;
 
 use \ArrayAccess;
