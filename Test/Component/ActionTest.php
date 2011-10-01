@@ -3,7 +3,7 @@
 namespace Tree\Test\Component;
 
 require_once '../Component/Action.php';
-require_once '../Behaviour/Http200Handler.php';
+require_once '../Behaviour/Http200Response.php';
 require_once 'Fake/Action.php';
 
 use \PHPUnit_Framework_TestCase;

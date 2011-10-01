@@ -2,10 +2,10 @@
 
 namespace Tree\Framework;
 
-use \Tree\Behaviour\Http200Handler;
-use \Tree\Behaviour\Http404Handler;
-use \Tree\Behaviour\Http403Handler;
-use \Tree\Behaviour\Http500Handler;
+use \Tree\Behaviour\Http200Response;
+use \Tree\Behaviour\Http404Response;
+use \Tree\Behaviour\Http403Response;
+use \Tree\Behaviour\Http500Response;
 use \Tree\Component\Action;
 use \Tree\Response\Response;
 use \Tree\Response\Response_Html;
@@ -78,13 +78,13 @@ class RequestHandler {
 		if (is_null($return)) {
 			// actions return null to indicate that there is nothing to return, i.e.
 			// the given parameters don't correspond to any entity, which is a 404
-			return $this->handle404($request, $action);
+			return $this->get404Response($request, $action);
 		}
 
 		if ($return === false) {
 			// actions return false to indicate that some unexpected error has
 			// prevented them from completing, which is an internal server error
-			return $this->handle500($request, $action);
+			return $this->get500Response($request, $action);
 		}
 
 		if ($return === 200) {
@@ -134,8 +134,8 @@ class RequestHandler {
 	 */
 	private function handle200($request, $action)
 	{
-		if ($action instanceof Action && $action instanceof Http200Handler) {
-			$response = $action->handle200($request);
+		if ($action instanceof Action && $action instanceof Http200Response) {
+			$response = $action->get200Response($request);
 		} else {
 			$response = new Response_Html;
 			$response->setStatus(200);
@@ -156,8 +156,8 @@ class RequestHandler {
 	 */
 	private function handle404($request, $action)
 	{
-		if ($action instanceof Action && $action instanceof Http404Handler) {
-			$response = $action->handle404($request);
+		if ($action instanceof Action && $action instanceof Http404Response) {
+			$response = $action->get404Response($request);
 		} else {
 			$response = new Response_Html;
 			$response->setStatus(404);
@@ -177,8 +177,8 @@ class RequestHandler {
 	 */
 	private function handle500($request, $action)
 	{
-		if ($action instanceof Action && $action instanceof Http500Handler) {
-			$response = $action->handle500($request);
+		if ($action instanceof Action && $action instanceof Http500Response) {
+			$response = $action->get500Response($request);
 		} else {
 			$response = new Response_Html;
 			$response->setStatus(500);

@@ -3,7 +3,7 @@
 namespace Tree\Behaviour;
 
 /**
- * Http404Handler 
+ * Http404Response 
  *
  * Interface for Action subclasses to declare that they can generate a response
  * when the HTTP response code is 404
@@ -15,7 +15,7 @@ namespace Tree\Behaviour;
  * @subpackage Behaviour
  * @version    0.00
  */
-interface Http404Handler {
+interface Http404Response {
 
 
 	/**
@@ -25,7 +25,7 @@ interface Http404Handler {
 	 * @param  \Tree\Request\Request $request 
 	 * @return \Tree\Response\Response
 	 */
-	public function handle404($request);
+	public function get404Response($request);
 
 }
 

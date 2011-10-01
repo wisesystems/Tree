@@ -3,7 +3,7 @@
 namespace Tree\Test;
 
 use \Tree\Component\Action;
-use \Tree\Behaviour\Http200Handler;
+use \Tree\Behaviour\Http200Response;
 
 /**
  * Fake_Action 
@@ -18,7 +18,7 @@ use \Tree\Behaviour\Http200Handler;
  * @uses       \Tree\Component\Action
  * @version    0.00
  */
-class Fake_Action extends Action implements Http200Handler {
+class Fake_Action extends Action implements Http200Response {
 
 	public function main(array $input)
 	{
@@ -29,7 +29,7 @@ class Fake_Action extends Action implements Http200Handler {
 		}
 	}
 
-	public function handle200($request)
+	public function get200Response($request)
 	{
 		return '<p>test</p>';
 	}
