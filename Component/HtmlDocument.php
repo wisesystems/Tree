@@ -21,6 +21,17 @@ use \Tree\Response\Response_Html;
 abstract class HtmlDocument extends Response_Html implements ArrayAccess {
 
 	/**
+	 * The document's content body
+	 *
+	 * Not necessarily the whole contents of the <body></body> tag, as the layout
+	 * template will probably add more.
+	 * 
+	 * @access private
+	 * @var    string
+	 */
+	private $content;
+
+	/**
 	 * Array of Javascript files on which the HTML document depends and which
 	 * should be loaded with it
 	 * 
@@ -46,6 +57,14 @@ abstract class HtmlDocument extends Response_Html implements ArrayAccess {
 	 * @var    \Tree\Component\Template
 	 */
 	private $layoutTemplate;
+
+	/**
+	 * The document's header title for the <title></title> tags
+	 * 
+	 * @access private
+	 * @var    string
+	 */
+	private $title;
 
 	/**
 	 * To be overridden with a method that returns the name of the layout
@@ -83,6 +102,17 @@ abstract class HtmlDocument extends Response_Html implements ArrayAccess {
 	}
 
 	/**
+	 * Returns the document's content
+	 * 
+	 * @access public
+	 * @return string
+	 */
+	public function getContent()
+	{
+		return $this->content;
+	}
+
+	/**
 	 * Returns the list of Javascript files on which the HTML document depends
 	 * 
 	 * @access public
@@ -102,6 +132,17 @@ abstract class HtmlDocument extends Response_Html implements ArrayAccess {
 	public function getStylesheetDependencies()
 	{
 		return $this->stylesheetDependencies;
+	}
+
+	/**
+	 * Returns the header title
+	 * 
+	 * @access public
+	 * @return string
+	 */
+	public function getTitle()
+	{
+		return $this->title;
 	}
 
 	/**
@@ -169,12 +210,35 @@ abstract class HtmlDocument extends Response_Html implements ArrayAccess {
 	public function sendResponseBody()
 	{
 		$layoutTemplate = $this->getLayoutTemplate();
-		$layoutTemplate['pageContent'] = $this->pageContent;
+		$layoutTemplate['title']       = $this->getTitle();
+		$layoutTemplate['content']     = $this->getContent();
 		$layoutTemplate['stylesheets'] = $this->getStylesheetDependencies();
 
 		$pageHtml = $layoutTemplate->getOutput();
 
 		echo $pageHtml;
+	}
+
+	/**
+	 * Stores the document's content
+	 * 
+	 * @access public
+	 * @param  string $content 
+	 */
+	public function setContent($content)
+	{
+		$this->content = $content;
+	}
+
+	/**
+	 * Stores the document's header title
+	 * 
+	 * @access public
+	 * @param  string $title 
+	 */
+	public function setTitle($title)
+	{
+		$this->title = $title;
 	}
 
 	/**
