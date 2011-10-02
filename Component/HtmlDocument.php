@@ -2,6 +2,7 @@
 
 namespace Tree\Component;
 
+use \stdClass;
 use \ArrayAccess;
 use \Tree\Response\Response_Html;
 
