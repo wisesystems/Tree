@@ -20,6 +20,7 @@
  */
 namespace Tree\Component;
 
+use \stdClass;
 use \ArrayAccess;
 use \Tree\Behaviour\PreTemplateDisplayLogic;
 use \Tree\Exception\TemplateException;
@@ -67,6 +68,23 @@ abstract class Template implements ArrayAccess {
 	 * @var    string
 	 */
 	private $outputString;
+
+	/**
+	 * An array listing the stylesheets on which the template HTML depends in
+	 * order to display correctly
+	 * 
+	 * @access private
+	 * @var    array
+	 */
+	private $stylesheetDependencies = array();
+
+	/**
+	 * An array listing the Javascript files on which the template HTML depends
+	 * 
+	 * @access private
+	 * @var    array
+	 */
+	private $javascriptDependencies = array();
 
 	/**
 	 * An associative array of input values that are common to all templates
@@ -130,6 +148,55 @@ abstract class Template implements ArrayAccess {
 		$this->outputString = $this->generateOutput();
 
 		return $this->outputString;
+	}
+
+	/**
+	 * Returns an array of the Javascript files on which the template depends
+	 * 
+	 * @access public
+	 * @return array
+	 */
+	public function getJavascriptDependencies()
+	{
+		return $this->javascriptDependencies;
+	}
+
+	/**
+	 * Returns an array of the stylesheets on which the template depends
+	 * 
+	 * @access public
+	 * @return array
+	 */
+	public function getStylesheetDependencies()
+	{
+		return $this->stylesheetDependencies;
+	}
+
+	/**
+	 * Adds a Javascript file to the list of those on which the template depends
+	 * 
+	 * @access public
+	 * @param  string $filename 
+	 */
+	public function requireJavascript($filename)
+	{
+		$this->javascriptDependencies[] = $filename;
+	}
+
+	/**
+	 * Adds a stylesheet to the list of those on which the template depends
+	 * 
+	 * @access public
+	 * @param  string $filename             The name of the CSS file
+	 * @param  string $media    [optional]  The CSS media type
+	 */
+	public function requireStylesheet($filename, $media = 'all')
+	{
+		$stylesheet        = new stdClass;
+		$stylesheet->href  = $filename;
+		$stylesheet->media = $media;
+
+		$this->stylesheetDependencies[] = $stylesheet;
 	}
 
 	/**

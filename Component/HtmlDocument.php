@@ -235,6 +235,8 @@ abstract class HtmlDocument extends Response_Html implements ArrayAccess {
 	{
 		$layoutTemplate = $this->getLayoutTemplate();
 
+		$layoutTemplate['document'] = $this;
+
 		$layoutTemplate['linkTags'] = $this->getHeaderLinkTags();
 		$layoutTemplate['metaTags'] = $this->getHeaderMetaTags();
 		$layoutTemplate['title']    = $this->getTitle();
@@ -299,11 +301,16 @@ abstract class HtmlDocument extends Response_Html implements ArrayAccess {
 	 * @access private
 	 * @return array
 	 */
-	private function getHeaderLinkTags()
+	public function getHeaderLinkTags()
 	{
 		$tags = array();
 
-		$stylesheets = $this->getStylesheetDependencies();
+		$layout = $this->getLayoutTemplate();
+
+		$layoutStylesheets = $layout->getStylesheetDependencies();
+		$extraStylesheets  = $this->getStylesheetDependencies();
+
+		$stylesheets = array_merge($layoutStylesheets, $extraStylesheets);
 
 		foreach ($stylesheets as $stylesheet) {
 
