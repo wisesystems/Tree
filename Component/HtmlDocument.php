@@ -2,7 +2,6 @@
 
 namespace Tree\Component;
 
-use \stdClass;
 use \ArrayAccess;
 use \Tree\Response\Response_Html;
 
@@ -59,8 +58,22 @@ abstract class HtmlDocument extends Response_Html implements ArrayAccess {
 	 */
 	private $layoutTemplate;
 
+	/**
+	 * An associative array of name-value pairs representing the document's header
+	 * <meta /> values
+	 * 
+	 * @access private
+	 * @var    array
+	 */
 	private $metaValues = array();
 
+	/**
+	 * An associative array of name-value pairs representing the document's header
+	 * <meta /> http-equiv values
+	 * 
+	 * @access private
+	 * @var    array
+	 */
 	private $metaHttpEquiv = array();
 
 	/**
