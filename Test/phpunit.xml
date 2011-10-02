@@ -14,7 +14,7 @@
 
 		<testsuite name="Component">
 			<file>Component/ActionTest.php</file>
-			<file>Component/PageTest.php</file>
+			<file>Component/HtmlDocumentTest.php</file>
 			<file>Component/TemplateTest.php</file>
 		</testsuite>
 

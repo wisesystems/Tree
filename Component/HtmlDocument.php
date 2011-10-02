@@ -5,7 +5,7 @@ namespace Tree\Component;
 use \Tree\Response\Response_Html;
 
 /**
- * Page 
+ * HtmlDocument 
  *
  * Represents a HTML document response to a HTTP request
  * 
@@ -17,7 +17,7 @@ use \Tree\Response\Response_Html;
  * @uses       \Tree\Response\Response_Html
  * @version    0.00
  */
-abstract class Page extends Response_Html {
+abstract class HtmlDocument extends Response_Html {
 
 	/**
 	 * Array of Javascript files on which the HTML document depends and which
@@ -38,8 +38,8 @@ abstract class Page extends Response_Html {
 	private $stylesheetDependencies = array();
 
 	/**
-	 * The top-level layout template for the page into which the actual content
-	 * is to be inserted
+	 * The top-level layout template for the document into which the actual 
+	 * content is to be inserted
 	 * 
 	 * @access private
 	 * @var    \Tree\Component\Template
@@ -47,7 +47,7 @@ abstract class Page extends Response_Html {
 	private $layoutTemplate;
 
 	/**
-	 * To be overridden with a method that returns the name of the page's layout
+	 * To be overridden with a method that returns the name of the layout
 	 * template class. The layout template class must be able to accept certain
 	 * input values and generate a valid (X)HTML document when generated
 	 * 
@@ -113,8 +113,8 @@ abstract class Page extends Response_Html {
 	public function sendResponseBody()
 	{
 		$layoutTemplate = $this->getLayoutTemplate();
-		$layoutTemplate->setInputValue('pageContent', $this->pageContent);
-		$layoutTemplate->setInputValue('stylesheets', $this->getStylesheetDependencies());
+		$layoutTemplate['pageContent'] = $this->pageContent;
+		$layoutTemplate['stylesheets'] = $this->getStylesheetDependencies();
 
 		$pageHtml = $layoutTemplate->getOutput();
 
@@ -122,7 +122,7 @@ abstract class Page extends Response_Html {
 	}
 
 	/**
-	 * Returns the page's layout template object
+	 * Returns the document's layout template object
 	 * 
 	 * @access private
 	 * @return \Tree\Component\Template
