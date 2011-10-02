@@ -2,6 +2,7 @@
 
 namespace Tree\Component;
 
+use \stdClass;
 use \ArrayAccess;
 use \Tree\Response\Response_Html;
 
@@ -58,6 +59,10 @@ abstract class HtmlDocument extends Response_Html implements ArrayAccess {
 	 */
 	private $layoutTemplate;
 
+	private $metaValues = array();
+
+	private $metaHttpEquiv = array();
+
 	/**
 	 * The document's header title for the <title></title> tags
 	 * 
@@ -94,11 +99,16 @@ abstract class HtmlDocument extends Response_Html implements ArrayAccess {
 	 * document
 	 * 
 	 * @access public
-	 * @param  string $filename 
+	 * @param  string $filename             The name of the CSS file
+	 * @param  string $media    [optional]  The CSS media type
 	 */
-	public function addStylesheetDependency($filename)
+	public function addStylesheetDependency($filename, $media = 'all')
 	{
-		$this->stylesheetDependencies[] = $filename;
+		$stylesheet        = new stdClass;
+		$stylesheet->href  = $filename;
+		$stylesheet->media = $media;
+
+		$this->stylesheetDependencies[] = $stylesheet;
 	}
 
 	/**
@@ -210,9 +220,11 @@ abstract class HtmlDocument extends Response_Html implements ArrayAccess {
 	public function sendResponseBody()
 	{
 		$layoutTemplate = $this->getLayoutTemplate();
-		$layoutTemplate['title']       = $this->getTitle();
-		$layoutTemplate['content']     = $this->getContent();
-		$layoutTemplate['stylesheets'] = $this->getStylesheetDependencies();
+
+		$layoutTemplate['linkTags'] = $this->getHeaderLinkTags();
+		$layoutTemplate['metaTags'] = $this->getHeaderMetaTags();
+		$layoutTemplate['title']    = $this->getTitle();
+		$layoutTemplate['content']  = $this->getContent();
 
 		$pageHtml = $layoutTemplate->getOutput();
 
@@ -231,6 +243,32 @@ abstract class HtmlDocument extends Response_Html implements ArrayAccess {
 	}
 
 	/**
+	 * Stores the given name-value pair to be displayed as a meta value in the
+	 * document's header as <meta name="$name" value="$value" />
+	 * 
+	 * @access public
+	 * @param  string $name 
+	 * @param  string $value 
+	 */
+	public function setMeta($name, $value)
+	{
+		$this->metaValues[$name] = $value;
+	}
+
+	/**
+	 * Stores the given name-value pair to be displayed as a meta http-equiv value
+	 * in the document's header as <meta http-equiv="$name" value="$value" />
+	 * 
+	 * @access public
+	 * @param  string $name 
+	 * @param  string $value 
+	 */
+	public function setMetaHttpEquiv($name, $value)
+	{
+		$this->metaHttpEquiv[$name] = $value;
+	}
+
+	/**
 	 * Stores the document's header title
 	 * 
 	 * @access public
@@ -239,6 +277,63 @@ abstract class HtmlDocument extends Response_Html implements ArrayAccess {
 	public function setTitle($title)
 	{
 		$this->title = $title;
+	}
+
+	/**
+	 * Returns an array of HTML header link tags
+	 * 
+	 * @access private
+	 * @return array
+	 */
+	private function getHeaderLinkTags()
+	{
+		$tags = array();
+
+		$stylesheets = $this->getStylesheetDependencies();
+
+		foreach ($stylesheets as $stylesheet) {
+
+			$tags[] = array(
+				'href'  => $stylesheet->href,
+				'media' => $stylesheet->media,
+				'rel'   => 'stylesheet',
+				'type'  => 'text/css',
+			);
+
+		}
+
+		return $tags;
+	}
+
+	/**
+	 * Returns an array of HTML header meta tags
+	 * 
+	 * @access private
+	 * @return array
+	 */
+	private function getHeaderMetaTags()
+	{
+		$tags = array();
+
+		foreach ($this->metaValues as $name => $value) {
+
+			$tags[] = array(
+				'name'    => $name,
+				'content' => $value,
+			);
+
+		}
+
+		foreach ($this->metaHttpEquiv as $name => $value) {
+
+			$tags[] = array(
+				'http-equiv' => $name,
+				'content'    => $value,
+			);
+
+		}
+
+		return $tags;
 	}
 
 	/**
