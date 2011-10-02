@@ -2,6 +2,7 @@
 
 namespace Tree\Component;
 
+use \ArrayAccess;
 use \Tree\Response\Response_Html;
 
 /**
@@ -17,7 +18,7 @@ use \Tree\Response\Response_Html;
  * @uses       \Tree\Response\Response_Html
  * @version    0.00
  */
-abstract class HtmlDocument extends Response_Html {
+abstract class HtmlDocument extends Response_Html implements ArrayAccess {
 
 	/**
 	 * Array of Javascript files on which the HTML document depends and which
@@ -101,6 +102,61 @@ abstract class HtmlDocument extends Response_Html {
 	public function getStylesheetDependencies()
 	{
 		return $this->stylesheetDependencies;
+	}
+
+	/**
+	 * \ArrayAccess: Indicates whether the document's layout template has the
+	 * given value
+	 * 
+	 * @access public
+	 * @param  string $offset 
+	 * @return boolean
+	 */
+	public function offsetExists($offset)
+	{
+		$layoutTemplate = $this->getLayoutTemplate();
+		return isset($layoutTemplate[$offset]);
+	}
+
+	/**
+	 * \ArrayAccess: Returns the given template variable from the document's
+	 * layout template
+	 * 
+	 * @access public
+	 * @param  string $offset 
+	 * @return mixed
+	 */
+	public function offsetGet($offset)
+	{
+		$layoutTemplate = $this->getLayoutTemplate();
+		return $layoutTemplate[$offset];
+	}
+
+	/**
+	 * \ArrayAccess: Sets the given template variable in the document's layout
+	 * template
+	 * 
+	 * @access public
+	 * @param  string $offset 
+	 * @param  mixed  $value 
+	 */
+	public function offsetSet($offset, $value)
+	{
+		$layoutTemplate          = $this->getLayoutTemplate();
+		$layoutTemplate[$offset] = $value;
+	}
+
+	/**
+	 * \ArrayAccess: Unsets the given template variable in the document's layout
+	 * template
+	 * 
+	 * @access public
+	 * @param  string $offset 
+	 */
+	public function offsetUnset($offset)
+	{
+		$layoutTemplate = $this->getLayoutTemplate();
+		unset($layoutTemplate[$offset]);
 	}
 
 	/**
