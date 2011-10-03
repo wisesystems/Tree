@@ -261,5 +261,16 @@ class RouterTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals('http://example.com/article/12345', $url);
 	}
 
+	public function testBug()
+	{
+		$this->router->setUrlPrefix('http://example.com');
+		$this->router->addRoute('/{year/\d\d\d/}', 'PostView');
+
+		$expected = 'http://example.com/2011';
+		$actual   = $this->router->getUrl('PostView', array('year' => 2011));
+
+		$this->assertEquals($expected, $actual);
+	}
+
 }
 
