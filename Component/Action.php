@@ -61,6 +61,14 @@ abstract class Action {
 	private $inputValues = array();
 
 	/**
+	 * The request router for the action subclass to use to generate URLS etc
+	 * 
+	 * @access private
+	 * @var    \Tree\Framework\Router
+	 */
+	private $router;
+
+	/**
 	 * Processes the request
 	 *
 	 * This method should do any requisite fetching, updating, creation, or
@@ -73,6 +81,15 @@ abstract class Action {
 	 * @return integer       e.g. 200, 404, 500
 	 */
 	abstract public function main(array $input);
+
+	/**
+	 * @access public
+	 * @param  \Tree\Component\Router $router [optional]
+	 */
+	public function __construct($router = null)
+	{
+		$this->router = $router;
+	}
 
 	/**
 	 * Returns the input value that has been stored against the given name 
@@ -193,6 +210,17 @@ abstract class Action {
 		$this->databases[$database] = $connection;
 
 		return $connection;
+	}
+
+	/**
+	 * Returns the request router
+	 * 
+	 * @access protected
+	 * @return \Tree\Framework\Router
+	 */
+	protected function getRouter()
+	{
+		return $this->router;
 	}
 
 	/**
