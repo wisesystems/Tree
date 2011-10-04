@@ -63,15 +63,16 @@ class RequestHandler {
 	{
 		$requestUrl = $request->getUrl();
 
-		$spec = $this->router->routeRequest($requestUrl);
+		$action = $this->router->getAction($requestUrl);
 
-		if (is_null($spec)) {
+		if (is_null($action)) {
 			// this is a request whose URL doesn't match any of the patterns in these
 			// router, the simplest kind of 404
 			return $this->handle404($request, null);
 		}
 
-		$action = $this->loadAction($spec);
+		$action->setConfiguration($this->configuration);
+		$action->setRouter($this->router);
 
 		$return = $action->performAction();
 
@@ -193,23 +194,10 @@ class RequestHandler {
 	 * specification
 	 * 
 	 * @access private
-	 * @param  array $spec 
-	 * @return Action
+	 * @param  \Tree\Component\Action
 	 */
-	private function loadAction(array $spec)
+	private function configureAction($action)
 	{
-		$actionClass  = $spec[0];
-		$parameters   = $spec[1];
-
-		$action = new $actionClass($this->router);
-
-		foreach ($parameters as $name => $value) {
-			$action->setParameter($name, $value);
-		}
-
-		$action->setConfiguration($this->configuration);
-
-		return $action;
 	}
 
 }

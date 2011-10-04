@@ -171,7 +171,7 @@ class Tree {
 			$action   = $route['action'];
 			$pattern  = $route['pattern'];
 
-			$parameters = array();
+			$route = new Route($pattern, $action);
 
 			foreach ($route as $name => $value) {
 				switch ($name) {
@@ -180,11 +180,12 @@ class Tree {
 					case 'pattern':
 						continue;
 					default:
-						$parameters[$name] = $value;
+						// todo : reenable this extra-parameters feature
+						//$parameters[$name] = $value;
 				}
 			}
 		
-			$this->router->addRoute($pattern, $action, $parameters);
+			$this->router->addRoute($route);
 		}
 	}
 

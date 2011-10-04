@@ -74,15 +74,6 @@ abstract class Action {
 	abstract public function main(array $input);
 
 	/**
-	 * @access public
-	 * @param  \Tree\Component\Router $router [optional]
-	 */
-	public function __construct($router = null)
-	{
-		$this->router = $router;
-	}
-
-	/**
 	 * Returns the input value that has been stored against the given name 
 	 * 
 	 * @access public
@@ -136,6 +127,17 @@ abstract class Action {
 	public function setParameter($name, $value)
 	{
 		$this->parameters[$name] = $value;
+	}
+
+	/**
+	 * Stores the router instance for the Action to use later
+	 * 
+	 * @access public
+	 * @param  \Tree\Framework\Router $router 
+	 */
+	public function setRouter($router)
+	{
+		$this->router = $router;
 	}
 
 	/**
