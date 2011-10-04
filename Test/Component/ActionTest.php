@@ -33,25 +33,6 @@ class ActionTest extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * Tests that setInputValue() stores values according the filtering
-	 * rules set using setInputFilter()
-	 *
-	 * @covers \Tree\Component\Action::setInputFilter
-	 * @covers \Tree\Component\Action::setInputValue
-	 * @covers \Tree\Component\Action::getInputValue
-	 */
-	public function testSetInputValueFiltersValue()
-	{
-		$this->action->setInputFilter('id', FILTER_VALIDATE_INT);
-
-		$this->action->setInputValue('id', 'blarg');
-		$this->assertEquals(false, $this->action->getInputValue('id'));
-
-		$this->action->setInputValue('id', 12345);
-		$this->assertEquals(12345, $this->action->getInputValue('id'));
-	}
-
-	/**
 	 * Tests that performAction() correctly passes any input values that
 	 * have been received through to the main() method
 	 *
@@ -59,8 +40,7 @@ class ActionTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testPerformActionPassesInputToMain()
 	{
-		$this->action->setInputFilter('id', FILTER_VALIDATE_INT);
-		$this->action->setInputValue('id', 12345);
+		$this->action->setParameter('id', 12345);
 
 		$response = $this->action->performAction();
 

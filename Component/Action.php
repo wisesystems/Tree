@@ -44,21 +44,12 @@ abstract class Action {
 	protected $databases = array();
 
 	/**
-	 * An associative array mapping names of acceptable input values to
-	 * details of how to filter or sanitise those values
-	 * 
-	 * @access protected
-	 * @var    array
-	 */
-	protected $inputFilters = array();
-
-	/**
 	 * An associative array mapping names of input values to those values
 	 * 
 	 * @access private
 	 * @var    array
 	 */
-	private $inputValues = array();
+	private $parameters = array();
 
 	/**
 	 * The request router for the action subclass to use to generate URLS etc
@@ -98,13 +89,13 @@ abstract class Action {
 	 * @param  string $name 
 	 * @return mixed
 	 */
-	public function getInputValue($name)
+	public function getParameter($name)
 	{
-		if (!isset($this->inputValues[$name])) {
+		if (!isset($this->parameters[$name])) {
 			return null;
 		}
 
-		return $this->inputValues[$name];
+		return $this->parameters[$name];
 	}
 
 	/**
@@ -115,11 +106,9 @@ abstract class Action {
 	 */
 	public function performAction()
 	{
-		$this->applyUnusedInputFilters();
-
 		$output = call_user_func(
 			array($this, 'main'),
-			$this->inputValues
+			$this->parameters
 		);
 
 		return $output;
@@ -137,25 +126,6 @@ abstract class Action {
 	}
 
 	/**
-	 * Sets up an input filter under the given name
-	 *
-	 * @access public
-	 * @param  string  $name      e.g. 'id'
-	 * @param  integer $filterId  e.g. FILTER_VALIDATE_INT
-	 * @param  integer $inputType e.g. INPUT_GET
-	 * @param  array   $options   any applicable filter_var options
-	 */
-	public function setInputFilter($name, $filterId, $inputType = null,
-		array $options = array())
-	{
-		$this->inputFilters[$name] = array(
-			'filter-id'  => $filterId,
-			'input-type' => $inputType,
-			'options'    => $options,
-		);
-	}
-
-	/**
 	 * Filters and stores the given input value under the given name 
 	 * 
 	 * @access public
@@ -163,11 +133,9 @@ abstract class Action {
 	 * @param  mixed  $value 
 	 * @return void
 	 */
-	public function setInputValue($name, $value)
+	public function setParameter($name, $value)
 	{
-		$value = $this->filterInputValue($name, $value);
-
-		$this->inputValues[$name] = $value;
+		$this->parameters[$name] = $value;
 	}
 
 	/**
@@ -221,76 +189,6 @@ abstract class Action {
 	protected function getRouter()
 	{
 		return $this->router;
-	}
-
-	/**
-	 * Applies any unused input filters that have input types set to those
-	 * inputs
-	 *
-	 * For example, if there is a filter called 'id' with an input-type of
-	 * INPUT_GET, and it has not yet been used by a call to 
-	 * setInputValue(), then it will be applied to the GET parameter 'id'.
-	 * 
-	 * @access private
-	 * @return void
-	 */
-	private function applyUnusedInputFilters()
-	{
-		foreach ($this->inputFilters as $name => $filter) {
-			
-			if (isset($this->inputValues[$name])) {
-				continue;
-			}
-
-			if (!isset($filter['input-type']) || $filter['input-type'] === null) {
-				continue;
-			}
-
-			$value = filter_input(
-				$filter['input-type'],
-				$name,
-				$filter['filter-id'],
-				$filter['options']
-			);
-
-			$this->inputValues[$name] = $value;
-		}
-	}
-
-	/**
-	 * Runs the given value through the filter whose name matches the given
-	 * name, returning the resulting value
-	 * 
-	 * @access private
-	 * @param  string $name 
-	 * @param  mixed $value 
-	 * @return mixed
-	 */
-	private function filterInputValue($name, $value)
-	{
-		if (!isset($this->inputFilters[$name])) {
-			return null;
-		}
-
-		if (!isset($this->inputFilters[$name]['filter-id'])) {
-			throw new Exception('Missing filter ID');
-		}
-
-		$filter = $this->inputFilters[$name];
-
-		if (!isset($filter['options'])) {
-			$filter['options'] = array();
-		} else {
-			$filter['options'] = array('options' => $filter['options']);
-		}
-
-		$value = filter_var(
-			$value,
-			$filter['filter-id'],
-			$filter['options']
-		);
-
-		return $value;
 	}
 
 }

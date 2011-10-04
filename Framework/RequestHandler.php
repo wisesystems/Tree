@@ -204,7 +204,7 @@ class RequestHandler {
 		$action = new $actionClass($this->router);
 
 		foreach ($parameters as $name => $value) {
-			$action->setInputValue($name, $value);
+			$action->setParameter($name, $value);
 		}
 
 		$action->setConfiguration($this->configuration);

@@ -2,6 +2,9 @@
 
 namespace Tree\Test;
 
+require_once '../Component/Action.php';
+require_once '../Behaviour/Http200Response.php';
+
 use \Tree\Component\Action;
 use \Tree\Behaviour\Http200Response;
 
