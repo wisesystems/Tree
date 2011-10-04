@@ -3,9 +3,9 @@
 namespace Tree\Framework;
 
 /**
- * RequestRouter 
+ * Router 
  *
- * Creates a two-way mapping between requests and Action subclasses
+ * Creates a two-way mapping between request URLs and Actions
  * 
  * @author     Henry Smith <henry@henrysmith.org> 
  * @copyright  2011 Henry Smith
@@ -17,13 +17,8 @@ namespace Tree\Framework;
 class Router {
 
 	/**
-	 * An array of route specifications of the following form:
-	 *      array(
-	 *              'request-pattern'    => '/article/{id}',
-	 *              'regular-expression' => '|^/article/(?P<id>[^/]+)$|',
-	 *              'action-id'          => 'ArticleView',
-	 *              'action-parameters'  => array(),
-	 *      )
+	 * An array of Route objects against which to test URLs and Action
+	 * specifications
 	 * 
 	 * @access private
 	 * @var    array
@@ -39,152 +34,74 @@ class Router {
 	private $urlPrefix;
 
 	/**
-	 * Adds a route to the list of those to be considered when routing 
-	 * or generating requests
+	 * Adds a route to the list of those to be tested against when routing
+	 * requests
 	 * 
 	 * @access public
-	 * @param  string $requestPattern 
-	 * @param  string $actionId 
-	 * @param  array  $actionParameters [optional]
+	 * @param  \Tree\Framework\Route $route 
 	 */
-	public function addRoute($requestPattern, $actionId, array $actionParameters = array())
+	public function addRoute($route)
 	{
-		$regularExpression = $this->generateRegEx($requestPattern);
-		$patternParameters = $this->parsePattern($requestPattern);
-
-		$actionParameters = array_merge($patternParameters, $actionParameters);
-
-		$this->routes[] = array(
-			'request-pattern'    => $requestPattern,
-			'regular-expression' => $regularExpression,
-			'action-id'          => $actionId,
-			'action-parameters'  => $actionParameters,
-		);
-
+		$this->routes[] = $route;
 	}
 
 	/**
-	 * Maps a request path to an action 
-	 *
+	 * Attempts to find an Action that corresponds to the given URL according to
+	 * the list of routes
+	 * 
 	 * @access public
-	 * @param  string $requestPath
-	 * @return array
+	 * @param  string $url 
+	 * @return \Tree\Component\Action
 	 */
-	public function getAction($requestPath)
+	public function getAction($url)
 	{
-		$requestPath = trim($requestPath, '/');
-		$requestPath = '/' . $requestPath;
+		$action = null;
 
-		foreach ($this->routes as $route) {
+		if (strpos($url, $this->urlPrefix) === 0) {
 
-			$requestPattern    = $route['request-pattern'];
-			$regularExpression = $route['regular-expression'];
-			$actionId          = $route['action-id'];
-			$actionParameters  = $route['action-parameters'];
+			$prefixLength = strlen($this->urlPrefix);
+			$requestPath  = substr($url, $prefixLength);
 
-			if (preg_match($regularExpression, $requestPath, $matches)) {
+			foreach ($this->routes as $route) {
 
-				foreach ($matches as $name => $value) {
-					if (!is_int($name)) {
-						$actionParameters[$name] = $value;
-					}
+				if ($route->matchesPath($requestPath)) {
+					$action = $route->getAction($requestPath);
+					break;
 				}
-
-				return array($actionId, $actionParameters);
-
 			}
-
 		}
-
-		return null;
+		
+		return $action;
 	}
 
 	/**
-	 * Maps an action to a request path 
+	 * Attempts to generate a URL corresponding the given action specification
+	 * according to the list of routes
 	 * 
 	 * @access public
 	 * @param  string $actionId 
-	 * @param  array  $actionParameters [optional]
+	 * @param  array  $parameters 
 	 * @return string
 	 */
-	public function getPath($actionId, array $actionParameters = array())
+	public function getUrl($actionId, array $parameters)
 	{
-		$parameterList = array_keys($actionParameters);
+		$url = null;
 
 		foreach ($this->routes as $route) {
+			$path = $route->getPath($actionId, $parameters);
 
-			$routePattern    = $route['request-pattern'];
-			$routeActionId   = $route['action-id'];
-			$routeParameters = $route['action-parameters'];
-
-			if ($parameterList == array_keys($routeParameters)) {
-
-				$path = $routePattern;
-				$path = $this->injectParameters($path, $actionParameters);
-
-				return $path;
+			if ($path !== null) {
+				$url = $this->urlPrefix . $path;
+				break;
 			}
-
 		}
-
-		return null;
-	}
-
-	/**
-	 * Maps an action to a request URL
-	 *
-	 * Requires a URL prefix to have been set using setUrlPrefix(), and
-	 * will throw an exception if this has not been done.
-	 * 
-	 * @access public
-	 * @param  string $actionId 
-	 * @param  array  $actionParameters [optional]
-	 * @return string
-	 */
-	public function getUrl($actionId, array $actionParameters = array())
-	{
-		if ($this->urlPrefix === null) {
-			throw new Exception('No URL prefix set');
-		}
-
-		$path = $this->getPath($actionId, $actionParameters);
-		if ($path === null) {
-			return null;
-		}
-
-		$url = $this->urlPrefix . $path;
 
 		return $url;
 	}
-
+	
 	/**
-	 * Routes a request URL to an action 
-	 *
-	 * Requires a URL prefix to have been set.
-	 * 
-	 * @access public
-	 * @param  string $requestUrl 
-	 * @return array
-	 */
-	public function routeRequest($requestUrl)
-	{
-		if ($this->urlPrefix === null) {
-			throw new Exception('No URL prefix set');
-		}
-		
-		if (strpos($requestUrl, $this->urlPrefix) !== 0) {
-			return null;
-		}
-
-		$prefixLength = strlen($this->urlPrefix);
-		$requestPath  = substr($requestUrl, $prefixLength);
-
-		return $this->getAction($requestPath);
-	}
-
-	/**
-	 * Sets a prefix to be prepended to request paths for generating
-	 * request URLs in getUrl()
+	 * Sets a prefix to be prepended to request paths when testing URLs and action
+	 * specifications against the list of routes
 	 * 
 	 * @access public
 	 * @param  string $urlPrefix 
@@ -192,92 +109,6 @@ class Router {
 	public function setUrlPrefix($urlPrefix)
 	{
 		$this->urlPrefix = $urlPrefix;
-	}
-
-	/**
-	 * Converts a request pattern into a regular expression
-	 *
-	 * Takes a human-readable request pattern such as '/article/{id}' and
-	 * converts it into a regular expression with named capture.
-	 * 
-	 * @access private
-	 * @param  string $requestPattern 
-	 * @return string
-	 */
-	private function generateRegEx($requestPattern)
-	{
-		$requestPattern = trim($requestPattern, '/');
-		$requestPattern = '/' . $requestPattern;
-
-		$regEx = preg_replace_callback(
-			'|{([^}]+?)(/([^/]+)/)?}|',
-			function ($matches) {
-
-				$token = $matches[0];
-				$name  = $matches[1];
-
-				if (isset($matches[3])) {
-					$pattern = $matches[3];
-				} else {
-					$pattern = '[^/]+';
-				}
-				
-				$format = '(?P<%s>%s)';
-				$string = sprintf($format, $name, $pattern);
-
-				return $string;
-
-			},
-			$requestPattern
-		);
-
-		$regEx = "|^{$regEx}$|";
-
-		return $regEx;
-	}
-
-	/**
-	 * Inserts the given set of parameters into the given request pattern
-	 * to generate a request path
-	 *
-	 * For example, given a string '/article/{id}' and an array('id'=>123),
-	 * returns the string '/article/123'.
-	 * 
-	 * @access private
-	 * @param  string $requestPattern 
-	 * @param  array  $actionParameters 
-	 * @return string
-	 */
-	private function injectParameters($requestPattern, $actionParameters)
-	{
-		foreach ($actionParameters as $name => $value) {
-			$requestPattern = str_replace(
-				'{' . $name . '}',
-				$value,
-				$requestPattern
-			);
-		}
-		return $requestPattern;
-	}
-
-	/**
-	 * Returns an array listing the value names in the given request
-	 * pattern
-	 *
-	 * For example, given the pattern '/article/{id}', returns the array
-	 * [{ id : null}]
-	 * 
-	 * @access private
-	 * @param  string $requestPattern 
-	 * @return array
-	 */
-	private function parsePattern($requestPattern)
-	{
-		if (!preg_match_all('/\{([^{}]+)\}/', $requestPattern, $matches)) {
-			return array();
-		}
-
-		return array_fill_keys($matches[1], null);
 	}
 
 }

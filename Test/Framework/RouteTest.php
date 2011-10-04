@@ -6,6 +6,7 @@ require_once '../Framework/Route.php';
 require_once 'Fake/Action.php';
 
 use \Tree\Framework\Route;
+use \Tree\Test\Fake_Action;
 use \PHPUnit_Framework_TestCase;
 
 /**
@@ -99,6 +100,73 @@ class RouteTest extends PHPUnit_Framework_TestCase {
 
 		$this->assertNull($action);
 	}
+
+	/**
+	 * @covers \Tree\Framework\Route::getPath
+	 * @test
+	 */
+	public function returnsPathIfActionMatches()
+	{
+		$route = new Route('/example/{id}', '\Tree\Test\Fake_Action');
+
+		$expected = '/example/1234';
+		$actual   = $route->getPath('\Tree\Test\Fake_Action', array(
+			'id' => 1234,
+		));
+
+		$this->assertEquals($expected, $actual);
+	}
+
+	/**
+	 * @covers \Tree\Framework\Route::getPath
+	 * @test
+	 */
+	public function rejectsPathIfActionDoesntMatch()
+	{
+		$route = new Route('/example/{id}', '\Tree\Test\Fake_Action');
+
+		$path = $route->getPath('\Some_Action', array(
+			'user' => 'root',
+		));
+
+		$this->assertNull($path);
+
+	}
+
+	/**
+	 * @covers \Tree\Framework\Route::getPath
+	 * @test
+	 */
+	public function returnsPathIfActionMatchesWithPattern()
+	{
+		$route = new Route('/example/{id}', '\Tree\Test\Fake_Action');
+		$route->setParameterPattern('id', '\d+');
+
+		$expected = '/example/1234';
+		$actual   = $route->getPath('\Tree\Test\Fake_Action', array(
+			'id' => 1234,
+		));
+
+		$this->assertEquals($expected, $actual);
+	}
+
+	/**
+	 * @covers \Tree\Framework\Route::getPath
+	 * @test
+	 */
+	public function rejectsPathIfActionDoesntMatchWithPattern()
+	{
+		$route = new Route('/example/{id}', '\Tree\Test\Fake_Action');
+		$route->setParameterPattern('id', '\d+');
+
+		$path = $route->getPath('\Tree\Test\Fake_Action', array(
+			'id' => 'notnumbers',
+		));
+
+		$this->assertNull($path);
+
+	}
+
 
 }
 

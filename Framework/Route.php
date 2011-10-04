@@ -124,6 +124,49 @@ class Route {
 	}
 
 	/**
+	 * Returns a path string that routes to the route's action, if the given
+	 * action name and parameters match those of the route
+	 *
+	 * For example, if the route's pattern is '/users/{username}' and its action
+	 * is 'Action_UserView', then given the parameters 'Action_UserView' and 
+	 * ["username":"root"], the returned value would be '/users/root'.
+	 * 
+	 * @access public
+	 * @param  string $actionId 
+	 * @param  array  $parameters 
+	 * @return string
+	 */
+	public function getPath($actionId, array $parameters)
+	{
+		if ($actionId !== $this->actionId) {
+			return null;
+		}
+
+		$parameterNames = array_keys($parameters);
+
+		if ($parameterNames !== $this->parameterNames) {
+			return null;
+		}
+
+		foreach ($parameters as $name => $value) {
+			if (!isset($this->parameterPatterns[$name])) {
+				continue;
+			}
+
+			$pattern = $this->parameterPatterns[$name];
+
+			if (!preg_match("|^{$pattern}$|", $value)) {
+				return null;
+			}
+
+		}
+
+		$path = $this->injectParameters($this->pattern, $parameters);
+
+		return $path;
+	}
+
+	/**
 	 * Indicates whether the given path matches the route's pattern
 	 * 
 	 * @access public
@@ -188,6 +231,18 @@ class Route {
 		}
 
 		return $matches[1];
+	}
+
+	private function injectParameters($pattern, array $parameters)
+	{
+		foreach ($parameters as $name => $value) {
+			$pattern = str_replace(
+				'{' . $name . '}',
+				$value,
+				$pattern
+			);
+		}
+		return $pattern;
 	}
 
 	/**
