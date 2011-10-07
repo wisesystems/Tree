@@ -59,7 +59,12 @@ class Result implements Iterator {
 	 */
 	public function current()
 	{
-		$row    = $this->databaseResult->current();
+		$row = $this->databaseResult->current();
+
+		if ($row === null) {
+			return null;
+		}
+
 		$entity = clone $this->baseEntity;
 
 		$tableName  = $entity->getEntityTableName();
