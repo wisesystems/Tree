@@ -40,7 +40,9 @@ trait BitField {
 	 */
 	public function setBitFieldFlag($bitfield, $flag)
 	{
+		$bitfield |= $flag;
 
+		return $bitfield;
 	}
 
 }
