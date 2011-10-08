@@ -110,7 +110,7 @@ class Autoloader {
 
 			require $absolutePath;
 
-			if (class_exists($class, false) || interface_exists($class, false)) {
+			if (class_exists($class, false) || interface_exists($class, false) || trait_exists($class, false)) {
 
 				return true;
 
