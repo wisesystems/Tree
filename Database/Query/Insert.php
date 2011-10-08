@@ -37,6 +37,18 @@ class Query_Insert extends Query {
 	private $columnValuePairs = array();
 
 	/**
+	 * \Tree\Database\Query: Reverts the query's parameters back to their initial
+	 * default state
+	 * 
+	 * @access public
+	 */
+	public function clearParameters()
+	{
+		$this->tableName        = null;
+		$this->columnValuePairs = array();
+	}
+
+	/**
 	 * Generates and returns the INSERT SQL 
 	 * 
 	 * @access public

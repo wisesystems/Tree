@@ -69,6 +69,21 @@ class Query_Delete extends Query {
 	}
 
 	/**
+	 * \Tree\Database\Query: Reverts the query's parameters back to their initial
+	 * default state
+	 * 
+	 * @access public
+	 */
+	public function clearParameters()
+	{
+		$this->wherePredicate->clearPredicates();
+
+		$this->tableName  = null;
+		$this->limitStart = null;
+		$this->limitEnd   = null;
+	}
+
+	/**
 	 * Sets the name of the table to be deleted from 
 	 *
 	 * The name is intended as syntactic sugar, mimicking the familiar SQL

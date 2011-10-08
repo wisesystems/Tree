@@ -49,6 +49,18 @@ class Query_Predicate {
 	}
 
 	/**
+	 * Reverts the predicate back to its initial empty state
+	 * 
+	 * @access public
+	 */
+	public function clearPredicates()
+	{
+		$this->operators  = array();
+		$this->statements = array();
+		$this->parameters = array();
+	}
+
+	/**
 	 * Generates and returns the SQL summarising the list of predicates
 	 * 
 	 * @access public

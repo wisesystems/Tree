@@ -61,6 +61,21 @@ class Query_Join extends Query {
 	}
 
 	/**
+	 * \Tree\Database\Query: Reverts the query's parameters back to their initial
+	 * default state
+	 * 
+	 * @access public
+	 */
+	public function clearParameters()
+	{
+		$this->onPredicate->clearPredicates();
+
+		$this->tableName  = null;
+		$this->tableAlias = null;
+		$this->joinType   = null;
+	}
+
+	/**
 	 * Generates and returns the JOIN SQL
 	 * 
 	 * @access public

@@ -128,6 +128,28 @@ class Query_Select extends Query {
 	}
 
 	/**
+	 * \Tree\Database\Query: Reverts the query's parameters back to their initial
+	 * default state
+	 * 
+	 * @access public
+	 */
+	public function clearParameters()
+	{
+		$this->wherePredicate->clearPredicates();
+
+		$this->columnNames     = array();
+		$this->columnAliases   = array();
+		$this->tableNames      = array();
+		$this->tableAliases    = array();
+		$this->joins           = array();
+		$this->groupColumns    = array();
+		$this->orderColumns    = array();
+		$this->orderDirections = array();
+		$this->limitStart      = null;
+		$this->limitEnd        = null;
+	}
+
+	/**
 	 * Sets the tables which should be queried
 	 *
 	 * Two types of parameter are supported:

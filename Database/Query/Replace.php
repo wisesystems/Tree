@@ -35,6 +35,18 @@ class Query_Replace extends Query {
 	private $setValues = array();
 
 	/**
+	 * \Tree\Database\Query: Reverts the query's parameters back to their initial
+	 * default state
+	 * 
+	 * @access public
+	 */
+	public function clearParameters()
+	{
+		$this->tableName = null;
+		$this->setValues = array();
+	}
+
+	/**
 	 * Sets the name of the table into which the data is to be put
 	 * 
 	 * @access public

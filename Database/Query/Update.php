@@ -79,6 +79,22 @@ class Query_Update extends Query {
 	}
 
 	/**
+	 * \Tree\Database\Query: Reverts the query's parameters back to their initial
+	 * default state
+	 * 
+	 * @access public
+	 */
+	public function clearParameters()
+	{
+		$this->wherePredicate->clearPredicate();
+
+		$this->tableName  = null;
+		$this->setValues  = array();
+		$this->limitStart = null;
+		$this->limitEnd   = null;
+	}
+
+	/**
 	 * Generates and returns the UPDATE query SQL 
 	 * 
 	 * @access public

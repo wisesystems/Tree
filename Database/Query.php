@@ -42,6 +42,14 @@ abstract class Query {
 	}
 
 	/**
+	 * Reverts all query parameters back to their initial empty state
+	 * 
+	 * @abstract
+	 * @access public
+	 */
+	abstract public function clearParameters();
+
+	/**
 	 * Returns the SQL generated for the query
 	 *
 	 * Intended for ease of debugging in that a simple 'echo $query;'
