@@ -549,9 +549,8 @@ abstract class Entity {
 				break;
 
 			case self::RELATIONSHIP_ONE_TO_MANY:
-				break;
-
 			case self::RELATIONSHIP_MANY_TO_MANY:
+				return $result;
 				break;
 
 		}
