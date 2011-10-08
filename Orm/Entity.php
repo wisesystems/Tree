@@ -378,6 +378,17 @@ abstract class Entity {
 	}
 
 	/**
+	 * Returns the entity's database connection object
+	 * 
+	 * @access public
+	 * @return \Tree\Database\Connection
+	 */
+	public function getDatabase()
+	{
+		return $this->database;
+	}
+
+	/**
 	 * Finds and returns the relationship of the given name
 	 * 
 	 * @access public
