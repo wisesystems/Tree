@@ -82,5 +82,18 @@ class BitFieldTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($expected, $actual);
 	}
 
+	/**
+	 * @covers \Tree\Traits\BitField::invertBitFieldFlag
+	 * @test
+	 */
+	public function invertBitFieldFlag()
+	{
+		$bitfield = 0b011;
+		$flag     = 0b001;
+		$expected = 0b010;
+		$actual   = $this->bitfield->invertBitFieldFlag($bitfield, $flag);
+
+		$this->assertEquals($expected, $actual);
+	}
 }
 

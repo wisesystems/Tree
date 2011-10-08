@@ -60,5 +60,21 @@ trait BitField {
 		return $bitfield;
 	}
 
+	/**
+	 * Sets the given flag to the opposite of its current value in the given
+	 * bit field
+	 * 
+	 * @access public
+	 * @param  integer $bitfield 
+	 * @param  integer $flag 
+	 * @return integer
+	 */
+	public function invertBitFieldFlag($bitfield, $flag)
+	{
+		$bitfield ^= $flag;
+
+		return $bitfield;
+	}
+
 }
 
