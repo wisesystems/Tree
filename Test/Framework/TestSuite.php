@@ -30,7 +30,7 @@ class TestSuite {
 		$suite->addTestSuite('\Tree\Test\Framework\AutoloaderTest');
 		$suite->addTestSuite('\Tree\Test\Framework\ConfigurationTest');
 		$suite->addTestSuite('\Tree\Test\Framework\RouterTest');
-		$suite->addTestSuite('\Tree\Test\Framework\TreeTest');
+		$suite->addTestSuite('\Tree\Test\Framework\ApplicationTest');
 
 		return $suite;
 	}
