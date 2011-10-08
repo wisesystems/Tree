@@ -76,5 +76,34 @@ class SearchSingleEntityTest extends PHPUnit_Framework_TestCase {
 		$this->assertTrue($result instanceof Result);
 	}
 
+	/**
+	 * Tests for a bug that was discovered whereby multiple calls to getSql()
+	 * cause it to add all the query parameters every single time, resulting in
+	 * broken queries
+	 *
+	 * For example:
+	 * After 1 call:  SELECT `id` FROM `sometable`
+	 * After 2 calls: SELECT `id`, `id` FROM `sometable`, `sometable`
+	 * And so on
+	 * 
+	 * @covers \Tree\Orm\Search::getResult
+	 * @test
+	 */
+	public function getSqlDoesntBreakQueryAfterSecondCall()
+	{
+		$expected  = 'SELECT `article`.`id` AS `article:id`, `article`.`title` AS ';
+		$expected .= '`article:title`, `article`.`body` AS `article:body`' . "\n";
+		$expected .= "FROM `article` `article`\n";
+
+		// this extra call to getSql() causes all the query parameters to be included
+		// twice, completely breaking the query
+		$this->search->getSql();
+
+		$actual = $this->search->getSql();
+
+		$this->assertEquals($expected, $actual);
+
+	}
+
 }
 
