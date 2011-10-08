@@ -53,8 +53,8 @@ class HtmlDocumentTest extends PHPUnit_Framework_Testcase {
 	/**
 	 * Verifies that calling addStylesheetDependency adds the file to the list
 	 * 
-	 * @covers \TreeComponentHtmlDocument::addStylesheetDependency
-	 * @covers \TreeComponentHtmlDocument::getStylesheetDependencies
+	 * @covers \TreeComponent\HtmlDocument::addStylesheetDependency
+	 * @covers \TreeComponent\HtmlDocument::getStylesheetDependencies
 	 */
 	public function testAddStylesheetDependencyAddsStylesheetDependency()
 	{
