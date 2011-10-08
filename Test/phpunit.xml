@@ -41,7 +41,7 @@
 			<file>Framework/AutoloaderTest.php</file>
 			<file>Framework/ConfigurationTest.php</file>
 			<file>Framework/RouterTest.php</file>
-			<file>Framework/TreeTest.php</file>
+			<file>Framework/ApplicationTest.php</file>
 		</testsuite>
 
 		<testsuite name="Orm">
