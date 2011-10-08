@@ -47,7 +47,7 @@ use \Tree\Exception\SearchException;
 		}
 
 		$this->baseEntity = new $this->entityClass;
-
+		$this->baseEntity->setDatabase($database);
 
 		$tableName  = $this->baseEntity->getEntityTableName();
 		$columnList = $this->baseEntity->getEntityColumnList();
