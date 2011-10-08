@@ -34,8 +34,6 @@ use \Tree\Exception\SearchException;
 	 */
 	private $baseEntity;
 
-	private $withRelationships = array();
-
 	/**
 	 * @param \Tree\Database\Connection $database 
 	 * @param string                    $entityClass [optional]
@@ -50,17 +48,6 @@ use \Tree\Exception\SearchException;
 
 		$this->baseEntity = new $this->entityClass;
 
-	}
-
-	/**
-	 * Generates and returns the SQL representing any search conditions that have
-	 * been set
-	 * 
-	 * @access public
-	 * @return string
-	 */
-	public function getSql()
-	{
 
 		$tableName  = $this->baseEntity->getEntityTableName();
 		$columnList = $this->baseEntity->getEntityColumnList();
@@ -76,13 +63,6 @@ use \Tree\Exception\SearchException;
 
 		$this->from(array($tableName => $tableName));
 
-
-		foreach ($this->withRelationships as $relationshipName) {
-			$this->addJoinForRelationship($relationshipName);
-		}
-
-
-		return parent::getSql();
 	}
 
 	/**
@@ -132,7 +112,7 @@ use \Tree\Exception\SearchException;
 			throw new SearchException($message, $code, $this);
 		}
 
-		$this->withRelationships[] = $relationshipName;
+		$this->addJoinForRelationship($relationshipName);
 	}
 
 	/**
