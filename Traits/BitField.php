@@ -45,5 +45,20 @@ trait BitField {
 		return $bitfield;
 	}
 
+	/**
+	 * Sets the given flag to 0 in the given bit field
+	 * 
+	 * @access public
+	 * @param  integer $bitfield 
+	 * @param  integer $flag 
+	 * @return integer
+	 */
+	public function unsetBitFieldFlag($bitfield, $flag)
+	{
+		$bitfield &= ~$flag;
+
+		return $bitfield;
+	}
+
 }
 

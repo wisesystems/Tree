@@ -68,5 +68,19 @@ class BitFieldTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($expected, $actual);
 	}
 
+	/**
+	 * @covers \Tree\Traits\BitField::unsetBitFieldFlag
+	 * @test
+	 */
+	public function unsetBitFieldFlag()
+	{
+		$bitfield = 0b011;
+		$flag     = 0b001;
+		$expected = 0b010;
+		$actual   = $this->bitfield->unsetBitFieldFlag($bitfield, $flag);
+
+		$this->assertEquals($expected, $actual);
+	}
+
 }
 
