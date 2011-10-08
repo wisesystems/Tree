@@ -128,6 +128,17 @@ class Configuration implements ArrayAccess {
 	}
 
 	/**
+	 * Returns an array representation of all the configuration values
+	 * 
+	 * @access public
+	 * @return array
+	 */
+	public function toArray()
+	{
+		return $this->getIniValues();
+	}
+
+	/**
 	 * Parses the ini file and returns its contents as an associative array 
 	 * 
 	 * @access private
