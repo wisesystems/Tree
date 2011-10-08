@@ -18,16 +18,29 @@ namespace Tree\Traits;
 trait BitField {
 
 	/**
-	 * Indicates whether the given flag is present in the given bitfield
+	 * Indicates whether the given flag is present in the given bit field
 	 * 
 	 * @access public
 	 * @param  integer $bitfield   Haystack
 	 * @param  integer $flag       Needle
 	 * @return boolean
 	 */
-	public function getBitFieldValue($bitfield, $flag)
+	public function getBitFieldFlag($bitfield, $flag)
 	{
 		return ($bitfield & $flag) != 0;
+	}
+
+	/**
+	 * Sets the given flag to 1 in the given bit field
+	 * 
+	 * @access public
+	 * @param  integer $bitfield 
+	 * @param  integer $flag 
+	 * @return integer
+	 */
+	public function setBitFieldFlag($bitfield, $flag)
+	{
+
 	}
 
 }

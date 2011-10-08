@@ -32,26 +32,26 @@ class BitFieldTest extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * @covers \Tree\Traits\BitField::getBitFieldValue
+	 * @covers \Tree\Traits\BitField::getBitFieldFlag
 	 * @test
 	 */
-	public function getBitFieldValue()
+	public function getBitFieldFlag()
 	{
-		$this->assertFalse($this->bitfield->getBitFieldValue(0, 0));
-		$this->assertFalse($this->bitfield->getBitFieldValue(0, 1));
-		$this->assertTrue($this->bitfield->getBitFieldValue(1, 1));
-		$this->assertFalse($this->bitfield->getBitFieldValue(2, 0));
-		$this->assertFalse($this->bitfield->getBitFieldValue(2, 1));
-		$this->assertTrue($this->bitfield->getBitFieldValue(2, 2));
-		$this->assertFalse($this->bitfield->getBitFieldValue(3, 0));
-		$this->assertTrue($this->bitfield->getBitFieldValue(3, 1));
-		$this->assertTrue($this->bitfield->getBitFieldValue(3, 2));
-		$this->assertTrue($this->bitfield->getBitFieldValue(3, 3));
-		$this->assertFalse($this->bitfield->getBitFieldValue(4, 0));
-		$this->assertFalse($this->bitfield->getBitFieldValue(4, 1));
-		$this->assertFalse($this->bitfield->getBitFieldValue(4, 2));
-		$this->assertFalse($this->bitfield->getBitFieldValue(4, 3));
-		$this->assertTrue($this->bitfield->getBitFieldValue(4, 4));
+		$this->assertFalse($this->bitfield->getBitFieldFlag(0b000, 0b000));
+		$this->assertFalse($this->bitfield->getBitFieldFlag(0b000, 0b001));
+		$this->assertTrue($this->bitfield->getBitFieldFlag(0b001, 0b001));
+		$this->assertFalse($this->bitfield->getBitFieldFlag(0b010, 0b000));
+		$this->assertFalse($this->bitfield->getBitFieldFlag(0b010, 0b001));
+		$this->assertTrue($this->bitfield->getBitFieldFlag(0b010, 0b010));
+		$this->assertFalse($this->bitfield->getBitFieldFlag(0b011, 0b000));
+		$this->assertTrue($this->bitfield->getBitFieldFlag(0b011, 0b001));
+		$this->assertTrue($this->bitfield->getBitFieldFlag(0b011, 0b010));
+		$this->assertTrue($this->bitfield->getBitFieldFlag(0b011, 0b011));
+		$this->assertFalse($this->bitfield->getBitFieldFlag(0b100, 0b000));
+		$this->assertFalse($this->bitfield->getBitFieldFlag(0b100, 0b001));
+		$this->assertFalse($this->bitfield->getBitFieldFlag(0b100, 0b010));
+		$this->assertFalse($this->bitfield->getBitFieldFlag(0b100, 0b011));
+		$this->assertTrue($this->bitfield->getBitFieldFlag(0b100, 0b100));
 	}
 
 }
