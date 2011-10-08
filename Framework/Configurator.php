@@ -40,7 +40,7 @@ class Configurator {
 	 * @access public
 	 * @param  \Tree\Framework\Router $router 
 	 */
-	public function configureRouter($router)
+	public function configureRouter($router, $routeClass)
 	{
 		if (isset($this->values['router']['urlprefix'])) {
 			$router->setUrlPrefix($this->values['router']['urlprefix']);
@@ -58,7 +58,7 @@ class Configurator {
 
 				$action  = $parameters['action'];
 				$pattern = $parameters['pattern'];
-				$route   = new Route($pattern, $action);
+				$route   = new $routeClass($pattern, $action);
 
 				$router->addRoute($route);
 			}
