@@ -61,7 +61,6 @@ use \Tree\Exception\SearchException;
 	 */
 	public function getSql()
 	{
-		$this->clearParameters();
 
 		$tableName  = $this->baseEntity->getEntityTableName();
 		$columnList = $this->baseEntity->getEntityColumnList();
