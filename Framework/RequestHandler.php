@@ -3,6 +3,7 @@
 namespace Tree\Framework;
 
 use \Tree\Behaviour\Http200Response;
+use \Tree\Behaviour\Http301Response;
 use \Tree\Behaviour\Http404Response;
 use \Tree\Behaviour\Http403Response;
 use \Tree\Behaviour\Http500Response;
@@ -68,38 +69,34 @@ class RequestHandler {
 		if (is_null($action)) {
 			// this is a request whose URL doesn't match any of the patterns in these
 			// router, the simplest kind of 404
-			return $this->handle404($request, null);
+			$status = 404;
+		} else {
+			$action->setConfiguration($this->configuration);
+			$action->setRouter($this->router);
+
+			$status = $action->performAction();
 		}
 
-		$action->setConfiguration($this->configuration);
-		$action->setRouter($this->router);
 
-		$return = $action->performAction();
+		switch ($status) {
 
-		if (is_null($return)) {
 			// actions return null to indicate that there is nothing to return, i.e.
 			// the given parameters don't correspond to any entity, which is a 404
-			return $this->get404Response($request, $action);
-		}
+			case null: return $this->handle404Response($request, $action);
 
-		if ($return === false) {
 			// actions return false to indicate that some unexpected error has
 			// prevented them from completing, which is an internal server error
-			return $this->get500Response($request, $action);
+			case false: return $this->get500Response($request, $action);
+
+			case 200: return $this->handle200($request, $action);
+			case 301: return $this->handle301($request, $action);
+			case 404: return $this->handle404($request, $action);
+			case 500: return $this->handle500($request, $action);
+
+			// if none of the above is true, something's gone very wrong
+			default: return $this->handle500($request, $action);
+
 		}
-
-		if ($return === 200) {
-			return $this->handle200($request, $action);
-		} elseif ($return === 404) {
-			return $this->handle404($request, $action);
-		} elseif ($return === 500) {
-			return $this->handle500($request, $action);
-		}
-
-
-		// at this point the only possible state is that the action returned
-		// something other than true, false or null, which is wrong
-		return $this->handle500($request, $action);
 	}
 
 	/**
@@ -129,8 +126,8 @@ class RequestHandler {
 	 * successfully
 	 * 
 	 * @access private
-	 * @param  \Tree\Request\Request $request 
-	 * @param  \Tree\Component\Action
+	 * @param  \Tree\Request\Request  $request 
+	 * @param  \Tree\Component\Action $action
 	 * @return \Tree\Response\Response
 	 */
 	private function handle200($request, $action)
@@ -147,12 +144,32 @@ class RequestHandler {
 	}
 
 	/**
+	 * Returns a response suitable for sending when the action has returned 301
+	 * indicating that the resource requested has moved
+	 * 
+	 * @access private
+	 * @param  \Tree\Request\Request  $request 
+	 * @param  \Tree\Component\Action $action 
+	 * @return \Tree\Response\Response
+	 */
+	private function handle301($request, $action)
+	{
+		if ($action instanceof Action && $action instanceof Http301Response) {
+			$response = $action->get301Response($request);
+		} else {
+			$response = $this->handle500($request, $action);
+		}
+
+		return $response;
+	}
+
+	/**
 	 * Returns a response suitable for sending when the request resource cannot
 	 * be found
 	 * 
 	 * @access private
-	 * @param  \Tree\Request\Request $request 
-	 * @param  \Tree\Component\Action
+	 * @param  \Tree\Request\Request  $request 
+	 * @param  \Tree\Component\Action $action
 	 * @return \Tree\Response\Response
 	 */
 	private function handle404($request, $action)
@@ -173,7 +190,8 @@ class RequestHandler {
 	 * server error
 	 * 
 	 * @access private
-	 * @param  \Tree\Request\Request $request 
+	 * @param  \Tree\Request\Request  $request 
+	 * @param  \Tree\Component\Action $action
 	 * @return \Tree\Response\Response
 	 */
 	private function handle500($request, $action)
