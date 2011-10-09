@@ -29,10 +29,10 @@ use \Tree\Exception\SearchException;
 	/**
 	 * A blank copy of the base entity being searched for
 	 * 
-	 * @access private
+	 * @access protected
 	 * @var    \Tree\Orm\Entity
 	 */
-	private $baseEntity;
+	protected $baseEntity;
 
 	/**
 	 * @param \Tree\Database\Connection $database 
