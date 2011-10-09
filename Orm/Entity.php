@@ -6,6 +6,7 @@ use \Tree\Behaviour\RelatedEntity;
 use \Tree\Exception\EntityException;
 use \Tree\Database\Query_Update;
 use \Tree\Database\Query_Insert;
+use \Tree\Database\Query_Join;
 
 /**
  * Entity 
@@ -524,12 +525,48 @@ abstract class Entity {
 
 		// todo: check cardinalities and handle link tables if necessary
 
-		$search = new Search($this->database, $relationship['class']);
+		if ($relationship['cardinality'] === self::RELATIONSHIP_MANY_TO_MANY) {
 
-		$foreignKey = $relationship['foreign-key'];
-		$foreignKeyValue = $this->$foreignKey;
+			$search = new Search($this->database, $relationship['class']);
 
-		$search->where("`{$relationship['foreign-key']}` = '%s'", $foreignKeyValue);
+			$relatedClass  = $relationship['class'];
+			$relatedEntity = new $relatedClass;
+			$foreignKey    = $relationship['foreign-key'];
+			$linkTable     = $relationship['link-table'];
+
+
+			$theirRelationship = $relatedEntity->getEntityRelationship(null, '\\' . get_class($this));
+			$theirForeignKey   = $theirRelationship['foreign-key'];
+			$theirPrimaryKey   = $relatedEntity->getEntityPrimaryKey();
+			$theirTable        = $relatedEntity->getEntityTableName();
+
+
+			$myColumn         = sprintf('`%s`.`%s`', $linkTable, $foreignKey);
+			$theirLinkColumn  = sprintf('`%s`.`%s`', $linkTable, $theirForeignKey);
+			$theirTableColumn = sprintf('`%s`.`%s`', $theirTable, $theirPrimaryKey[0]);
+
+			$foreignKeyValue = $this->$foreignKey;
+
+			$join = new Query_Join($this->database);
+			$join->setTable($linkTable);
+			$join->on("{$myColumn} = %s", $foreignKeyValue);
+			$join->on("{$theirLinkColumn} = {$theirTableColumn}");
+
+			$search->addJoin($join);
+
+			echo $search;
+
+
+		} else {
+
+			$search = new Search($this->database, $relationship['class']);
+
+			$foreignKey = $relationship['foreign-key'];
+			$foreignKeyValue = $this->$foreignKey;
+
+			$search->where("`{$relationship['foreign-key']}` = '%s'", $foreignKeyValue);
+
+		}
 
 		$result = $search->getResult();
 		
