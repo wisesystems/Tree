@@ -523,8 +523,6 @@ abstract class Entity {
 	{
 		$relationship = $this->getEntityRelationship($relationshipName);
 
-		// todo: check cardinalities and handle link tables if necessary
-
 		if ($relationship['cardinality'] === self::RELATIONSHIP_MANY_TO_MANY) {
 
 			$search = new Search($this->database, $relationship['class']);

@@ -76,6 +76,8 @@ use \Tree\Exception\SearchException;
 		$databaseResult = parent::getResult();
 
 		$result = new Result($databaseResult, $this->baseEntity);
+		$result->setDatabase($this->connection);
+
 		return $result;
 	}
 
