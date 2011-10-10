@@ -82,11 +82,11 @@ class RequestHandler {
 
 			// actions return null to indicate that there is nothing to return, i.e.
 			// the given parameters don't correspond to any entity, which is a 404
-			case null: return $this->handle404Response($request, $action);
+			case null: return $this->handle404($request, $action);
 
 			// actions return false to indicate that some unexpected error has
 			// prevented them from completing, which is an internal server error
-			case false: return $this->get500Response($request, $action);
+			case false: return $this->handle500($request, $action);
 
 			case 200: return $this->handle200($request, $action);
 			case 301: return $this->handle301($request, $action);
