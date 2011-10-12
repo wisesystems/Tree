@@ -552,8 +552,6 @@ abstract class Entity {
 
 			$search->addJoin($join);
 
-			echo $search;
-
 
 		} else {
 
