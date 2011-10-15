@@ -24,8 +24,8 @@ interface Http302Response {
 	 * Return a response to send to the client when the action returns 302
 	 * 
 	 * @access public
-	 * @param  \Tree\Request\Request $request 
-	 * @return \Tree\Response\Response
+	 * @param  \Tree\Http\Request $request 
+	 * @return \Tree\Http\Response
 	 */
 	public function get302Response($request);
 
