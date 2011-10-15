@@ -2,6 +2,7 @@
 
 namespace Tree\Response;
 
+use \stdClass;
 use \Exception;
 
 /**
@@ -87,6 +88,8 @@ abstract class Response {
 	 */
 	protected $responseBody;
 
+	private $responseCookies = array();
+
 	/**
 	 * An associative array of header names and values 
 	 * 
@@ -104,6 +107,7 @@ abstract class Response {
 	{
 		$this->sendStatusHeader();
 		$this->sendResponseHeaders();
+		$this->sendResponseCookies();
 		$this->sendResponseBody();
 	}
 
@@ -116,6 +120,18 @@ abstract class Response {
 	public function setBody($body)
 	{
 		$this->responseBody = $body;
+	}
+
+	public function setCookie($name, $value, $expire = 0, $path = '/', $domain = '', $secure = true, $httpOnly = true)
+	{
+		$this->responseCookies[$name]           = new stdClass;
+		$this->responseCookies[$name]->name     = $name;
+		$this->responseCookies[$name]->value    = $value;
+		$this->responseCookies[$name]->expire   = $expire;
+		$this->responseCookies[$name]->path     = $path;
+		$this->responseCookies[$name]->domain   = $domain;
+		$this->responseCookies[$name]->secure   = $secure;
+		$this->responseCookies[$name]->httpOnly = $httpOnly;
 	}
 
 	/**
@@ -155,6 +171,14 @@ abstract class Response {
 	{
 		foreach ($this->responseHeaders as $name => $value) {
 			header("{$name}: $value");
+		}
+	}
+
+	private function sendResponseCookies()
+	{
+		foreach ($this->responseCookies as $name => $cookie) {
+			setcookie($cookie->name, $cookie->value, $cookie->expire, $cookie->path,
+				$cookie->domain, $cookie->secure, $cookie->httpOnly);
 		}
 	}
 
