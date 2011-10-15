@@ -30,6 +30,8 @@ class Result implements Iterator {
 	 * @var    \Tree\Database\Result
 	 */
 	private $databaseResult;
+
+	private $databaseConnection;
 	
 	/**
 	 * A blank copy of the base entity that was originally searched for
@@ -72,6 +74,7 @@ class Result implements Iterator {
 		$entityData = $this->getValuesByKeyPrefix($row, "{$tableName}:");
 
 		$entity->hydrateEntity($entityData);
+		$entity->setDatabase($this->databaseConnection);
 
 		if ($entity instanceof RelatedEntity) {
 
@@ -87,6 +90,7 @@ class Result implements Iterator {
 
 				$relatedEntity = new $relationship['class'];
 				$relatedEntity->hydrateEntity($data);
+				$relatedEntity->setDatabase($this->databaseConnection);
 				
 				$entity->setRelatedEntity($relationship['name'], $relatedEntity);
 
@@ -139,6 +143,11 @@ class Result implements Iterator {
 	public function valid()
 	{
 		return $this->databaseResult->valid();
+	}
+
+	public function setDatabase($database)
+	{
+		$this->databaseConnection = $database;
 	}
 
 	/**

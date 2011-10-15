@@ -267,6 +267,15 @@ abstract class Template implements ArrayAccess {
 		self::$globalValues[$name] = $value;
 	}
 
+	public static function getGlobalValue($name)
+	{
+		if (isset(self::$globalValues[$name])) {
+			return self::$globalValues[$name];
+		} else {
+			return null;
+		}
+	}
+
 	/**
 	 * Stores the given directory as the one to look in to find the template
 	 * filename as specified by $this->templateFilename
