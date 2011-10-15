@@ -4,6 +4,7 @@ namespace Tree\Framework;
 
 use \Tree\Behaviour\Http200Response;
 use \Tree\Behaviour\Http301Response;
+use \Tree\Behaviour\Http302Response;
 use \Tree\Behaviour\Http404Response;
 use \Tree\Behaviour\Http403Response;
 use \Tree\Behaviour\Http500Response;
@@ -90,6 +91,7 @@ class RequestHandler {
 
 			case 200: return $this->handle200($request, $action);
 			case 301: return $this->handle301($request, $action);
+			case 302: return $this->handle302($request, $action);
 			case 404: return $this->handle404($request, $action);
 			case 500: return $this->handle500($request, $action);
 
@@ -162,6 +164,27 @@ class RequestHandler {
 
 		return $response;
 	}
+
+	/**
+	 * Returns a response suitable for sending when the action has returned 302
+	 * indicating that the resource requested has been found at a different URL
+	 * 
+	 * @access private
+	 * @param  \Tree\Request\Request  $request 
+	 * @param  \Tree\Component\Action $action 
+	 * @return \Tree\Response\Response
+	 */
+	private function handle302($request, $action)
+	{
+		if ($action instanceof Action && $action instanceof Http302Response) {
+			$response = $action->get302Response($request);
+		} else {
+			$response = $this->handle500($request, $action);
+		}
+
+		return $response;
+	}
+
 
 	/**
 	 * Returns a response suitable for sending when the request resource cannot
