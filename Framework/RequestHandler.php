@@ -2,6 +2,7 @@
 
 namespace Tree\Framework;
 
+use \Tree\Behaviour\HttpGetRequest;
 use \Tree\Behaviour\Http200Response;
 use \Tree\Behaviour\Http301Response;
 use \Tree\Behaviour\Http302Response;
@@ -31,9 +32,6 @@ use \Tree\Http\Response_Text;
  * @uses       \Tree\Framework\Router
  * @uses       \Tree\Http\Request
  * @uses       \Tree\Http\Response
- * @uses       \Tree\Component\Action_HtmlResponseGenerator
- * @uses       \Tree\Component\Action_JsonResponseGenerator
- * @uses       \Tree\Component\Action_TextResponseGenerator
  * @version    0.00
  */
 class RequestHandler {
@@ -63,7 +61,8 @@ class RequestHandler {
 	 */
 	public function handleRequest($request)
 	{
-		$requestUrl = $request->getUrl();
+		$requestMethod = $request->getMethod();
+		$requestUrl    = $request->getUrl();
 
 		$action = $this->router->getAction($requestUrl);
 
@@ -71,11 +70,14 @@ class RequestHandler {
 			// this is a request whose URL doesn't match any of the patterns in these
 			// router, the simplest kind of 404
 			$status = 404;
+
+		} elseif (!$action->supportsMethod($requestMethod)) {
+			$status = 403;
 		} else {
 			$action->setConfiguration($this->configuration);
 			$action->setRouter($this->router);
 
-			$status = $action->performAction();
+			$status = $action->performAction($requestMethod);
 		}
 
 
@@ -93,6 +95,7 @@ class RequestHandler {
 			case 301: return $this->handle301($request, $action);
 			case 302: return $this->handle302($request, $action);
 			case 404: return $this->handle404($request, $action);
+			case 403: return $this->handle403($request, $action);
 			case 500: return $this->handle500($request, $action);
 
 			// if none of the above is true, something's gone very wrong
@@ -181,6 +184,24 @@ class RequestHandler {
 		} else {
 			$response = $this->handle500($request, $action);
 		}
+
+		return $response;
+	}
+
+	/**
+	 * Returns a response suitable for sending when the request method is not
+	 * allowed
+	 * 
+	 * @access private
+	 * @param  \Tree\Http\Request  $request 
+	 * @param  \Tree\Component\Action $action
+	 * @return \Tree\Http\Response
+	 */
+	private function handle403($request, $action)
+	{
+		$response = new Response_Html;
+		$response->setStatus(403);
+		$response->setBody('<h1>403 Method Not Allowed</h1>');
 
 		return $response;
 	}

@@ -5,6 +5,10 @@ namespace Tree\Component;
 use \Exception;
 use \PDO;
 
+use \Tree\Behaviour\HttpDeleteRequest;
+use \Tree\Behaviour\HttpGetRequest;
+use \Tree\Behaviour\HttpPostRequest;
+use \Tree\Behaviour\HttpPutRequest;
 use \Tree\Database\Connection_MySql;
 
 /**
@@ -60,20 +64,6 @@ abstract class Action {
 	private $router;
 
 	/**
-	 * Processes the request
-	 *
-	 * This method should do any requisite fetching, updating, creation, or
-	 * deletion of data required by the request. It should then return a HTTP
-	 * status code to indicate the outcome and the type of response to be sent.
-	 * 
-	 * @abstract
-	 * @access public
-	 * @param  array $input 
-	 * @return integer       e.g. 200, 404, 500
-	 */
-	abstract public function main(array $input);
-
-	/**
 	 * Returns the input value that has been stored against the given name 
 	 * 
 	 * @access public
@@ -93,12 +83,35 @@ abstract class Action {
 	 * Runs the main() method and returns its return value 
 	 *
 	 * @access public
+	 * @param  string $requestMethod  GET, POST, etc
 	 * @return mixed
 	 */
-	public function performAction()
+	public function performAction($requestMethod)
 	{
+		switch ($requestMethod) {
+
+			case 'DELETE':
+				$methodName = 'delete';
+				break;
+
+			case 'GET':
+				$methodName = 'get';
+				break;
+
+			case 'POST':
+				$methodName = 'post';
+				break;
+
+			case 'PUT':
+				$methodName = 'put';
+				break;
+
+		}
+
+		// todo: throw unsupport method exception
+
 		$output = call_user_func(
-			array($this, 'main'),
+			array($this, $methodName),
 			$this->parameters
 		);
 
@@ -138,6 +151,40 @@ abstract class Action {
 	public function setRouter($router)
 	{
 		$this->router = $router;
+	}
+
+	/**
+	 * Indicates whether the given HTTP request method is supported
+	 * 
+	 * @access public
+	 * @param  string $method  'GET', 'POST', 'PUT', 'DELETE'
+	 * @return boolean
+	 */
+	public function supportsMethod($method)
+	{
+		$supportsMethod = false;
+
+		switch ($method) {
+
+			case 'GET':
+				$supportsMethod = $this instanceof HttpGetRequest;
+				break;
+
+			case 'POST': 
+				$supportsMethod = $this instanceof HttpPostRequest;
+				break;
+
+			case 'PUT':
+				$supportsMethod = $this instanceof HttpPutRequest;
+				break;
+
+			case 'DELETE':
+				$supportsMethod = $this instanceof HttpDeleteRequest;
+				break;
+
+		}
+
+		return $supportsMethod;
 	}
 
 	/**

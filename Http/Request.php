@@ -17,6 +17,14 @@ namespace Tree\Http;
 class Request {
 
 	/**
+	 * The request's HTTP method, such as GET or POST
+	 * 
+	 * @access private
+	 * @var    string
+	 */
+	private $method;
+
+	/**
 	 * Returns the given HTTP request header
 	 * 
 	 * @access public
@@ -32,6 +40,23 @@ class Request {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Returns the request's HTTP method
+	 *
+	 * For example, "GET", "POST", "DELETE" and so on.
+	 * 
+	 * @access public
+	 * @return string
+	 */
+	public function getMethod()
+	{
+		if ($this->method === null) {
+			$this->method = filter_input(INPUT_SERVER, 'REQUEST_METHOD');
+		}
+
+		return $this->method;
 	}
 
 	/**
