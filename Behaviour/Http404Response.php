@@ -22,8 +22,8 @@ interface Http404Response {
 	 * Return a response to send to the client when the action returns 404
 	 * 
 	 * @access public
-	 * @param  \Tree\Request\Request $request 
-	 * @return \Tree\Response\Response
+	 * @param  \Tree\Http\Request $request 
+	 * @return \Tree\Http\Response
 	 */
 	public function get404Response($request);
 

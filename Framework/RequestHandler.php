@@ -8,9 +8,9 @@ use \Tree\Behaviour\Http404Response;
 use \Tree\Behaviour\Http403Response;
 use \Tree\Behaviour\Http500Response;
 use \Tree\Component\Action;
-use \Tree\Response\Response;
-use \Tree\Response\Response_Html;
-use \Tree\Response\Response_Text;
+use \Tree\Http\Response;
+use \Tree\Http\Response_Html;
+use \Tree\Http\Response_Text;
 
 /**
  * RequestHandler 
@@ -28,8 +28,8 @@ use \Tree\Response\Response_Text;
  * @license    GPLv2.0
  * @uses       \Tree\Framework\Configuration
  * @uses       \Tree\Framework\Router
- * @uses       \Tree\Request\Request
- * @uses       \Tree\Response\Response
+ * @uses       \Tree\Http\Request
+ * @uses       \Tree\Http\Response
  * @uses       \Tree\Component\Action_HtmlResponseGenerator
  * @uses       \Tree\Component\Action_JsonResponseGenerator
  * @uses       \Tree\Component\Action_TextResponseGenerator
@@ -57,8 +57,8 @@ class RequestHandler {
 	 * Returns a Response corresponding to the given Request
 	 * 
 	 * @access public
-	 * @param  \Tree\Request\Request $request 
-	 * @return \Tree\Response\Response
+	 * @param  \Tree\Http\Request $request 
+	 * @return \Tree\Http\Response
 	 */
 	public function handleRequest($request)
 	{
@@ -126,9 +126,9 @@ class RequestHandler {
 	 * successfully
 	 * 
 	 * @access private
-	 * @param  \Tree\Request\Request  $request 
+	 * @param  \Tree\Http\Request  $request 
 	 * @param  \Tree\Component\Action $action
-	 * @return \Tree\Response\Response
+	 * @return \Tree\Http\Response
 	 */
 	private function handle200($request, $action)
 	{
@@ -148,9 +148,9 @@ class RequestHandler {
 	 * indicating that the resource requested has moved
 	 * 
 	 * @access private
-	 * @param  \Tree\Request\Request  $request 
+	 * @param  \Tree\Http\Request  $request 
 	 * @param  \Tree\Component\Action $action 
-	 * @return \Tree\Response\Response
+	 * @return \Tree\Http\Response
 	 */
 	private function handle301($request, $action)
 	{
@@ -168,9 +168,9 @@ class RequestHandler {
 	 * be found
 	 * 
 	 * @access private
-	 * @param  \Tree\Request\Request  $request 
+	 * @param  \Tree\Http\Request  $request 
 	 * @param  \Tree\Component\Action $action
-	 * @return \Tree\Response\Response
+	 * @return \Tree\Http\Response
 	 */
 	private function handle404($request, $action)
 	{
@@ -190,9 +190,9 @@ class RequestHandler {
 	 * server error
 	 * 
 	 * @access private
-	 * @param  \Tree\Request\Request  $request 
+	 * @param  \Tree\Http\Request  $request 
 	 * @param  \Tree\Component\Action $action
-	 * @return \Tree\Response\Response
+	 * @return \Tree\Http\Response
 	 */
 	private function handle500($request, $action)
 	{

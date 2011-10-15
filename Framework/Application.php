@@ -3,9 +3,8 @@
 namespace Tree\Framework;
 
 use \Tree\Component\Template;
-use \Tree\Request\Request;
-use \Tree\Request\Request_Http;
-use \Tree\Response\Response;
+use \Tree\Http\Request;
+use \Tree\Http\Response;
 
 /**
  * Application
@@ -202,11 +201,11 @@ class Application {
 	 * corresponding subclass of Request
 	 * 
 	 * @access private
-	 * @return \Tree\Request\Request
+	 * @return \Tree\Http\Request
 	 */
 	private function detectRequest()
 	{
-		return new Request_Http;
+		return new Request;
 	}
 
 }

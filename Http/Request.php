@@ -1,21 +1,20 @@
 <?php
 
-namespace Tree\Request;
+namespace Tree\Http;
 
 /**
- * Request_Http 
- *
- * Models aspects of requests that are specific to those that come via HTTP
+ * Request 
  * 
+ * Models the requests that the application receives
+ *
  * @author     Henry Smith <henry@henrysmith.org> 
  * @copyright  2011 Henry Smith
  * @license    GPLv2.0
  * @package    Tree
- * @subpackage Request
- * @uses       \Tree\Request\Request
+ * @subpackage Http
  * @version    0.00
  */
-class Request_Http extends Request {
+class Request {
 
 	/**
 	 * Returns the given HTTP request header

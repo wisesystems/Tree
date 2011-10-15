@@ -1,6 +1,6 @@
 <?php
 
-namespace Tree\Response;
+namespace Tree\Http;
 
 /**
  * Response_Json 
@@ -10,7 +10,7 @@ namespace Tree\Response;
  * @author     Henry Smith <henry@henrysmith.org> 
  * @copyright  2011 Henry Smith
  * @license    GPLv2.0
- * @package    Tree
+ * @package    Http
  * @subpackage Response
  * @version    0.00
  */

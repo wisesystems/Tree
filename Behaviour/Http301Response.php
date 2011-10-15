@@ -24,8 +24,8 @@ interface Http301Response {
 	 * Return a response to send to the client when the action returns 200
 	 * 
 	 * @access public
-	 * @param  \Tree\Request\Request $request 
-	 * @return \Tree\Response\Response
+	 * @param  \Tree\Http\Request $request 
+	 * @return \Tree\Http\Response
 	 */
 	public function get301Response($request);
 

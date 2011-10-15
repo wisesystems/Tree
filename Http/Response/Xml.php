@@ -1,29 +1,29 @@
 <?php
 
-namespace Tree\Response;
+namespace Tree\Http;
 
 /**
- * Response_Html 
+ * Response_Xml
  * 
- * Handles sending HTML responses
+ * Handles sending XML responses
  *
  * @author     Henry Smith <henry@henrysmith.org> 
  * @copyright  2011 Henry Smith
  * @license    GPLv2.0
  * @package    Tree
- * @subpackage Response
+ * @subpackage Http
  * @version    0.00
  * @uses       \Tree\Response\Response
  */
-class Response_Html extends Response {
+class Response_Xml extends Response {
 
 	public function __construct()
 	{
-		$this->setHeader('Content-type', 'text/html');
+		$this->setHeader('Content-type', 'text/xml');
 	}
 
 	/**
-	 * Sends a HTML response body
+	 * Sends an XML response body
 	 * 
 	 * @access protected
 	 */

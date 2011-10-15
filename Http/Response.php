@@ -1,6 +1,6 @@
 <?php
 
-namespace Tree\Response;
+namespace Tree\Http;
 
 use \stdClass;
 use \Exception;
@@ -15,7 +15,7 @@ use \Exception;
  * @copyright  2011 Henry Smith
  * @license    GPLv2.0
  * @package    Tree
- * @subpackage Response
+ * @subpackage Http
  * @version    0.00
  */
 abstract class Response {

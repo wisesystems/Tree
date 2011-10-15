@@ -4,7 +4,7 @@ namespace Tree\Component;
 
 use \stdClass;
 use \ArrayAccess;
-use \Tree\Response\Response_Html;
+use \Tree\Http\Response_Html;
 
 /**
  * HtmlDocument 
@@ -16,7 +16,7 @@ use \Tree\Response\Response_Html;
  * @license    GPLv2.0
  * @package    Tree
  * @subpackage Component
- * @uses       \Tree\Response\Response_Html
+ * @uses       \Tree\Http\Response_Html
  * @version    0.00
  */
 abstract class HtmlDocument extends Response_Html implements ArrayAccess {
@@ -225,7 +225,7 @@ abstract class HtmlDocument extends Response_Html implements ArrayAccess {
 	}
 
 	/**
-	 * \Tree\Response\Response: Overrides the basic response-body-sending with a
+	 * \Tree\Http\Response: Overrides the basic response-body-sending with a
 	 * little extra code to do the final compiling of the page data into a
 	 * coherent HTML document
 	 * 
