@@ -2,8 +2,8 @@
 
 namespace Tree\Test\Component;
 
-require '../Response/Response.php';
-require '../Response/Response/Html.php';
+require '../Http/Response.php';
+require '../Http/Response/Html.php';
 require '../Component/HtmlDocument.php';
 require_once 'Fake/HtmlDocument.php';
 
