@@ -155,7 +155,7 @@ class Route {
 
 			$pattern = $this->parameterPatterns[$name];
 
-			if (!preg_match("|^{$pattern}$|", $value)) {
+			if (!preg_match($pattern, $value)) {
 				return null;
 			}
 
