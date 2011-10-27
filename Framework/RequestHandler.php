@@ -189,23 +189,26 @@ class RequestHandler {
 	}
 
 	/**
-	 * Returns a response suitable for sending when the request method is not
-	 * allowed
+	 * Returns a response suitable for sending when the user does not have the
+	 * access rights to the requested resource
 	 * 
 	 * @access private
-	 * @param  \Tree\Http\Request  $request 
+	 * @param  \Tree\Http\Request     $request 
 	 * @param  \Tree\Component\Action $action
 	 * @return \Tree\Http\Response
 	 */
 	private function handle403($request, $action)
 	{
-		$response = new Response_Html;
-		$response->setStatus(403);
-		$response->setBody('<h1>403 Method Not Allowed</h1>');
+		if ($action instanceof Action && $action instanceof Http403Response) {
+			$response = $action->get403Response($request);
+		} else {
+			$response = new Response_Html;
+			$response->setStatus(403);
+			$response->setBody('<h1>403 Access Denied</h1>');
+		}
 
 		return $response;
 	}
-
 
 	/**
 	 * Returns a response suitable for sending when the request resource cannot
