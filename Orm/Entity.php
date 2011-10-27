@@ -176,16 +176,38 @@ abstract class Entity {
 	 */
 	public function __set($name, $value)
 	{
-		$columnList = $this->getEntityColumnList();
-		if (!in_array($name, $columnList)) {
+		$columnList    = $this->getEntityColumnList();
+		$relationNames = array();
+
+		if ($this instanceof RelatedEntity) {
+
+			$relationships = $this->getEntityRelationships();
+
+			foreach ($relationships as $relationship) {
+				$relationNames[] = $relationship['name'];
+			}
+
+		}
+
+		if (in_array($name, $columnList)) {
+
+			if (isset($this->originalValues[$name]) && $this->originalValues[$name] !== $value) {
+				$this->addState(self::STATE_DIRTY);
+			}
+
+		} elseif (in_array($name, $relationNames)) {
+
+			// TODO: enforce relationship cardinality restraints so that either an
+			// array, a \Tree\Orm\Result, or a \Tree\Orm\Entity is required
+			$this->relatedEntities[$name] = $value;
+
+		} else {
 			$message = "No such attribute: {$name}";
 			$code    = EntityException::NO_SUCH_ATTRIBUTE;
 			throw new EntityException($message, $code, $this);
 		}
 
-		if (isset($this->originalValues[$name]) && $this->originalValues[$name] !== $value) {
-			$this->addState(self::STATE_DIRTY);
-		}
+
 
 		$this->currentValues[$name] = $value;
 	}
