@@ -46,21 +46,20 @@ class Configurator {
 			$router->setUrlPrefix($this->values['router']['urlprefix']);
 		}
 
-		if (isset($this->values['routes'])) {
+		if (isset($this->values['router']['routes'])) {
 
-			foreach ($this->values['routes'] as $name => $parameters) {
+			$routes = $this->values['router']['routes'];
+			$routes = new Configuration($routes);
 
-				switch (false) {
-					case isset($parameters['action']):
-					case isset($parameters['pattern']):
-						continue;
-				}
+			foreach ($routes as $name => $r) {
 
-				$action  = $parameters['action'];
-				$pattern = $parameters['pattern'];
-				$route   = new $routeClass($pattern, $action);
+				$action  = $r['action'];
+				$pattern = $r['pattern'];
+
+				$route = new $routeClass($pattern, $action);
 
 				$router->addRoute($route);
+
 			}
 
 		}

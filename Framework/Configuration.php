@@ -3,6 +3,7 @@
 namespace Tree\Framework;
 
 use \ArrayAccess;
+use \Iterator;
 use \Tree\Exception\ConfigurationException;
 
 /**
@@ -17,7 +18,7 @@ use \Tree\Exception\ConfigurationException;
  * @subpackage Framework
  * @version    0.00
  */
-class Configuration implements ArrayAccess {
+class Configuration implements ArrayAccess, Iterator {
 
 	/**
 	 * The full path of the ini file 
@@ -36,6 +37,14 @@ class Configuration implements ArrayAccess {
 	 * @var    array
 	 */
 	private $iniValues;
+
+	/**
+	 * The current internal pointer value for the Iterator implementation 
+	 * 
+	 * @access private
+	 * @var    integer
+	 */
+	private $iteratorIndex = 0;
 
 	/**
 	 * @access public
@@ -136,6 +145,76 @@ class Configuration implements ArrayAccess {
 	public function toArray()
 	{
 		return $this->getIniValues();
+	}
+
+	/**
+	 * Iterator: Returns the config value at the current iterator index
+	 * 
+	 * @access public
+	 * @return mixed
+	 */
+	public function current()
+	{
+		$values = $this->toArray();
+
+		$current = array_slice($values, $this->iteratorIndex, 1);
+		$current = current($current);
+
+		return $current;
+	}
+
+	/**
+	 * Iterator: Returns the key name of the value at the current iterator index
+	 * 
+	 * @access public
+	 * @return mixed
+	 */
+	public function key()
+	{
+		$values = $this->toArray();
+		$keys   = array_keys($values);
+
+		$key = array_slice($keys, $this->iteratorIndex, 1);
+		$key = current($key);
+
+		return $key;
+	}
+
+	/**
+	 * Iterator: Increments the iterator index
+	 * 
+	 * @access public
+	 */
+	public function next()
+	{
+		$this->iteratorIndex++;
+	}
+
+	/**
+	 * Iterator: Resets the iterator index
+	 * 
+	 * @access public
+	 */
+	public function rewind()
+	{
+		$this->iteratorIndex = 0;
+	}
+	
+	/**
+	 * Iterator: Indicates whether the iterator index is valid
+	 * 
+	 * @access public
+	 * @return boolean
+	 */
+	public function valid()
+	{
+		if ($this->iteratorIndex < 0) {
+			return false;
+		} elseif ($this->iteratorIndex >= count($this->toArray())) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	/**
