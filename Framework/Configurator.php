@@ -56,7 +56,13 @@ class Configurator {
 				$action  = $r['action'];
 				$pattern = $r['pattern'];
 
-				$route = new $routeClass($pattern, $action);
+				$route = new $routeClass($pattern, $action, $name);
+
+				$patterns = isset($r['regexes']) ? $r['regexes'] : array();
+
+				foreach ($patterns as $parameter => $pattern) {
+					$route->setParameterPattern($parameter, $pattern);
+				}
 
 				$router->addRoute($route);
 
